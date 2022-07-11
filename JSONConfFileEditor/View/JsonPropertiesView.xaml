@@ -3,103 +3,92 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:enums ="clr-namespace:JSONConfFileEditor.Abstractions.Enums"
              xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
              xmlns:local="clr-namespace:JSONConfFileEditor.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="#f5ecd3">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <StackPanel Orientation="Vertical" CanVerticallyScroll="True" CanHorizontallyScroll="True" >
+    <UserControl.Resources>
 
-                <TextBlock Text="Boolean values" HorizontalAlignment="Center" FontSize="18"/>
-
-                <!-- Boolean -->
-                <ItemsControl ItemsSource="{Binding BoolCollection}" Margin="0,10,0,0" >
-                    
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Rows="{Binding BoolCollectionLength}" Columns="2"  />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox Margin="0,0,5,5" HorizontalAlignment="Center" IsChecked="{Binding IsChecked}">
-                                <TextBlock Text="{Binding Title}" TextWrapping="Wrap" ></TextBlock>
-                            </CheckBox>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <TextBlock Text="Double values" HorizontalAlignment="Center" FontSize="18"/>
-
-                <!-- double -->
-                <ItemsControl ItemsSource="{Binding DoubleCollection}" Margin="0,10,0,0">
-                    
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Rows="{Binding DoubleCollectionLength}" Columns="2" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                                <TextBlock Text="{Binding Title}" />
-                                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0" Text="{Binding DoubleValue}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <TextBlock Text="String values" HorizontalAlignment="Center" FontSize="18"/>
-
-                <!-- string -->
-                <ItemsControl ItemsSource="{Binding StringCollection}" Margin="0,10,0,0">
-                    
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Rows="{Binding StringCollectionLength}" Columns="2" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                                <TextBlock Text="{Binding Title}"/>
-                                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding StringValue}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <TextBlock Text="Enum values" HorizontalAlignment="Center" FontSize="18"/>
-
-                <!-- Enums -->
-                <ItemsControl ItemsSource="{Binding EnumCollection}" Margin="0,10,0,0">
-                    
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Rows="{Binding EnumCollectionLength}" Columns="2" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding Title}"/>
-                                <ComboBox  MinWidth="70" ItemsSource="{Binding ComboBoxValues}" Margin="5,0,0,0" SelectedItem="{Binding ComboBoxValue}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
+        <DataTemplate x:Key="bool">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  >
+                <TextBlock  Text="{Binding PropertyName}" TextWrapping="Wrap" />
+                <CheckBox IsChecked="{Binding ValueAsBool}" Margin="5,0,0,0"/>
             </StackPanel>
-        </Grid>
-    </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="numeric">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                <TextBlock Text="{Binding PropertyName}" />
+                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0" Text="{Binding ValueAsDouble}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="string">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                <TextBlock Text="{Binding PropertyName}"/>
+                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="enum">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock Text="{Binding PropertyName}"/>
+                <ComboBox  MinWidth="70" ItemsSource="{Binding AvailableEnumValues}" Margin="5,0,0,0" SelectedItem="{Binding ValueAsEnum}" />
+            </StackPanel>
+        </DataTemplate>
+
+
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+        <StackPanel Orientation="Vertical"  Margin="0,10,0,0" HorizontalAlignment="Center">
+
+            <ItemsControl ItemsSource="{Binding AllAvailableProperties}">
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="{Binding AllAvailablePropertiesLength}" Columns="2"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}" Margin="40,5,0,0">
+                            <ContentControl.Style>
+                                <Style TargetType="ContentControl">
+                                    <Style.Triggers>
+
+                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Bool}">
+                                            <Setter Property="ContentTemplate"
+                                                        Value="{StaticResource bool}" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Numeric}">
+                                            <Setter Property="ContentTemplate"
+                                                         Value="{StaticResource numeric}" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.String}">
+                                            <Setter Property="ContentTemplate"
+                                                         Value="{StaticResource string}" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Enum}">
+                                            <Setter Property="ContentTemplate"
+                                                         Value="{StaticResource enum}" />
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentControl.Style>
+                        </ContentControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+    </ScrollViewer>
+
 </UserControl>

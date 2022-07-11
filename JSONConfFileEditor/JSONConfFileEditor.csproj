@@ -73,9 +73,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Abstractions\Classes\RealyCommand.cs" />
+    <Compile Include="Abstractions\Classes\RelayCommand.cs" />
     <Compile Include="Abstractions\Enums\FeedbackMechanismGroupOne.cs" />
     <Compile Include="Abstractions\Enums\FeedbackMechanismGroupTwo.cs" />
+    <Compile Include="Abstractions\Enums\PossibleTypes.cs" />
+    <Compile Include="Models\MyCustomConfigurationClass.cs" />
+    <Compile Include="Models\MyCustomConfigurationClass2.cs" />
+    <Compile Include="Models\PropertyDescriptionBuilder.cs" />
     <Compile Include="ViewModel\JSONConfigurationEditor.cs" />
     <Compile Include="ViewModel\JSONControlViewModel.cs" />
     <Compile Include="View\JsonPropertiesView.xaml.cs">
@@ -125,8 +129,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

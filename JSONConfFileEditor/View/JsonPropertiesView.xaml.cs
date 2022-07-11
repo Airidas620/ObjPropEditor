@@ -24,8 +24,6 @@ namespace JSONConfFileEditor.View
     {
         public JsonPropertiesView()
         {
-
-            Console.WriteLine("hi");
             InitializeComponent();
         }
 

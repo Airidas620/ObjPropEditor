@@ -1,5 +1,6 @@
 ﻿using JSONConfFileEditor.Abstractions.Classes;
 using JSONConfFileEditor.Abstractions.Enums;
+using JSONConfFileEditor.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace JSONConfFileEditor.ViewModel
             get { return jSONConfigurationEditor; }
         }
 
-        MyCustomConfigurationClass myCustomConfigurationClass;
+        MyCustomConfigurationClass2 myCustomConfigurationClass;
 
         public RelayCommand SaveConfigurationCommand { private set; get; }
 
@@ -28,7 +29,7 @@ namespace JSONConfFileEditor.ViewModel
         /// <summary>
         /// Saves serialized config object to file
         /// </summary>
-        void SaveConfigToFile(MyCustomConfigurationClass myCustomConfigurationClass, string path)
+        void SaveConfigToFile(Object myCustomConfigurationClass, string path)
         {
             File.WriteAllText(path, JsonConvert.SerializeObject(jSONConfigurationEditor.MyCustomConfigurationClass, Formatting.Indented));
         }
@@ -36,66 +37,24 @@ namespace JSONConfFileEditor.ViewModel
         private void ExecuteSaveConfigurationCommand(object obj)
         {
 
-            jSONConfigurationEditor.SetUpConfigurationClass();
+            jSONConfigurationEditor.SetUpConfigurationClass2();
 
             SaveConfigToFile(jSONConfigurationEditor.MyCustomConfigurationClass, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "JSONConf.txt"));
         }
 
         public JSONControlViewModel()
         {
-            myCustomConfigurationClass = new MyCustomConfigurationClass();
+            myCustomConfigurationClass = new MyCustomConfigurationClass2();
 
             jSONConfigurationEditor = new JSONConfigurationEditor(myCustomConfigurationClass);
+
+            MyCustomConfigurationClass2 myCustomConfigurationClass2 = new MyCustomConfigurationClass2();
+
+            //Console.Write(JsonConvert.SerializeObject(myCustomConfigurationClass2, Formatting.Indented));
 
             SaveConfigurationCommand = new RelayCommand(ExecuteSaveConfigurationCommand);
         }
 
-        #region JSON object
-        /// <summary>
-        /// Class for JSON config file 
-        /// </summary>
-        [JsonObject(MemberSerialization.OptIn)]
-      
-        public class MyCustomConfigurationClass
-        {
-           
-            [JsonProperty]
-            public bool IsFeedbackEnabled { get; set; }
-
-            [JsonProperty]
-            public bool IsFeedbackEnabled2 { get; set; }
-
-            [JsonProperty]
-            public bool IsFeedbackEnabled3 { get; set; }
-
-            [JsonProperty]
-            public bool IsFeedbackEnabled4 { get; set; }
-
-            [JsonProperty]
-            public bool IsFeedbackEnabled5 { get; set; }
-
-            [JsonProperty]
-            public double GetLastFeedbackValue { get; set; }
-
-            [JsonProperty]
-            public double GetLastFeedbackValue2 { get; set; }
-
-            [JsonProperty]
-            public string FeedbackTitle { get; set; }
-
-            [JsonProperty]
-            public string FeedbackTitle2 { get; set; }
-
-            [JsonProperty]
-            public FeedbackMechanismGroupOneEnum TypeOfFeedbackMechanism { get; set; }
-
-            [JsonProperty]
-            public FeedbackMechanismGroupOneEnum TypeOfFeedbackMechanism2 { get; set; }
-
-            [JsonProperty]
-            public FeedbackMechanismGroupTwoEnum TypeOfFeedbackMechanism3 { get; set; }
-
-        }
-        #endregion
+       
     }
 }
