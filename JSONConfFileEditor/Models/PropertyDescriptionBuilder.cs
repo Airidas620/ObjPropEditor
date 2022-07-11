@@ -28,8 +28,10 @@ namespace JSONConfFileEditor.Models
 			var fields = type.GetFields().ToList();
 
 			fields.ForEach(field => {
-				TryResolvePropertyAndAddToCollection(field.FieldType);
-			});
+                AllAvailableProperties.Add(new PropertyDescription() { PropertyName = field.Name, GeneralProperty = PossibleTypes.FieldLine});
+                TryResolvePropertyAndAddToCollection(field.FieldType);
+                AllAvailableProperties.Add(new PropertyDescription() { PropertyName = field.Name, GeneralProperty = PossibleTypes.FieldLine});
+            });
 
 
 			var props = type.GetProperties().ToList();
@@ -38,10 +40,7 @@ namespace JSONConfFileEditor.Models
             {
 				if (prop.PropertyType.IsEnum)
 				{
-					var propDescription = new PropertyDescription() { PropertyName = prop.Name, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.Enum };
-					propDescription.AvailableEnumValues = Enum.GetValues(prop.PropertyType);
-
-					AllAvailableProperties.Add(propDescription);
+					AllAvailableProperties.Add(new PropertyDescription() { PropertyName = prop.Name, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.Enum, AvailableEnumValues = Enum.GetValues(prop.PropertyType)});
 					continue;
 				}
 
@@ -61,7 +60,6 @@ namespace JSONConfFileEditor.Models
 				if (prop.PropertyType == typeof(bool))
 				{
 					AllAvailableProperties.Add(new PropertyDescription() { PropertyName = prop.Name, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.Bool});
-
 				}
 
 
@@ -105,7 +103,13 @@ namespace JSONConfFileEditor.Models
 
 		public class PropertyDescription
 		{
-			public System.Type PropertyType { get; set; }
+
+			public PropertyDescription()
+            {
+
+            }
+
+			public Type PropertyType { get; set; }
 
 			public string PropertyName { get; set; }
 
@@ -121,8 +125,6 @@ namespace JSONConfFileEditor.Models
 
 			public PossibleTypes GeneralProperty { get; set; }
 
-
-			public bool testingLine = true;
 		}
 
 	}

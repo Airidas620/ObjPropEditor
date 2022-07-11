@@ -50,8 +50,6 @@ namespace JSONConfFileEditor.ViewModel
 
             MyCustomConfigurationClass2 myCustomConfigurationClass2 = new MyCustomConfigurationClass2();
 
-            //Console.Write(JsonConvert.SerializeObject(myCustomConfigurationClass2, Formatting.Indented));
-
             SaveConfigurationCommand = new RelayCommand(ExecuteSaveConfigurationCommand);
         }
 

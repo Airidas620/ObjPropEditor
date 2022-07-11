@@ -46,7 +46,8 @@ namespace JSONConfFileEditor.ViewModel
         private void setConfigInstanceMemebers(Type type, Object src, ref  int propDesIndex)
         {
             var fields = type.GetFields().ToList();
-            Console.WriteLine(type.GetProperty("FeedbackTitle1x").ToString());
+
+            PropertyDescription propertyDescription;
 
             foreach (var field in fields)
             {
@@ -55,73 +56,135 @@ namespace JSONConfFileEditor.ViewModel
 
             var props = type.GetProperties().ToList();
 
+
             foreach (var prop in props)
             {
 
-                if (prop.PropertyType.IsEnum)
+                while(AllAvailableProperties.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.FieldLine)
                 {
-                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsEnum);
-                    continue;
+                    propDesIndex++;
+                }
+                propertyDescription = AllAvailableProperties.ElementAt(propDesIndex);
+
+
+                if (propertyDescription.GeneralProperty == PossibleTypes.Enum)
+                {
+                    prop.SetValue(src, propertyDescription.ValueAsEnum);
+                    
                 }
 
-                if (CheckIfPropertyIsNumeric(prop))
+                if (propertyDescription.GeneralProperty == PossibleTypes.String)
                 {
-                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsDouble);
+                    prop.SetValue(src, propertyDescription.ValueAsString);
                 }
 
-                if (prop.PropertyType == typeof(string))
+                if (propertyDescription.GeneralProperty == PossibleTypes.Bool)
                 {
-                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsString);//AllAvailableProperties.ElementAt(propDesIndex).ValueAsString
+                    prop.SetValue(src, propertyDescription.ValueAsBool);
                 }
 
 
-                if (prop.PropertyType == typeof(bool))
+                if (propertyDescription.GeneralProperty == PossibleTypes.Numeric)
                 {
-                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsBool);
+
+                    string ValueAsDoubleString = propertyDescription.ValueAsDouble.ToString();
+
+                    switch (Type.GetTypeCode(prop.PropertyType))
+                    {
+                        case TypeCode.Byte:
+                            byte byteNumber;
+                            if (Byte.TryParse(ValueAsDoubleString, out byteNumber))
+                            {
+                                prop.SetValue(src, byteNumber);
+                            }
+                            break;
+
+                        case TypeCode.Decimal:
+                            decimal decimalNumber;
+                            if (Decimal.TryParse(ValueAsDoubleString, out decimalNumber))
+                            {
+                                prop.SetValue(src, decimalNumber);
+                            }
+                            break;
+
+                        case TypeCode.Double:
+                            double doubleNumber;
+                            if (Double.TryParse(ValueAsDoubleString, out doubleNumber))
+                            {
+                                prop.SetValue(src, doubleNumber);
+                            }
+                            break;
+
+                        case TypeCode.Int16:
+                            Int16 int16Number;
+                            if (Int16.TryParse(ValueAsDoubleString, out int16Number))
+                            {
+                                prop.SetValue(src, int16Number);
+                            }
+                            break;
+
+                        case TypeCode.Int32:
+                            Int32 int32Number;
+                            if (Int32.TryParse(ValueAsDoubleString, out int32Number))
+                            {
+                                prop.SetValue(src, int32Number);
+                            }
+                            break;
+
+                        case TypeCode.Int64:
+                            Int64 int64Number;
+                            if (Int64.TryParse(ValueAsDoubleString, out int64Number))
+                            {
+                                prop.SetValue(src, int64Number);
+                            }
+                            break;
+
+                        case TypeCode.SByte:
+                            sbyte sbyteNumber;
+                            if (sbyte.TryParse(ValueAsDoubleString, out sbyteNumber))
+                            {
+                                prop.SetValue(src, sbyteNumber);
+                            }
+                            break;
+
+                        case TypeCode.Single:
+                            Single SingleNumber;
+                            if (Single.TryParse(ValueAsDoubleString, out SingleNumber))
+                            {
+                                prop.SetValue(src, SingleNumber);
+                            }
+                            break;
+
+                        case TypeCode.UInt16:
+                            UInt16 uInt16Number;
+                            if (UInt16.TryParse(ValueAsDoubleString, out uInt16Number))
+                            {
+                                prop.SetValue(src, uInt16Number);
+                            }
+                            break;
+
+                        case TypeCode.UInt32:
+                            UInt32 uInt32Number;
+                            if (UInt32.TryParse(ValueAsDoubleString, out uInt32Number))
+                            {
+                                prop.SetValue(src, uInt32Number);
+                            }
+                            break;
+
+                        case TypeCode.UInt64:
+                            UInt64 uInt64Number;
+                            if (UInt64.TryParse(ValueAsDoubleString, out uInt64Number))
+                            {
+                                prop.SetValue(src, uInt64Number);
+                            }
+                            break;
+                    }
                 }
 
                 propDesIndex++;
 
             }
-            ///////////
-            /*
-            var fields = type.GetFields().ToList();
-
-            foreach (var field in fields)
-            {
-                setConfigInstanceMemebers(field.FieldType, field.GetValue(src), ref propDesIndex);
-            }
-
-            var props = type.GetProperties().ToList();
-
-            foreach (var prop in props)
-            {
-
-                if (prop.PropertyType.IsEnum)
-                {
-                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsEnum);
-                    continue;
-                }
-
-                if (CheckIfPropertyIsNumeric(prop))
-                {
-                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsDouble);
-                }
-
-                if (prop.PropertyType == typeof(string))
-                {
-                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsString);//AllAvailableProperties.ElementAt(propDesIndex).ValueAsString
-                }
-
-
-                if (prop.PropertyType == typeof(bool))
-                {
-                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsBool);
-                }
-
-                propDesIndex++;
-
-            }*/
+           
         }
 
         #region commented text

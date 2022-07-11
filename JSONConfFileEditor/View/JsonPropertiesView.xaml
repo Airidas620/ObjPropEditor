@@ -38,6 +38,12 @@
             </StackPanel>
         </DataTemplate>
 
+        <DataTemplate x:Key="FieldLine">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Foreground="#FFDE1717" />
+            </StackPanel>
+        </DataTemplate>
+
 
     </UserControl.Resources>
 
@@ -48,7 +54,7 @@
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="{Binding AllAvailablePropertiesLength}" Columns="2"/>
+                        <UniformGrid Rows="{Binding AllAvailablePropertiesLength}" Columns="1"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -78,6 +84,11 @@
                                         <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Enum}">
                                             <Setter Property="ContentTemplate"
                                                     Value="{StaticResource enum}" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.FieldLine}">
+                                            <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource FieldLine}" />
                                         </DataTrigger>
 
                                     </Style.Triggers>

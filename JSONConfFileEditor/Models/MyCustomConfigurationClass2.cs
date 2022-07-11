@@ -30,10 +30,10 @@ namespace JSONConfFileEditor.Models
         public bool IsFeedbackEnabled5 { get; set; }
 
         [JsonProperty]
-        public double GetLastFeedbackValue { get; set; }
+        public uint GetLastFeedbackValue { get; set; }
 
         [JsonProperty]
-        public double GetLastFeedbackValue2 { get; set; }
+        public uint GetLastFeedbackValue2 { get; set; }
 
         [JsonProperty]
         public string FeedbackTitle { get; set; }
@@ -67,7 +67,7 @@ namespace JSONConfFileEditor.Models
             public class InnerClass2
             {
                 [JsonProperty]
-                public string FeedbackTitle2x { get; set; }
+                public string FeedbackTitle2 { get; set; }
 
                 [JsonProperty]
                 public bool IsFeedbackEnabled2x { get; set; }
