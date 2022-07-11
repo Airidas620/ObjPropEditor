@@ -120,6 +120,9 @@ namespace JSONConfFileEditor.Models
 			public Array AvailableEnumValues { get; set; }
 
 			public PossibleTypes GeneralProperty { get; set; }
+
+
+			public bool testingLine = true;
 		}
 
 	}

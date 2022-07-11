@@ -7,8 +7,7 @@
              xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
              xmlns:local="clr-namespace:JSONConfFileEditor.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="#f5ecd3">
+             d:DesignHeight="450" d:DesignWidth="800" Background="White">
     <UserControl.Resources>
 
         <DataTemplate x:Key="bool">
@@ -60,24 +59,25 @@
                                 <Style TargetType="ContentControl">
                                     <Style.Triggers>
 
+                                        
                                         <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Bool}">
                                             <Setter Property="ContentTemplate"
-                                                        Value="{StaticResource bool}" />
+                                                    Value="{StaticResource bool}" />
                                         </DataTrigger>
 
                                         <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Numeric}">
                                             <Setter Property="ContentTemplate"
-                                                         Value="{StaticResource numeric}" />
+                                                    Value="{StaticResource numeric}" />
                                         </DataTrigger>
 
                                         <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.String}">
                                             <Setter Property="ContentTemplate"
-                                                         Value="{StaticResource string}" />
+                                                    Value="{StaticResource string}" />
                                         </DataTrigger>
 
                                         <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Enum}">
                                             <Setter Property="ContentTemplate"
-                                                         Value="{StaticResource enum}" />
+                                                    Value="{StaticResource enum}" />
                                         </DataTrigger>
 
                                     </Style.Triggers>

@@ -45,8 +45,8 @@ namespace JSONConfFileEditor.ViewModel
 
         private void setConfigInstanceMemebers(Type type, Object src, ref  int propDesIndex)
         {
-            
             var fields = type.GetFields().ToList();
+            Console.WriteLine(type.GetProperty("FeedbackTitle1x").ToString());
 
             foreach (var field in fields)
             {
@@ -83,6 +83,45 @@ namespace JSONConfFileEditor.ViewModel
                 propDesIndex++;
 
             }
+            ///////////
+            /*
+            var fields = type.GetFields().ToList();
+
+            foreach (var field in fields)
+            {
+                setConfigInstanceMemebers(field.FieldType, field.GetValue(src), ref propDesIndex);
+            }
+
+            var props = type.GetProperties().ToList();
+
+            foreach (var prop in props)
+            {
+
+                if (prop.PropertyType.IsEnum)
+                {
+                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsEnum);
+                    continue;
+                }
+
+                if (CheckIfPropertyIsNumeric(prop))
+                {
+                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsDouble);
+                }
+
+                if (prop.PropertyType == typeof(string))
+                {
+                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsString);//AllAvailableProperties.ElementAt(propDesIndex).ValueAsString
+                }
+
+
+                if (prop.PropertyType == typeof(bool))
+                {
+                    prop.SetValue(src, AllAvailableProperties.ElementAt(propDesIndex).ValueAsBool);
+                }
+
+                propDesIndex++;
+
+            }*/
         }
 
         #region commented text
