@@ -12,7 +12,10 @@ namespace JSONConfFileEditor.Abstractions.Enums
 		String,
 		Bool,
 		Enum,
+		Class,
+		List,
 		FieldLine,
+		Null,
 		Unknown
 	}
 }

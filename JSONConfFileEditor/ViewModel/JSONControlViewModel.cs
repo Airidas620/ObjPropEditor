@@ -20,8 +20,7 @@ namespace JSONConfFileEditor.ViewModel
         {
             get { return jSONConfigurationEditor; }
         }
-
-        MyCustomConfigurationClass2 myCustomConfigurationClass;
+       
 
         public RelayCommand SaveConfigurationCommand { private set; get; }
 
@@ -29,26 +28,23 @@ namespace JSONConfFileEditor.ViewModel
         /// <summary>
         /// Saves serialized config object to file
         /// </summary>
-        void SaveConfigToFile(Object myCustomConfigurationClass, string path)
+        void SaveConfigToFile(Object serializableClass, string path)
         {
-            File.WriteAllText(path, JsonConvert.SerializeObject(jSONConfigurationEditor.MyCustomConfigurationClass, Formatting.Indented));
+            File.WriteAllText(path, JsonConvert.SerializeObject(serializableClass, Formatting.Indented));
         }
 
         private void ExecuteSaveConfigurationCommand(object obj)
         {
-
-            jSONConfigurationEditor.SetUpConfigurationClass2();
-
-            SaveConfigToFile(jSONConfigurationEditor.MyCustomConfigurationClass, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "JSONConf.txt"));
+            var myConfiguration = jSONConfigurationEditor.GetConfiguredClass();
+            SaveConfigToFile(myConfiguration, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "JSONConf.txt"));
         }
 
         public JSONControlViewModel()
         {
-            myCustomConfigurationClass = new MyCustomConfigurationClass2();
+            //var configurationFile = new CarbideSIModel();
+            var configurationFile = new MyCustomConfigurationClass2();
 
-            jSONConfigurationEditor = new JSONConfigurationEditor(myCustomConfigurationClass);
-
-            MyCustomConfigurationClass2 myCustomConfigurationClass2 = new MyCustomConfigurationClass2();
+            jSONConfigurationEditor = new JSONConfigurationEditor(configurationFile);         
 
             SaveConfigurationCommand = new RelayCommand(ExecuteSaveConfigurationCommand);
         }

@@ -10,17 +10,26 @@ using JSONConfFileEditor.ViewModel;
 using JSONConfFileEditor.Models;
 using System.Collections.ObjectModel;
 using static JSONConfFileEditor.Models.PropertyDescriptionBuilder;
+using JSONConfFileEditor.Abstractions.Classes;
 
 namespace JSONConfFileEditor.ViewModel
 {
     public class JSONConfigurationEditor : INotifyPropertyChanged
     {
 
-        public ObservableCollection<PropertyDescription> AllAvailableProperties { get; private set; }
+        public string buttonText { get; set; } = "hii";
 
-        public int AllAvailablePropertiesLength { get; private set; }
+        private ObservableCollection<PropertyDescription> allAvailableProperties;
+
+        public ObservableCollection<PropertyDescription> AllAvailableProperties {
+            get { return new ObservableCollection<PropertyDescription>(allAvailableProperties.Where(prop => prop.GeneralProperty != PossibleTypes.Class && prop.GeneralProperty != PossibleTypes.Null)); }
+            private set { allAvailableProperties = value; } 
+        }
+
+        public int AllAvailablePropertiesLength { get ; private set; }
 
         public Object MyCustomConfigurationClass { get; private set; }
+
 
         public JSONConfigurationEditor(Object myCustomConfigurationClass)
         {
@@ -33,26 +42,27 @@ namespace JSONConfFileEditor.ViewModel
         }
 
 
-        public void SetUpConfigurationClass2()
+        public Object GetConfiguredClass()
         {
             int propDesIndex = 0;
 
-            setConfigInstanceMemebers(MyCustomConfigurationClass.GetType(), MyCustomConfigurationClass, ref propDesIndex);
+            if(allAvailableProperties.Count != 0)
+                SetConfigInstanceMemebers(MyCustomConfigurationClass.GetType(), MyCustomConfigurationClass, ref propDesIndex);
 
-            Console.WriteLine("n " + propDesIndex);
 
+            return MyCustomConfigurationClass; 
         }
 
-        private void setConfigInstanceMemebers(Type type, Object src, ref  int propDesIndex)
+        private void SetConfigInstanceMemebers(Type type, Object src, ref  int propDesIndex)
         {
             var fields = type.GetFields().ToList();
 
             PropertyDescription propertyDescription;
 
-            foreach (var field in fields)
+            /*foreach (var field in fields)
             {
                 setConfigInstanceMemebers(field.FieldType, field.GetValue(src), ref propDesIndex);
-            }
+            }*/
 
             var props = type.GetProperties().ToList();
 
@@ -60,35 +70,38 @@ namespace JSONConfFileEditor.ViewModel
             foreach (var prop in props)
             {
 
-                while(AllAvailableProperties.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.FieldLine)
+                while(allAvailableProperties.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.FieldLine)
                 {
                     propDesIndex++;
                 }
-                propertyDescription = AllAvailableProperties.ElementAt(propDesIndex);
+                propertyDescription = allAvailableProperties.ElementAt(propDesIndex);
 
+                propDesIndex++;
 
                 if (propertyDescription.GeneralProperty == PossibleTypes.Enum)
                 {
                     prop.SetValue(src, propertyDescription.ValueAsEnum);
-                    
+                    continue;
                 }
 
                 if (propertyDescription.GeneralProperty == PossibleTypes.String)
                 {
                     prop.SetValue(src, propertyDescription.ValueAsString);
+                    continue;
                 }
 
                 if (propertyDescription.GeneralProperty == PossibleTypes.Bool)
                 {
-                    prop.SetValue(src, propertyDescription.ValueAsBool);
-                }
 
+                    prop.SetValue(src, propertyDescription.ValueAsBool);
+                    continue;
+                }
 
                 if (propertyDescription.GeneralProperty == PossibleTypes.Numeric)
                 {
 
                     string ValueAsDoubleString = propertyDescription.ValueAsDouble.ToString();
-
+                    #region Numeric types
                     switch (Type.GetTypeCode(prop.PropertyType))
                     {
                         case TypeCode.Byte:
@@ -179,37 +192,20 @@ namespace JSONConfFileEditor.ViewModel
                             }
                             break;
                     }
+                    #endregion
+                    continue;
                 }
 
-                propDesIndex++;
+                if (propertyDescription.GeneralProperty == PossibleTypes.Class)
+                {
+                    SetConfigInstanceMemebers(prop.PropertyType, prop.GetValue(src), ref propDesIndex);
+                }
+
+
 
             }
            
         }
-
-        #region commented text
-
-        //SaveConfiguration()
-        //{
-        //    var props = curentConfigClass.GetProperties();
-
-        //    props.ForEach(prop =>
-        //    {
-        //        if (AllAvailableProps.Contains(prop.Name)) ;
-
-        //        //What is property type
-        //        //Get that property value
-        //        //If successful 
-        //        //currentConfigClass.thatproperty = resolvedValue;
-
-        //    } );
-
-        //    // serialize current class and save to file;
-        //}
-
-        //  public Dictionary<string,T> AllAvailableProps { get; set; }
-
-        #endregion
 
         #region notification
         public event PropertyChangedEventHandler PropertyChanged;

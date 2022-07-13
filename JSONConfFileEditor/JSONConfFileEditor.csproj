@@ -77,6 +77,7 @@
     <Compile Include="Abstractions\Enums\FeedbackMechanismGroupOne.cs" />
     <Compile Include="Abstractions\Enums\FeedbackMechanismGroupTwo.cs" />
     <Compile Include="Abstractions\Enums\PossibleTypes.cs" />
+    <Compile Include="Models\CarbideSIConfig.cs" />
     <Compile Include="Models\MyCustomConfigurationClass.cs" />
     <Compile Include="Models\MyCustomConfigurationClass2.cs" />
     <Compile Include="Models\PropertyDescriptionBuilder.cs" />
