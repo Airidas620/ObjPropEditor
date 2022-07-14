@@ -110,7 +110,7 @@
 
                     </ItemsControl>
                     <StackPanel Orientation="Horizontal">
-                        <Button Content= "Add" Command="{Binding AddToListCommand}"  Margin="5,0,0,0"/>
+                        <Button Content= "Add" Command="{Binding AddToListCommand}"/>
                         <Button Content= "Remove" Command="{Binding RemoveFromListCommand}"  Margin="5,0,0,0"/>
                     </StackPanel>
                     
