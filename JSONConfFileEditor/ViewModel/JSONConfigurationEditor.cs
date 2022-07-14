@@ -14,7 +14,7 @@ using JSONConfFileEditor.Abstractions.Classes;
 
 namespace JSONConfFileEditor.ViewModel
 {
-    public class JSONConfigurationEditor : INotifyPropertyChanged
+    public class JSONConfigurationEditor
     {
 
         public string buttonText { get; set; } = "hii";
@@ -70,7 +70,7 @@ namespace JSONConfFileEditor.ViewModel
             foreach (var prop in props)
             {
 
-                while(allAvailableProperties.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.FieldLine)
+                while(allAvailableProperties.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ObjectLine)
                 {
                     propDesIndex++;
                 }
@@ -196,6 +196,16 @@ namespace JSONConfFileEditor.ViewModel
                     continue;
                 }
 
+                if (propertyDescription.GeneralProperty == PossibleTypes.List)
+                {
+                    if(propertyDescription.ListProperty == PossibleTypes.String)
+                    {
+                        //((List<string>)(prop.GetValue(src))).AddRange(propertyDescription.StringList);
+
+                        prop.SetValue(src, propertyDescription.StringList.ToList());
+                    }
+                }
+
                 if (propertyDescription.GeneralProperty == PossibleTypes.Class)
                 {
                     SetConfigInstanceMemebers(prop.PropertyType, prop.GetValue(src), ref propDesIndex);
@@ -206,21 +216,6 @@ namespace JSONConfFileEditor.ViewModel
             }
            
         }
-
-        #region notification
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        // This method is called by the Set accessor of each property.
-        // The CallerMemberName attribute that is applied to the optional propertyName
-        // parameter causes the property name of the caller to be substituted as an argument.
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-        #endregion
 
     }
 }

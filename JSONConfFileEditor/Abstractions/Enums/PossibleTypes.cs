@@ -14,7 +14,8 @@ namespace JSONConfFileEditor.Abstractions.Enums
 		Enum,
 		Class,
 		List,
-		FieldLine,
+		ObjectLine,
+		ListLine,
 		Null,
 		Unknown
 	}

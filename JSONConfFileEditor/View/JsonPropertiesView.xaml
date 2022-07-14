@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:enums ="clr-namespace:JSONConfFileEditor.Abstractions.Enums"
+             xmlns:models ="clr-namespace:JSONConfFileEditor.Models"
              xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
              xmlns:local="clr-namespace:JSONConfFileEditor.View"
              mc:Ignorable="d" 
@@ -50,12 +51,54 @@
             </StackPanel>
         </DataTemplate>
 
+        <DataTemplate x:Key="DataTemplateTrigger">
+            <ContentControl Content="{Binding}" Margin="0,7,0,0" >
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Style.Triggers>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Bool}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource bool}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Numeric}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource numeric}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.String}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource string}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Enum}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource enum}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.List}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{DynamicResource List}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.ObjectLine}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource FieldLine}" />
+                            </DataTrigger>
+
+
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </DataTemplate>
 
 
         <DataTemplate x:Key="List">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                    <ItemsControl ItemsSource="{Binding ListPropertyDescriptions}">
+                    <ItemsControl ItemsSource="{Binding ListPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTrigger}">
 
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -65,58 +108,17 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <ContentControl Content="{Binding}" Margin="0,7,0,0" >
-                                    <ContentControl.Style>
-                                        <Style TargetType="ContentControl">
-                                            <Style.Triggers>
-
-                                                <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Bool}">
-                                                    <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource bool}" />
-                                                </DataTrigger>
-
-                                                <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Numeric}">
-                                                    <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource numeric}" />
-                                                </DataTrigger>
-
-                                                <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.String}">
-                                                    <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource string}" />
-                                                </DataTrigger>
-
-                                                <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Enum}">
-                                                    <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource enum}" />
-                                                </DataTrigger>
-
-                                                <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.List}">
-                                                    <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource List}" />
-                                                </DataTrigger>
-
-                                                <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.FieldLine}">
-                                                    <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource FieldLine}" />
-                                                </DataTrigger>
-
-
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ContentControl.Style>
-                                </ContentControl>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        
                     </ItemsControl>
-                </StackPanel>
-                <TextBlock Width="{Binding NestDepth}"></TextBlock>
-                <TextBlock Text="{Binding PropertyName}"/>
-                <Button Content= "Add" Command="{Binding AddToListCommand}"  Margin="5,0,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content= "Add" Command="{Binding AddToListCommand}"  Margin="5,0,0,0"/>
+                        <Button Content= "Remove" Command="{Binding RemoveFromListCommand}"  Margin="5,0,0,0"/>
+                    </StackPanel>
+                    
 
-                <ListBox MinWidth="70" ItemsSource="{Binding StringList}" MaxHeight="60" ScrollViewer.VerticalScrollBarVisibility="Hidden"  Margin="0,2,0,0"/>
+                </StackPanel>
+                <!--<TextBlock Width="{Binding NestDepth}"></TextBlock>-->
+                <!--<TextBlock Text="{Binding PropertyName}"/>-->
+                <ListBox Width="120" Height="40" ItemsSource="{Binding StringList}" SelectedIndex="{Binding SelectedItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden"  Margin="0,2,0,0"/>
 
             </StackPanel>
         </DataTemplate>
@@ -128,8 +130,8 @@
         <StackPanel Orientation="Vertical"  Margin="0,10,0,0" HorizontalAlignment="Center">
 
             <!--<Button Content="" Command="{Binding AddToListCommand}"></Button>-->
-            
-            <ItemsControl ItemsSource="{Binding AllAvailableProperties}">
+
+            <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTrigger}">
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -141,50 +143,7 @@
                     
                 </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ContentControl Content="{Binding}" Margin="0,7,0,0" >
-                            <ContentControl.Style>
-                                <Style TargetType="ContentControl">
-                                    <Style.Triggers>
-
-                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Bool}">
-                                            <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource bool}" />
-                                        </DataTrigger>
-
-                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Numeric}">
-                                            <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource numeric}" />
-                                        </DataTrigger>
-
-                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.String}">
-                                            <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource string}" />
-                                        </DataTrigger>
-
-                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Enum}">
-                                            <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource enum}" />
-                                        </DataTrigger>
-
-                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.List}">
-                                            <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource List}" />
-                                        </DataTrigger>
-
-                                        <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.FieldLine}">
-                                            <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource FieldLine}" />
-                                        </DataTrigger>
-
-
-                                    </Style.Triggers>
-                                </Style>
-                            </ContentControl.Style>
-                        </ContentControl>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
+         
 
             </ItemsControl>
 

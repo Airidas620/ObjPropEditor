@@ -11,13 +11,11 @@ namespace JSONConfFileEditor.Models
 {
     public class MyCustomConfigurationClass2
     {
-        public List<String> test { get; set; } = new List<string>() { "hi", "x" };
+        public List<string> test { get; set; } = new List<string>();
+        //public List<string> test3 { get; set; } = new List<string>();
 
-        public ObservableCollection<string> AllAvailableProperties { get; set; } = new ObservableCollection<string> { "hi", "x" };
-        /*void smth()
-        {
-        }*/
-            
+        //public List<List<string>> test2 { get; set; } = new List<List<string>>();
+
 
         //public InnerClass1 innerClass1 { get; set; } = new InnerClass1();
 
@@ -32,8 +30,10 @@ namespace JSONConfFileEditor.Models
 
         public bool IsFeedbackEnabled4 { get; set; }
 
+        //public ObservableCollection<string> AllAvailableProperties { get; set; } = new ObservableCollection<string> { "hi", "x" };
 
-        /*public bool IsFeedbackEnabled5 { get; set; }
+        /*
+        public bool IsFeedbackEnabled5 { get; set; }
 
 
         public uint GetLastFeedbackValue { get; set; }
