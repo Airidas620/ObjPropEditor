@@ -26,7 +26,7 @@ namespace JSONConfFileEditor.ViewModel
 
 
         /// <summary>
-        /// Saves serialized config object to file
+        /// Saves serialized config object to a file
         /// </summary>
         void SaveConfigToFile(Object serializableClass, string path)
         {

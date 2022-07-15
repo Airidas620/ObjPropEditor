@@ -4,16 +4,16 @@
 exe
 C#
 .cs
-C:\Code\JSONConfFileEditor2\JSONConfFileEditor\obj\Debug\
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\obj\Debug\
 JSONConfFileEditor
 none
 false
 DEBUG;TRACE
-C:\Code\JSONConfFileEditor2\JSONConfFileEditor\App.xaml
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\App.xaml
 2-2069514340
 
-16-1753885252
-18882679668
+17-162033130
+18-715120125
 MainWindow.xaml;View\JsonPropertiesView.xaml;
 
 False
