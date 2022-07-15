@@ -29,7 +29,6 @@ namespace JSONConfFileEditor.Models
         
         public bool IsFeedbackEnabled4 { get; set; }
 
-        
         public bool IsFeedbackEnabled5 { get; set; }
 
         

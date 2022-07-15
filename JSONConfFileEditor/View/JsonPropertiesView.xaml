@@ -14,7 +14,7 @@
         <DataTemplate x:Key="bool">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left"  >
                 <TextBlock Width="{Binding NestDepth}"></TextBlock>
-                <TextBlock Text="{Binding PropertyName}" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding PropertyName}" />
                 <CheckBox IsChecked="{Binding ValueAsBool}" Margin="5,0,0,0"/>
             </StackPanel>
         </DataTemplate>
@@ -44,14 +44,21 @@
         </DataTemplate>
 
 
-        <DataTemplate x:Key="FieldLine">
+        <DataTemplate x:Key="ObjectLine">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left">
                 <TextBlock Width="{Binding NestDepth}"></TextBlock>
                 <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Foreground="#FFDE1717" />
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="DataTemplateTrigger">
+        <DataTemplate x:Key="ListLine">
+            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock Width="{Binding NestDepth}"></TextBlock>
+                <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DataTemplateTriggers">
             <ContentControl Content="{Binding}" Margin="0,7,0,0" >
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">
@@ -84,7 +91,12 @@
 
                             <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.ObjectLine}">
                                 <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource FieldLine}" />
+                                                    Value="{StaticResource ObjectLine}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.ListLine}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource ListLine}" />
                             </DataTrigger>
 
 
@@ -98,27 +110,28 @@
         <DataTemplate x:Key="List">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                    <ItemsControl ItemsSource="{Binding ListPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTrigger}">
+                    <ItemsControl ItemsSource="{Binding ListPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}">
 
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"/>
+                                    VerticalAlignment="Center"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
                     </ItemsControl>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBlock Width="{Binding NestDepth}"></TextBlock>
                         <Button Content= "Add" Command="{Binding AddToListCommand}"/>
                         <Button Content= "Remove" Command="{Binding RemoveFromListCommand}"  Margin="5,0,0,0"/>
                     </StackPanel>
-                    
+
 
                 </StackPanel>
-                <!--<TextBlock Width="{Binding NestDepth}"></TextBlock>-->
-                <!--<TextBlock Text="{Binding PropertyName}"/>-->
-                <ListBox Width="120" Height="40" ItemsSource="{Binding StringList}" SelectedIndex="{Binding SelectedItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden"  Margin="0,2,0,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Width="{Binding NestDepth}"></TextBlock>
+                    <ListBox Width="120" Height="40" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  Margin="0,2,0,0" HorizontalAlignment="Left"/>
+                </StackPanel>
 
             </StackPanel>
         </DataTemplate>
@@ -131,7 +144,7 @@
 
             <!--<Button Content="" Command="{Binding AddToListCommand}"></Button>-->
 
-            <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTrigger}">
+            <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

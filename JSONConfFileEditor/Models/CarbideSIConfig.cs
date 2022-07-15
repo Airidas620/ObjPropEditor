@@ -19,6 +19,7 @@ namespace JSONConfFileEditor.Models
 	{
 		[JsonConverter(typeof(StringEnumConverter))]
 		public HardwareType HardwareType { get; set; } = HardwareType.Demo;
+		public string Title { get; set; }
 	}
 
 	class HarpiaMainBoardSingleShutterConfig : HardwareComponentConfiguration
@@ -39,7 +40,7 @@ namespace JSONConfFileEditor.Models
 		public int HarpiaMainBoardSingleShutterStageIndex { get; set; } = 0;//todo this prop should be moved to object HardwareConfig, which is specific to hardware
 
 
-		//public List<HardwareComponentConfiguration> HardwareComponents { get; set; } = new List<HardwareComponentConfiguration>();
+		public List<HardwareComponentConfiguration> HardwareComponents { get; set; } = new List<HardwareComponentConfiguration>();
 
 		public string CarbideIPAddress { get; set; } = "";
 	
