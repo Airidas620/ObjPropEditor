@@ -27,7 +27,7 @@ namespace JSONConfFileEditor.Models
         public List<InnerClass1> listobj{ get; set; } = new List<InnerClass1>();
 
 
-        //public List<List<string>> test2 { get; set; } = new List<List<string>>();
+        public List<List<string>> test2 { get; set; } = new List<List<string>>();
 
 
         public bool IsFeedbackEnabled { get; set; }
@@ -64,7 +64,7 @@ namespace JSONConfFileEditor.Models
 
         public FeedbackMechanismGroupTwoEnum TypeOfFeedbackMechanism3 { get; set; }
 
-        public InnerClass1 innerClass1 { get; set; } //= new InnerClass1();
+        public InnerClass1 innerClass1 { get; set; } //= new InnerClass1();*/
 
 
         public class InnerClass1

@@ -73,6 +73,14 @@ namespace JSONConfFileEditor.Models
                 if (propertyDescription.GeneralProperty == PossibleTypes.List)
                 {
 
+                    if (propertyDescription.ListProperty == PossibleTypes.List)
+                    {
+                        //patikrinama ar ilgis nelygus nuliui
+                        //Rekursija
+                        //issaugojiams
+                        continue;
+                    }
+
                     if (propertyDescription.ListProperty == PossibleTypes.String)
                     {
                         prop.SetValue(src, propertyDescription.StringList);
@@ -142,7 +150,6 @@ namespace JSONConfFileEditor.Models
                     if (prop.GetValue(src) == null)
                     {
                         prop.SetValue(src, Activator.CreateInstance(prop.PropertyType));
-                        Console.WriteLine("xd");
                     }
                     SetObjectValuesWithPropertyDescription(prop.GetValue(src), propertyDescriptions, ref propDesIndex);
                 }
