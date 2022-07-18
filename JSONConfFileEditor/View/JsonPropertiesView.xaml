@@ -110,7 +110,7 @@
         <DataTemplate x:Key="List">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                    <ItemsControl ItemsSource="{Binding ListPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}">
+                    <ItemsControl ItemsSource="{Binding ListPropertyDescriptionsGraph}" ItemTemplate="{StaticResource DataTemplateTriggers}">
 
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -130,7 +130,8 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Width="{Binding NestDepth}"></TextBlock>
-                    <ListBox Width="120" Height="40" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  Margin="0,2,0,0" HorizontalAlignment="Left"/>
+                    <ListBox Width="120" Height="50" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" Margin="0,2,0,0" HorizontalAlignment="Left"/>
+                    <!--<ListBox Width="220" Height="97" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  Margin="0,2,0,0" HorizontalAlignment="Left"/>-->
                 </StackPanel>
 
             </StackPanel>
@@ -144,7 +145,7 @@
 
             <!--<Button Content="" Command="{Binding AddToListCommand}"></Button>-->
 
-            <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
+            <ItemsControl ItemsSource="{Binding AllAvailablePropertiesGraph}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
