@@ -26,7 +26,7 @@ namespace JSONConfFileEditor.ViewModel
 
 
         /// <summary>
-        /// Saves serialized config object to file
+        /// Saves serialized config object to a file
         /// </summary>
         void SaveConfigToFile(Object serializableClass, string path)
         {
@@ -41,8 +41,8 @@ namespace JSONConfFileEditor.ViewModel
 
         public JSONControlViewModel()
         {
-           var configurationFile = new CarbideSIModel();
-          //  var configurationFile = new MyCustomConfigurationClass2();
+           //var configurationFile = new CarbideSIModel();
+           var configurationFile = new MyCustomConfigurationClass2();
 
             jSONConfigurationEditor = new JSONConfigurationEditor(configurationFile);         
 

@@ -41,18 +41,6 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SciChart.Charting, Version=6.5.1.26063, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
-      <HintPath>..\packages\SciChart.6.5.1.26063\lib\net452\SciChart.Charting.dll</HintPath>
-    </Reference>
-    <Reference Include="SciChart.Core, Version=6.5.1.26063, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
-      <HintPath>..\packages\SciChart.6.5.1.26063\lib\net452\SciChart.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="SciChart.Data, Version=6.5.1.26063, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
-      <HintPath>..\packages\SciChart.6.5.1.26063\lib\net452\SciChart.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="SciChart.Drawing, Version=6.5.1.26063, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
-      <HintPath>..\packages\SciChart.6.5.1.26063\lib\net452\SciChart.Drawing.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -77,9 +65,10 @@
     <Compile Include="Abstractions\Enums\FeedbackMechanismGroupOne.cs" />
     <Compile Include="Abstractions\Enums\FeedbackMechanismGroupTwo.cs" />
     <Compile Include="Abstractions\Enums\PossibleTypes.cs" />
-    <Compile Include="Models\CarbideSIConfig.cs" />
-    <Compile Include="Models\MyCustomConfigurationClass.cs" />
-    <Compile Include="Models\MyCustomConfigurationClass2.cs" />
+    <Compile Include="ConfModels\CarbideSIConfig.cs" />
+    <Compile Include="Models\PropertyDescriptionGUI.cs" />
+    <Compile Include="ConfModels\MyCustomConfigurationClass.cs" />
+    <Compile Include="ConfModels\MyCustomConfigurationClass2.cs" />
     <Compile Include="Models\PropertyDescriptionBuilder.cs" />
     <Compile Include="ViewModel\JSONConfigurationEditor.cs" />
     <Compile Include="ViewModel\JSONControlViewModel.cs" />
