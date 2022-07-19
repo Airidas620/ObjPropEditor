@@ -160,7 +160,7 @@ namespace JSONConfFileEditor.Models
                 var increasedDepth = depth + 40;
 
                 listPropDes.ListProperty = PossibleTypes.List;
-                listPropDes.ListOfList = new List<Object>();
+                listPropDes.ObjectList = new List<Object>();
 
 
                 listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.ListLine });
@@ -259,7 +259,7 @@ namespace JSONConfFileEditor.Models
             /// </summary>
             public List<Object> ObjectList { get; set; }
 
-            public List<Object> ListOfList { get; set; }
+            //public List<Object> ListOfList { get; set; }
 
             /// <summary>
             /// Objects List<T> list Type T resolved at runtime
@@ -353,8 +353,8 @@ namespace JSONConfFileEditor.Models
                 {
                     if(listPropertyDescriptions.Last().ValueAsEnum != null)
                     {
-                        ObjectList.Add(listPropertyDescriptions.Last().ValueAsEnum);
-                        DescriptionList.Add(ObjectList.Last().ToString());
+                        EnumList.Add(listPropertyDescriptions.Last().ValueAsEnum);
+                        DescriptionList.Add(EnumList.Last().ToString());
                     }
                 }
 
@@ -393,10 +393,11 @@ namespace JSONConfFileEditor.Models
 
                     if (listDescritpion.ListProperty == PossibleTypes.String)
                     {
-                        ListOfList.Add(listDescritpion.StringList);
+                        ObjectList.Add(new List<string>(listDescritpion.StringList));//stores reference masyvai laiko masyvus(nuoradas) 
                         
                         DescriptionList.Add(JsonConvert.SerializeObject(listDescritpion.StringList, Formatting.Indented));
-                        
+                        Console.WriteLine(ObjectList.Count());
+
                         //DescriptionList.Add(ListOfList.ToString());
                     }
 
@@ -405,9 +406,10 @@ namespace JSONConfFileEditor.Models
                         /*Console.WriteLine(listDescritpion.ListOfList[0]);
                         Console.WriteLine(listDescritpion.ListOfList.GetType());
                         Console.WriteLine(listDescritpion.ListOfList[0].GetType());*/
-                        ObjectList.Add(listDescritpion.ObjectList);
+                        ObjectList.Add(new List<Object>(listDescritpion.ObjectList));
 
-                        DescriptionList.Add(JsonConvert.SerializeObject(listDescritpion.ListOfList, Formatting.Indented));
+                        DescriptionList.Add(JsonConvert.SerializeObject(listDescritpion.ObjectList, Formatting.Indented));
+                        Console.WriteLine(ObjectList.Count());
 
                         //DescriptionList.Add(ListOfList.ToString());
                     }
@@ -452,22 +454,22 @@ namespace JSONConfFileEditor.Models
 
                 if (ListProperty == PossibleTypes.String)
                 {
-                    RemoveElement(ObjectList, selectedItem);
+                    RemoveElement(StringList, selectedItem);
                 }
 
                 if (ListProperty == PossibleTypes.Numeric)
                 {
-                    RemoveElement(ObjectList, selectedItem);
+                    RemoveElement(DoubleList, selectedItem);
                 }
 
                 if (ListProperty == PossibleTypes.Bool)
                 {
-                    RemoveElement(ObjectList, selectedItem);
+                    RemoveElement(BoolList, selectedItem);
                 }
 
                 if (ListProperty == PossibleTypes.Enum)
                 {
-                    RemoveElement(ObjectList, selectedItem);
+                    RemoveElement(EnumList, selectedItem);
                 }
 
                 if (ListProperty == PossibleTypes.Class)

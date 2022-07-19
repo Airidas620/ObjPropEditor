@@ -75,13 +75,15 @@ namespace JSONConfFileEditor.Models
 
                     if (propertyDescription.ListProperty == PossibleTypes.String)
                     {
-                        prop.SetValue(src, propertyDescription.ObjectList.OfType<string>().ToList());
+
+
+                        prop.SetValue(src, propertyDescription.StringList);
                         continue;
                     }
 
                     if (propertyDescription.ListProperty == PossibleTypes.Bool)
                     {
-                        prop.SetValue(src, propertyDescription.ObjectList.OfType<bool>().ToList());
+                        prop.SetValue(src, propertyDescription.BoolList);
                         continue;
                     }
 
@@ -109,11 +111,11 @@ namespace JSONConfFileEditor.Models
                     if (propertyDescription.ListProperty == PossibleTypes.Enum)
                     {
 
-                        Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList.Count());
+                        Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.EnumList.Count());
 
                         for (int i = 0; i < values.Length; i++)
                         {
-                            values.SetValue(propertyDescription.ObjectList[i], i);
+                            values.SetValue(propertyDescription.EnumList[i], i);
                         }
 
                         prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
@@ -122,113 +124,109 @@ namespace JSONConfFileEditor.Models
 
                     Array ArrayCreator(Type genericType, PropertyDescription propDescription)
                     {
-                       
-                        if(propDescription.ListProperty == PossibleTypes.List)
+                        Array array;
+                        Array innerArray;
+
+                        //Console.WriteLine(genericType);
+
+                        /*foreach(var item in propDescription.ObjectList)
                         {
-                            PropertyDescription listDescritpion = null;
-
-                            for (int i = 0; i < propDescription.ListPropertyDescriptions.Count(); i++)
-                            {
-                                if (propDescription.ListPropertyDescriptions[i].GeneralProperty == PossibleTypes.List)
-                                {
-                                    listDescritpion = propDescription.ListPropertyDescriptions[i];
-                                }
-                            }
-
-                            Console.WriteLine(genericType.GetGenericArguments().First());
-                            
-
-                            ArrayCreator(genericType.GetGenericArguments().First(), listDescritpion);
-                        }
-
-                        /*if (propertyDescription.ListProperty == PossibleTypes.String)
-                        {
-                            prop.SetValue(src, propertyDescription.ObjectList.OfType<string>().ToList());
-                            continue;
-                        }
-
-                        if (propertyDescription.ListProperty == PossibleTypes.Bool)
-                        {
-                            prop.SetValue(src, propertyDescription.ObjectList.OfType<bool>().ToList());
-                            continue;
-                        }
-
-                        if (propertyDescription.ListProperty == PossibleTypes.Numeric)
-                        {
-                            string ValueAsDoubleString = propertyDescription.ValueAsDouble.ToString();
-
-                            //For Numeric Enum and Class types you need to convert from generic List(Double, Enum, Object) to src Type T list at runtime
-                            //First array gets created of Type T. Then it's values are set with generic list
-                            Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList.Count());
-
-                            for (int i = 0; i < values.Length; i++)
-                            {
-                                ValueAsDoubleString = propertyDescription.ObjectList[i].ToString();
-                                //Change from double to required type
-                                values.SetValue(SetNumericProp(null, prop.PropertyType.GetGenericArguments().First(), ValueAsDoubleString, true), i);
-                            }
-
-
-                            //List<T> is created for src List with constructor List<T>(IEnumerable<T>)
-                            prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
-                            continue;
-                        }
-
-                        if (propertyDescription.ListProperty == PossibleTypes.Enum)
-                        {
-
-                            Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList.Count());
-
-                            for (int i = 0; i < values.Length; i++)
-                            {
-                                values.SetValue(propertyDescription.ObjectList[i], i);
-                            }
-
-                            prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
-                            continue;
+                            Console.WriteLine(propDescription.ObjectList.Count());
                         }*/
-                        //Array values = Array.CreateInstance(genericType, list.Count());
 
-                        /*
+                        //Console.WriteLine(genericType);
+
                         
-                        if loop
 
-                        for loop of length
-                        array  = arraycreator
-                        return array 
-
-
-                        string...
-
-
-                        return array
-                         */
-
-                        /*for (int i = 0; i < values.Length; i++)
+                        /*for (int i = 0; i < propDescription.ListPropertyDescriptions.Count(); i++)
                         {
-                            Array InnerValues;
-                            values.SetValue(propertyDescription.ListOfList[0], i);
+                            if (propDescription.ListPropertyDescriptions[i].GeneralProperty == PossibleTypes.List)
+                            {
+                                listDescritpion = propDescription.ListPropertyDescriptions[i];
+                            }
                         }*/
 
+                        //Console.WriteLine(genericType.GetGenericArguments().First());
+                            
+                        array = Array.CreateInstance(genericType, propDescription.ObjectList.Count());
+
+                        Console.WriteLine(array.GetType());
+                        if (propDescription.ListProperty == PossibleTypes.List)
+                            Console.WriteLine(propDescription.ObjectList.Count());
+
+                        //Console.WriteLine(array.Length);
 
                         /*
-                         * 
-                         * if list do array 
-                         * jei ne toliau testi su string... ir paskui grazinti array, bet kur priskiriamas tas array su list
-                        kveiciama funkcija kuris sukuria array ir pasukui jis grazinamas su return
-                        for loop pereina per 2D dimensijas, kurios kviecia create array?
+                        Turime objekto masyva kuriame yra vertes ir per jas pereinama:
+                        Jei string... uzpildomas tas arra 
 
 
-                         */
+                            */
+                        PropertyDescription listDescritpion = null;
 
-                        return null;
+                        for (int j = 0; j < propDescription.ListPropertyDescriptions.Count(); j++)
+                        {
+                            if (propDescription.ListPropertyDescriptions[j].GeneralProperty == PossibleTypes.List)
+                            {
+                                listDescritpion = propDescription.ListPropertyDescriptions[j];
+                            }
+                        }
+
+                        for (int i = 0; i < array.Length; i++)
+                        {
+                            //rekucrion in here   
+
+                            if(listDescritpion.ListProperty == PossibleTypes.List)
+                            {
+                                Console.WriteLine("tset");
+
+                                Console.WriteLine("inside " + array.GetType());
+
+                                array.SetValue(ArrayCreator(genericType.GetGenericArguments().First(), listDescritpion),i);
+
+                                Console.WriteLine("inside2 " + array.GetType());
+
+                                Console.WriteLine("tset3");
+
+                                //innerArray = ArrayCreator(genericType.GetGenericArguments().First(), listDescritpion);
+                                //array.SetValue(innerArray, i);
+                            }
+                            if (listDescritpion.ListProperty == PossibleTypes.String)
+                            {
+                                Console.WriteLine("tset2");
+                                //array = Array.CreateInstance(typeof(List<>).MakeGenericType(typeof(string)), 1);// List<string>[] is for List<List<string>>
+
+                                array.SetValue(propDescription.ObjectList[i], i);
+
+                            }
+
+                        }
+                        Console.WriteLine("return: " + array.GetType());
+                        return array;
+
                     }
 
                     if (propertyDescription.ListProperty == PossibleTypes.List)
                     {
 
 
-                        ArrayCreator(prop.PropertyType.GetGenericArguments().First(), propertyDescription);
+                        Array values = ArrayCreator(prop.PropertyType.GetGenericArguments().First(), propertyDescription);
+
+
+                        if(values.Length != 0)
+                        {
+
+                            Console.WriteLine(values.GetType());
+                            //Console.WriteLine(values.Length);
+                            //prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
+                        }
+
+
+
+                        //Console.WriteLine(values.GetType());
+
+                        //prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
+
 
                         //Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ListOfList.Count());
 
@@ -241,7 +239,6 @@ namespace JSONConfFileEditor.Models
                             values.SetValue(propertyDescription.ListOfList[0], i);
                         }*/
 
-                        //prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
 
 
                         continue;
