@@ -127,41 +127,16 @@ namespace JSONConfFileEditor.Models
                         Array array;
                         Array innerArray;
 
-                        //Console.WriteLine(genericType);
-
-                        /*foreach(var item in propDescription.ObjectList)
-                        {
-                            Console.WriteLine(propDescription.ObjectList.Count());
-                        }*/
-
-                        //Console.WriteLine(genericType);
-
-                        
-
-                        /*for (int i = 0; i < propDescription.ListPropertyDescriptions.Count(); i++)
-                        {
-                            if (propDescription.ListPropertyDescriptions[i].GeneralProperty == PossibleTypes.List)
-                            {
-                                listDescritpion = propDescription.ListPropertyDescriptions[i];
-                            }
-                        }*/
-
-                        //Console.WriteLine(genericType.GetGenericArguments().First());
                             
-                        array = Array.CreateInstance(genericType, propDescription.ObjectList.Count());
+                        array = Array.CreateInstance(genericType,propDescription.ObjectList.Count());
+                        Console.WriteLine(propDescription.ObjectList.GetType().GetGenericArguments().First());
 
-                        Console.WriteLine(array.GetType());
-                        if (propDescription.ListProperty == PossibleTypes.List)
-                            Console.WriteLine(propDescription.ObjectList.Count());
+                        //Console.WriteLine(array.GetType());
+                        //if (propDescription.ListProperty == PossibleTypes.List)
+                        //    Console.WriteLine(propDescription.ObjectList.Count());
 
-                        //Console.WriteLine(array.Length);
+                        ////Console.WriteLine(array.Length);
 
-                        /*
-                        Turime objekto masyva kuriame yra vertes ir per jas pereinama:
-                        Jei string... uzpildomas tas arra 
-
-
-                            */
                         PropertyDescription listDescritpion = null;
 
                         for (int j = 0; j < propDescription.ListPropertyDescriptions.Count(); j++)
@@ -178,22 +153,31 @@ namespace JSONConfFileEditor.Models
 
                             if(listDescritpion.ListProperty == PossibleTypes.List)
                             {
-                                Console.WriteLine("tset");
+                                /*Console.WriteLine("tset");
 
-                                Console.WriteLine("inside " + array.GetType());
+                                Console.WriteLine("inside " + array.GetType());*/
 
-                                array.SetValue(ArrayCreator(genericType.GetGenericArguments().First(), listDescritpion),i);
+                                Array test = ArrayCreator(genericType.GetGenericArguments().First(), listDescritpion);
+                                Console.WriteLine(test.GetType());
+                                Console.WriteLine(genericType.GetGenericArguments().First());
+                                Object ob = Activator.CreateInstance(typeof(List<>).MakeGenericType(typeof(List<string>)), new object[] { test });
+                                Object ob2 = Activator.CreateInstance(typeof(List<>).MakeGenericType(genericType.GetGenericArguments().First()), new object[] { test });
 
-                                Console.WriteLine("inside2 " + array.GetType());
 
-                                Console.WriteLine("tset3");
+                                array.SetValue(ob2,0);
+
+                                //array.SetValue(ArrayCreator(genericType.GetGenericArguments().First(), listDescritpion),i);
+
+                                /*Console.WriteLine("inside2 " + array.GetType());
+                                
+                                Console.WriteLine("tset3");*/
 
                                 //innerArray = ArrayCreator(genericType.GetGenericArguments().First(), listDescritpion);
                                 //array.SetValue(innerArray, i);
                             }
                             if (listDescritpion.ListProperty == PossibleTypes.String)
                             {
-                                Console.WriteLine("tset2");
+                                //Console.WriteLine("tset2");
                                 //array = Array.CreateInstance(typeof(List<>).MakeGenericType(typeof(string)), 1);// List<string>[] is for List<List<string>>
 
                                 array.SetValue(propDescription.ObjectList[i], i);
@@ -201,7 +185,7 @@ namespace JSONConfFileEditor.Models
                             }
 
                         }
-                        Console.WriteLine("return: " + array.GetType());
+                       // Console.WriteLine("return: " + array.GetType());
                         return array;
 
                     }
@@ -216,9 +200,9 @@ namespace JSONConfFileEditor.Models
                         if(values.Length != 0)
                         {
 
-                            Console.WriteLine(values.GetType());
+                            //Console.WriteLine(values.GetType());
                             //Console.WriteLine(values.Length);
-                            //prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
+                            prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
                         }
 
 
