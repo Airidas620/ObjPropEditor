@@ -14,7 +14,12 @@ namespace JSONConfFileEditor.Models
 
         //public ObservableCollection<string> AllAvailableProperties { get; set; } = new ObservableCollection<string> { "hi", "x" };
 
-        public List<string> listString { get; set; } = new List<string>();
+        public List<List<List<string>>> test2 { get; set; } = new List<List<List<string>>>();
+
+        //public List<List<string>> test4 { get; set; } = new List<List<string>>();
+
+
+        /*public List<string> listString { get; set; } = new List<string>();
 
         public List<bool> listBool { get; set; } = new List<bool>();
 
@@ -27,7 +32,6 @@ namespace JSONConfFileEditor.Models
         public List<InnerClass1> listobj{ get; set; } = new List<InnerClass1>();
 
 
-        public List<List<string>> test2 { get; set; } = new List<List<string>>();
 
 
         public bool IsFeedbackEnabled { get; set; }
