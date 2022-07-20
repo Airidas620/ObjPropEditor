@@ -14,7 +14,24 @@ namespace JSONConfFileEditor.Models
 
         //public ObservableCollection<string> AllAvailableProperties { get; set; } = new ObservableCollection<string> { "hi", "x" };
 
-        public List<List<List<string>>> test2 { get; set; } = new List<List<List<string>>>();
+        //public List<List<List<string>>> test2 { get; set; } = new List<List<List<string>>>();
+
+        public List<InnerClass1> listobj { get; set; } = new List<InnerClass1>();
+
+        public InnerClass1 innerClass1 { get; set; }
+
+
+        /* public List<bool> listBool { get; set; } = new List<bool>();
+
+         public List<double> listDouble { get; set; } = new List<double>();
+
+         public List<Int32> lisInt32 { get; set; } = new List<Int32>();
+
+         public List<FeedbackMechanismGroupOneEnum> listEnum { get; set; } = new List<FeedbackMechanismGroupOneEnum>();
+
+
+         public List<string> listString { get; set; } = new List<string>();
+         public List<string> listString2 { get; set; } = new List<string>();*/
 
         //public List<List<string>> test4 { get; set; } = new List<List<string>>();
 
@@ -105,7 +122,7 @@ namespace JSONConfFileEditor.Models
 
             public string FeedbackTitle3 { get; set; }
 
-            public List<string> stringArray { get; set; } = new List<string>();
+            public List<bool> stringArray { get; set; } = new List<bool>();
 
             public bool IsFeedbackEnabled3x { get; set; }
         }

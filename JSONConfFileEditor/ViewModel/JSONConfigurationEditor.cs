@@ -20,15 +20,12 @@ namespace JSONConfFileEditor.ViewModel
         private ObservableCollection<PropertyDescription> allAvailableProperties;
 
         public ObservableCollection<PropertyDescription> AllAvailablePropertiesGraph {
-            get { return new ObservableCollection<PropertyDescription>(allAvailableProperties.Where(prop => prop.GeneralProperty != PossibleTypes.Class)); }
+
+            get { return allAvailableProperties; }
+            //(Not used) get { return new ObservableCollection<PropertyDescription>(allAvailableProperties.Where(prop => prop.GeneralProperty != PossibleTypes.Class)); }
             private set { allAvailableProperties = value; } 
         }
 
-        public ObservableCollection<PropertyDescription> AllAvailablePropertiesGUI
-        {
-            get { return new ObservableCollection<PropertyDescription>(allAvailableProperties.Where(prop => prop.GeneralProperty != PossibleTypes.ObjectLine && prop.GeneralProperty != PossibleTypes.ListLine)); }
-            private set { allAvailableProperties = value; }
-        }
 
         public int AllAvailablePropertiesLength { get ; private set; }
 
@@ -55,7 +52,7 @@ namespace JSONConfFileEditor.ViewModel
             int propDesIndex = 0;
 
             if (allAvailableProperties.Count != 0)
-                PropertyDescriptionBuilder.SetObjectValuesWithPropertyDescription(MyCustomConfigurationClass, AllAvailablePropertiesGUI, ref propDesIndex);
+                PropertyDescriptionBuilder.SetObjectValuesWithPropertyDescription(MyCustomConfigurationClass, allAvailableProperties, ref propDesIndex);
 
             return MyCustomConfigurationClass; 
         }

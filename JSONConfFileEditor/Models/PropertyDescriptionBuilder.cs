@@ -74,13 +74,13 @@ namespace JSONConfFileEditor.Models
                     prop.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
 
                 {
-                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ListLine});
-                    currentDescription.Add(new PropertyDescription() { PropertyName = "List", NestDepth = depth, PropertyType = prop.PropertyType, ListPropertyDescriptions = new ObservableCollection<PropertyDescription>(), DescriptionList = new ObservableCollection<string>(), GeneralProperty = PossibleTypes.List});
+                    //(Not used)currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ListLine});
+                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, ObjectList = new List<Object>(), PropertyType = prop.PropertyType, ListPropertyDescriptions = new ObservableCollection<PropertyDescription>(), DescriptionList = new ObservableCollection<string>(), GeneralProperty = PossibleTypes.List});
 
                     //Function to resolve List<T> Type T properties
                     TryResolveListAndAddToCollection(prop.PropertyType.GenericTypeArguments.First(), currentDescription.Last(), depth);
 
-                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ListLine });
+                    //(Not used)currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ListLine });
                     continue;
                 }
 
@@ -89,13 +89,13 @@ namespace JSONConfFileEditor.Models
                 {
                     var increasedDepth = depth + 40;
 
-                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
+                    //(Not used)currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
                     currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.Class });
 
                     //Since prop is class object it can be resolved and be linearly added to same ObservableCollection<PropertyDescription> array
                     TryResolvePropertyAndAddToCollection(prop.PropertyType, currentDescription, increasedDepth);
 
-                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
+                    //(Not used)currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
                 }
 
             }
@@ -103,7 +103,7 @@ namespace JSONConfFileEditor.Models
         }
 
         /// <summary>
-        /// Resolves List<T> Type t properties and adds their descriptions to ObservableCollection<PropertyDescription> array
+        /// Resolves List<T> Type t properties and adds their descriptions to ObservableCollection<PropertyDescription> List
         /// </summary>
         /// <param name="listType">Type for which properties will be resolved</param>
         /// <paramref name="listPropDes">Property descriptions will be stored in List parents PropertyDescription.listPropertyDescriptions property</paramref>/> 
@@ -115,8 +115,6 @@ namespace JSONConfFileEditor.Models
             if (listType.IsEnum)
             {
                 listPropDes.ListProperty = PossibleTypes.Enum;
-                listPropDes.EnumList = new List<Object>();
-                listPropDes.ObjectList = new List<Object>();
                 listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listPropDes.PropertyName, NestDepth = listPropDes.NestDepth, PropertyType = listPropDes.PropertyType, GeneralProperty = PossibleTypes.Enum, AvailableEnumValues = Enum.GetValues(listType) });
                 return;
             }
@@ -125,8 +123,6 @@ namespace JSONConfFileEditor.Models
             if (CheckIfPropertyIsNumeric(listType))
             {
                 listPropDes.ListProperty = PossibleTypes.Numeric;
-                listPropDes.DoubleList = new List<Object>();
-                listPropDes.ObjectList = new List<Object>();
                 listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = "Numeric", NestDepth = listPropDes.NestDepth, PropertyType = listPropDes.PropertyType, GeneralProperty = PossibleTypes.Numeric });
                 return;
             }
@@ -135,8 +131,6 @@ namespace JSONConfFileEditor.Models
             if (listType == typeof(string))
             {
                 listPropDes.ListProperty = PossibleTypes.String;
-                listPropDes.StringList = new List<string>();
-                listPropDes.ObjectList = new List<Object>();
                 listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = "String", NestDepth = listPropDes.NestDepth, PropertyType = listPropDes.PropertyType, GeneralProperty = PossibleTypes.String });
                 return;
             }
@@ -145,32 +139,7 @@ namespace JSONConfFileEditor.Models
             if (listType == typeof(bool))
             {
                 listPropDes.ListProperty = PossibleTypes.Bool;
-                listPropDes.BoolList = new List<Object>();
-                listPropDes.ObjectList = new List<Object>();
                 listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = "Bool", NestDepth = listPropDes.NestDepth, PropertyType = listPropDes.PropertyType, GeneralProperty = PossibleTypes.Bool });
-                return;
-            }
-
-            //List TODO
-            if (listType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(ICollection<>)) &&
-                listType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
-
-            {
-
-                var increasedDepth = depth + 40;
-
-                listPropDes.ListProperty = PossibleTypes.List;
-                listPropDes.ObjectList = new List<Object>();
-
-
-                listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyNamesss = listType.Name, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.ListLine });
-                listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = "List", NestDepth = increasedDepth, PropertyType = listType, ListPropertyDescriptions = new ObservableCollection<PropertyDescription>(), DescriptionList = new ObservableCollection<string>(), GeneralProperty = PossibleTypes.List });
-
-                TryResolveListAndAddToCollection(listType.GenericTypeArguments.First(), listPropDes.ListPropertyDescriptions.Last(), increasedDepth);
-
-                listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.ListLine });
-
-
                 return;
             }
 
@@ -181,16 +150,15 @@ namespace JSONConfFileEditor.Models
                 var increasedDepth = depth + 40;
 
                 listPropDes.ListProperty = PossibleTypes.Class;
-
-                listPropDes.ObjectList = new List<object>();
+                listPropDes.ListObjectType = listType;
                 listPropDes.ListObjectType = listType;
 
-                listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
+                //(Not used)listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
 
                 //Since List<T> holds class properties they need to be resolved
                 TryResolvePropertyAndAddToCollection(listType, listPropDes.ListPropertyDescriptions, increasedDepth);
 
-                listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
+                //(Not used)listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
             }
 
         }
@@ -217,17 +185,15 @@ namespace JSONConfFileEditor.Models
                     }
             }
 
+            /// <summary>
+            /// (Not used)
+            /// </summary>
             public ObservableCollection<PropertyDescription> ListPropertyDescriptionsGraph
             {
                 get { return new ObservableCollection<PropertyDescription>(listPropertyDescriptions.Where(prop => prop.GeneralProperty != PossibleTypes.Class)); }
                 set { listPropertyDescriptions = value; }
             }
 
-            public ObservableCollection<PropertyDescription> ListPropertyDescriptionsGUI
-            {
-                get { return new ObservableCollection<PropertyDescription>(listPropertyDescriptions.Where(prop => prop.GeneralProperty != PossibleTypes.ObjectLine && prop.GeneralProperty != PossibleTypes.ListLine)); }
-                set { listPropertyDescriptions = value; }
-            }
 
             /// <summary>
             /// Property to describe added list item for WPF ListBox
@@ -235,27 +201,7 @@ namespace JSONConfFileEditor.Models
             public ObservableCollection<string> DescriptionList { get; set; }
 
             /// <summary>
-            /// List to hold List<string> values
-            /// </summary>
-            public List<string> StringList { get; set; }
-
-            /// <summary>
-            /// List to hold List<double> values
-            /// </summary>
-            public List<Object> DoubleList { get; set; }
-
-            /// <summary>
-            /// List to hold List<bool> values
-            /// </summary>
-            public List<Object> BoolList { get; set; }
-
-            /// <summary>
-            /// List to hold List<enum> values
-            /// </summary>
-            public List<Object> EnumList { get; set; }
-
-            /// <summary>
-            /// List to hold List<object> values 
+            /// List to hold List<string,bool,double,enum,object> values 
             /// </summary>
             public List<Object> ObjectList { get; set; }
 
@@ -266,27 +212,57 @@ namespace JSONConfFileEditor.Models
             #endregion
 
             #region ObjectProperties
+
             //Properties used for single Type T properties
 
+            /// <summary>
+            /// Type of Property
+            /// </summary>
             public Type PropertyType { get; set; }
 
+            /// <summary>
+            /// Name of property
+            /// </summary>
             public string PropertyName { get; set; }
 
-            //Properties to hold values for different properties Type T types
+            /// <summary>
+            /// Holds numeric values if property is double
+            /// </summary>
             public double ValueAsDouble { get; set; }
 
+            /// <summary>
+            /// Holds string values if property is atring
+            /// </summary>
             public string ValueAsString { get; set; } = "";
 
+            /// <summary>
+            /// Holds bool values if property is bool
+            /// </summary>
             public bool ValueAsBool { get; set; }
 
+            /// <summary>
+            /// Holds enum values if property is enum
+            /// </summary>
             public Enum ValueAsEnum { get; set; }
 
+            /// <summary>
+            /// All available enum property enum values
+            /// </summary>
             public Array AvailableEnumValues { get; set; }
 
+            /// <summary>
+            /// Property Type as PossibleTypes enum value
+            /// </summary>
             public PossibleTypes GeneralProperty { get; set; }
 
+            /// <summary>
+            /// List property Type as PossibleTypes enum value
+            /// </summary>
             public PossibleTypes ListProperty { get; set; }
 
+            /// <summary>
+            /// Proportional to how many times resolve functions were called recursively
+            /// </summary>
             public int NestDepth { get; set; }
 
             #endregion
@@ -318,27 +294,19 @@ namespace JSONConfFileEditor.Models
 
             private void ExecuteAddToListCommand(object obj)
             {
-                //Console.WriteLine(ListProperty);
 
                 if (ListProperty == PossibleTypes.String)
                 {
 
                     //Since single property list only have one property description
                     //Last() can be replaced with First() or [0]
-
-                    StringList.Add(listPropertyDescriptions.Last().ValueAsString);
+                    ObjectList.Add(listPropertyDescriptions.Last().ValueAsString);
 
                     if (listPropertyDescriptions.Last().ValueAsString != "")
-                        DescriptionList.Add(StringList.Last().ToString());
+                        DescriptionList.Add(ObjectList.Last().ToString());
 
                     else
                         DescriptionList.Add("\"\"");
-                }
-
-                if (ListProperty == PossibleTypes.Numeric)
-                {
-                    ObjectList.Add(listPropertyDescriptions.Last().ValueAsDouble);
-                    DescriptionList.Add(ObjectList.Last().ToString());
                 }
 
                 if (ListProperty == PossibleTypes.Bool)
@@ -347,12 +315,18 @@ namespace JSONConfFileEditor.Models
                     DescriptionList.Add(ObjectList.Last().ToString());
                 }
 
+                if (ListProperty == PossibleTypes.Numeric)
+                {
+                    ObjectList.Add(listPropertyDescriptions.Last().ValueAsDouble);
+                    DescriptionList.Add(ObjectList.Last().ToString());
+                }
+
                 if (ListProperty == PossibleTypes.Enum)
                 {
                     if(listPropertyDescriptions.Last().ValueAsEnum != null)
                     {
-                        EnumList.Add(listPropertyDescriptions.Last().ValueAsEnum);
-                        DescriptionList.Add(EnumList.Last().ToString());
+                        ObjectList.Add(listPropertyDescriptions.Last().ValueAsEnum);
+                        DescriptionList.Add(ObjectList.Last().ToString());
                     }
                 }
 
@@ -364,12 +338,11 @@ namespace JSONConfFileEditor.Models
                     int propDesIndex = 0;
 
                     //Assing values to Object from GUI 
-                    SetObjectValuesWithPropertyDescription(instance, ListPropertyDescriptionsGUI, ref propDesIndex);
+                    SetObjectValuesWithPropertyDescription(instance, ListPropertyDescriptions, ref propDesIndex);
 
                     //Add to List
                     ObjectList.Add(instance);
 
-                    //TODO replace with serialize
                     DescriptionList.Add(JsonConvert.SerializeObject(instance, Formatting.Indented));
 
 
@@ -377,45 +350,14 @@ namespace JSONConfFileEditor.Models
 
             }
 
+
             /// <summary>
             /// Removes value from array
             /// </summary>
-            /// <param name="ilist">List implements IList interface which has RemoveAt</param>
-            /// <param name="index">Value index to remove</param>
-            private void RemoveElement(IList ilist, int index)
-            {
-                ilist.RemoveAt(index);
-                DescriptionList.RemoveAt(index);
-            }
-
             private void ExecuteRemoveFromListCommand(object obj)
             {
-
-                if (ListProperty == PossibleTypes.String)
-                {
-                    RemoveElement(StringList, selectedItem);
-                }
-
-                if (ListProperty == PossibleTypes.Numeric)
-                {
-                    RemoveElement(DoubleList, selectedItem);
-                }
-
-                if (ListProperty == PossibleTypes.Bool)
-                {
-                    RemoveElement(BoolList, selectedItem);
-                }
-
-                if (ListProperty == PossibleTypes.Enum)
-                {
-                    RemoveElement(EnumList, selectedItem);
-                }
-
-                if (ListProperty == PossibleTypes.Class)
-                {
-                    RemoveElement(ObjectList, selectedItem);
-                }
-
+                ObjectList.RemoveAt(selectedItem);
+                DescriptionList.RemoveAt(selectedItem);
             }
 
             public PropertyDescription()

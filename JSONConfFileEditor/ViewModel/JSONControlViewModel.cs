@@ -20,35 +20,28 @@ namespace JSONConfFileEditor.ViewModel
         {
             get { return jSONConfigurationEditor; }
         }
-       
 
         public RelayCommand SaveConfigurationCommand { private set; get; }
-
 
         /// <summary>
         /// Saves serialized config object to a file
         /// </summary>
-        void SaveConfigToFile(Object serializableObject, string path)
-        {
-            File.WriteAllText(path, JsonConvert.SerializeObject(serializableObject, Formatting.Indented));
-        }
-
         private void ExecuteSaveConfigurationCommand(object obj)
         {
             var myConfiguration = jSONConfigurationEditor.GetConfiguredClass();
-            SaveConfigToFile(myConfiguration, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "JSONConf.txt"));
+            File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "JSONConf.txt"), JsonConvert.SerializeObject(myConfiguration, Formatting.Indented));
         }
 
         public JSONControlViewModel()
         {
-           //var configurationFile = new CarbideSIModel();
-           var configurationFile = new MyCustomConfigurationClass2();
+            //var configurationFile = new CarbideSIModel();
+            var configurationFile = new MyCustomConfigurationClass2();
 
-            jSONConfigurationEditor = new JSONConfigurationEditor(configurationFile);         
+            jSONConfigurationEditor = new JSONConfigurationEditor(configurationFile);
 
             SaveConfigurationCommand = new RelayCommand(ExecuteSaveConfigurationCommand);
         }
 
-       
+
     }
 }

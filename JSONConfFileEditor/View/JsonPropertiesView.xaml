@@ -58,6 +58,13 @@
             </StackPanel>
         </DataTemplate>
 
+        <DataTemplate x:Key="Class">
+            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock Width="{Binding NestDepth}"></TextBlock>
+                <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Foreground="#FFDE1717" />
+            </StackPanel>
+        </DataTemplate>
+        
         <DataTemplate x:Key="DataTemplateTriggers">
             <ContentControl Content="{Binding}" Margin="0,7,0,0" >
                 <ContentControl.Style>
@@ -99,6 +106,11 @@
                                                     Value="{StaticResource ListLine}" />
                             </DataTrigger>
 
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Class}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource ObjectLine}" />
+                            </DataTrigger>
+
 
                         </Style.Triggers>
                     </Style>
@@ -109,8 +121,14 @@
 
         <DataTemplate x:Key="List">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                    <TextBlock Width="{Binding NestDepth}"></TextBlock>
+                    <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}"/>
+                </StackPanel>
+                
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                    <ItemsControl ItemsSource="{Binding ListPropertyDescriptionsGraph}" ItemTemplate="{StaticResource DataTemplateTriggers}">
+                    <ItemsControl ItemsSource="{Binding ListPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}">
 
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -130,8 +148,8 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Width="{Binding NestDepth}"></TextBlock>
-                    <ListBox Width="120" Height="50" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" Margin="0,2,0,0" HorizontalAlignment="Left"/>
-                    <!--<ListBox Width="220" Height="97" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  Margin="0,2,0,0" HorizontalAlignment="Left"/>-->
+                    <!--<ListBox Width="120" Height="50" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" Margin="0,2,0,0" HorizontalAlignment="Left"/>-->
+                    <ListBox Width="220" Height="97" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" Margin="0,2,0,0" HorizontalAlignment="Left"/>
                 </StackPanel>
 
             </StackPanel>
