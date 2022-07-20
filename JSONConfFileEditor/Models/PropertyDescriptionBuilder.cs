@@ -163,7 +163,7 @@ namespace JSONConfFileEditor.Models
                 listPropDes.ObjectList = new List<Object>();
 
 
-                listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.ListLine });
+                listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyNamesss = listType.Name, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.ListLine });
                 listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = "List", NestDepth = increasedDepth, PropertyType = listType, ListPropertyDescriptions = new ObservableCollection<PropertyDescription>(), DescriptionList = new ObservableCollection<string>(), GeneralProperty = PossibleTypes.List });
 
                 TryResolveListAndAddToCollection(listType.GenericTypeArguments.First(), listPropDes.ListPropertyDescriptions.Last(), increasedDepth);
@@ -255,11 +255,9 @@ namespace JSONConfFileEditor.Models
             public List<Object> EnumList { get; set; }
 
             /// <summary>
-            /// List to hold List<object> values
+            /// List to hold List<object> values 
             /// </summary>
             public List<Object> ObjectList { get; set; }
-
-            //public List<Object> ListOfList { get; set; }
 
             /// <summary>
             /// Objects List<T> list Type T resolved at runtime
@@ -374,63 +372,6 @@ namespace JSONConfFileEditor.Models
                     //TODO replace with serialize
                     DescriptionList.Add(JsonConvert.SerializeObject(instance, Formatting.Indented));
 
-
-                }
-
-                //TODO
-                if (ListProperty == PossibleTypes.List)
-                {
-                    
-                    PropertyDescription listDescritpion = null;
-
-                    for (int i = 0; i < listPropertyDescriptions.Count(); i++)
-                    {
-                        if (listPropertyDescriptions[i].GeneralProperty == PossibleTypes.List)
-                        {
-                            listDescritpion = listPropertyDescriptions[i];
-                        }
-                    }
-
-                    if (listDescritpion.ListProperty == PossibleTypes.String)
-                    {
-                        ObjectList.Add(new List<string>(listDescritpion.StringList));//stores reference masyvai laiko masyvus(nuoradas) 
-                        
-                        DescriptionList.Add(JsonConvert.SerializeObject(listDescritpion.StringList, Formatting.Indented));
-
-                        //DescriptionList.Add(ListOfList.ToString());
-                    }
-
-                    if (listDescritpion.ListProperty == PossibleTypes.List)
-                    {
-                        /*Console.WriteLine(listDescritpion.ListOfList[0]);
-                        Console.WriteLine(listDescritpion.ListOfList.GetType());
-                        Console.WriteLine(listDescritpion.ListOfList[0].GetType());*/
-                        ObjectList.Add(new List<Object>(listDescritpion.ObjectList));
-
-                        DescriptionList.Add(JsonConvert.SerializeObject(listDescritpion.ObjectList, Formatting.Indented));
-
-                        //DescriptionList.Add(ListOfList.ToString());
-                    }
-
-                    if (listDescritpion.ListProperty == PossibleTypes.Numeric)
-                    {
-                       
-                    }
-
-                    if (listDescritpion.ListProperty == PossibleTypes.Bool)
-                    {
-                       
-                    }
-
-                    if (listDescritpion.ListProperty == PossibleTypes.Enum)
-                    {
-                       
-                    }
-
-
-
-                    //list<Lsit<Object>>
-                    //Patikrinama ar ilgis nelygus nuliui
 
                 }
 

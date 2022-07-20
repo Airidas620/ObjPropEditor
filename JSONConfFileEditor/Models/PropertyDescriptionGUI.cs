@@ -11,6 +11,13 @@ namespace JSONConfFileEditor.Models
 {
     public partial class PropertyDescriptionBuilder
     {
+
+
+        public static void log(object a)
+        {
+            Console.WriteLine(a);
+        }
+
         /// <summary>
         /// Writes values to Object src from GUI values
         /// </summary>
@@ -26,11 +33,11 @@ namespace JSONConfFileEditor.Models
             foreach (var prop in props)
             {
                 //Skip ObjectLines and ListLines
-                /*while (propertyDescriptions.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ObjectLine ||
+                while (propertyDescriptions.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ObjectLine ||
                     propertyDescriptions.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ListLine)
                 {
                     propDesIndex++;
-                }*/
+                }
 
 
                 propertyDescription = propertyDescriptions.ElementAt(propDesIndex);
@@ -113,6 +120,8 @@ namespace JSONConfFileEditor.Models
 
                         Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.EnumList.Count());
 
+
+
                         for (int i = 0; i < values.Length; i++)
                         {
                             values.SetValue(propertyDescription.EnumList[i], i);
@@ -194,34 +203,23 @@ namespace JSONConfFileEditor.Models
                     {
 
 
-                        Array values = ArrayCreator(prop.PropertyType.GetGenericArguments().First(), propertyDescription);
+                        Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList.Count());
 
 
-                        if(values.Length != 0)
+
+                        /*log(values.GetType());
+                        log(propertyDescription.ObjectList[0].GetType());*/
+
+
+                        /*if(values.Length != 0)
                         {
 
                             //Console.WriteLine(values.GetType());
                             //Console.WriteLine(values.Length);
                             prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
-                        }
-
-
-
-                        //Console.WriteLine(values.GetType());
-
-                        //prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
-
-
-                        //Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ListOfList.Count());
-
-                        /*Console.WriteLine(prop.PropertyType.GetGenericArguments().First());
-                        Console.WriteLine(propertyDescription.ListOfList[0].GetType());
-                        Console.WriteLine(propertyDescription.ListOfList.Count());*/
-
-                        /*for (int i = 0; i < values.Length; i++)
-                        {
-                            values.SetValue(propertyDescription.ListOfList[0], i);
                         }*/
+
+
 
 
 
@@ -231,6 +229,9 @@ namespace JSONConfFileEditor.Models
                     if (propertyDescription.ListProperty == PossibleTypes.Class)
                     {
                         Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList.Count());
+
+                        log(propertyDescription.ObjectList[0].GetType());
+
 
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -245,6 +246,8 @@ namespace JSONConfFileEditor.Models
 
                 if (propertyDescription.GeneralProperty == PossibleTypes.Class)
                 {
+
+
 
                     if (prop.GetValue(src) == null)
                     {

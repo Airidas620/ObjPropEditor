@@ -18,6 +18,11 @@ namespace JSONConfFileEditor.Models
 
         //public List<List<string>> test4 { get; set; } = new List<List<string>>();
 
+        //public List<FeedbackMechanismGroupOneEnum> listEnum { get; set; } = new List<FeedbackMechanismGroupOneEnum>();
+
+        //public List<List<string>> test4 { get; set; } = new List<List<string>>();
+
+        //public List<InnerClass1> listobj { get; set; } = new List<InnerClass1>();
 
         /*public List<string> listString { get; set; } = new List<string>();
 
