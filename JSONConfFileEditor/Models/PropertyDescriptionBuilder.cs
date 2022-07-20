@@ -396,7 +396,6 @@ namespace JSONConfFileEditor.Models
                         ObjectList.Add(new List<string>(listDescritpion.StringList));//stores reference masyvai laiko masyvus(nuoradas) 
                         
                         DescriptionList.Add(JsonConvert.SerializeObject(listDescritpion.StringList, Formatting.Indented));
-                        Console.WriteLine(ObjectList.Count());
 
                         //DescriptionList.Add(ListOfList.ToString());
                     }
@@ -409,7 +408,6 @@ namespace JSONConfFileEditor.Models
                         ObjectList.Add(new List<Object>(listDescritpion.ObjectList));
 
                         DescriptionList.Add(JsonConvert.SerializeObject(listDescritpion.ObjectList, Formatting.Indented));
-                        Console.WriteLine(ObjectList.Count());
 
                         //DescriptionList.Add(ListOfList.ToString());
                     }
