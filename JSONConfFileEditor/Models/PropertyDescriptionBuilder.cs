@@ -20,87 +20,126 @@ namespace JSONConfFileEditor.Models
 
         public ObservableCollection<PropertyDescription> AllAvailableProperties { get; set; }
 
+        Object MyCustonConfigurationClass;
+
         public PropertyDescriptionBuilder(Object customConfigurationClass)
         {
-            AllAvailableProperties = new ObservableCollection<PropertyDescription>();
+            MyCustonConfigurationClass = customConfigurationClass;
+            //GetTypePropertyDescriptions(customConfigurationClass.GetType());
 
-            TryResolvePropertyAndAddToCollection(customConfigurationClass.GetType(), AllAvailableProperties);
+        }
 
+
+        public bool BuildProperties()
+        {
+            /*AllAvailableProperties = GetTypePropertyDescriptions(MyCustonConfigurationClass.GetType());
+            return true;*/
+
+            try
+            {
+                AllAvailableProperties = GetTypePropertyDescriptions(MyCustonConfigurationClass.GetType());
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
         /// Resolves Type properties and adds their descriptions to ObservableCollection<PropertyDescription> array
         /// </summary>
-        /// <param name="type">Type for which properties will be resolved</param>
+        /// <param name="classType">Type for which properties will be resolved</param>
         /// <paramref name="currentDescription"> holds descriptions for type properties</paramref>/> 
         /// <paramref name="depth"/ Propotional to how many times this function was called recursively>
-        public void TryResolvePropertyAndAddToCollection(Type type, ObservableCollection<PropertyDescription> currentDescription, int depth = 0)
+        public ObservableCollection<PropertyDescription> GetTypePropertyDescriptions(Type type, int depth = 0, int maxDepth = 20)
         {
+            
+            /*if(recursiveCalls > maxDepth)
+            {
+                Console.WriteLine(maxDepth);
+                Console.WriteLine(depth);
+                throw new Exception("Too many inner Object/Lists");
+            }*/
+
+            var availableProperties = new ObservableCollection<PropertyDescription>();
+
             var props = type.GetProperties().ToList();
 
             foreach (var prop in props)
             {
+
+                Console.WriteLine(depth);
                 //Enum
                 if (prop.PropertyType.IsEnum)
                 {
-                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.Enum, AvailableEnumValues = Enum.GetValues(prop.PropertyType) });
+                    availableProperties.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.Enum, AvailableEnumValues = Enum.GetValues(prop.PropertyType) });
                     continue;
                 }
 
                 //Numeric
                 if (CheckIfPropertyIsNumeric(prop.PropertyType))
                 {
-                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.Numeric });
+                    availableProperties.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.Numeric });
                     continue;
                 }
 
                 //String
                 if (prop.PropertyType == typeof(string))
                 {
-                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.String });
+                    availableProperties.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.String });
                     continue;
                 }
 
                 //Bool
                 if (prop.PropertyType == typeof(bool))
                 {
-                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.Bool });
+                    availableProperties.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.Bool });
                     continue;
                 }
-
 
                 //List
                 if (prop.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(ICollection<>)) &&
                     prop.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
-
                 {
-                    //(Not used)currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ListLine});
-                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, ObjectList = new List<Object>(), PropertyType = prop.PropertyType, ListPropertyDescriptions = new ObservableCollection<PropertyDescription>(), DescriptionList = new ObservableCollection<string>(), GeneralProperty = PossibleTypes.List});
-
+                    var listProp = new PropertyDescription()
+                    {
+                        PropertyName = prop.Name,
+                        NestDepth = depth,
+                        ObjectList = new List<Object>(),
+                        PropertyType = prop.PropertyType,
+                        ListPropertyDescriptions = new ObservableCollection<PropertyDescription>(),
+                        DescriptionList = new ObservableCollection<string>(),
+                        GeneralProperty = PossibleTypes.List
+                    };
                     //Function to resolve List<T> Type T properties
-                    TryResolveListAndAddToCollection(prop.PropertyType.GenericTypeArguments.First(), currentDescription.Last(), depth);
+                    TryResolveListAndAddToCollection(prop.PropertyType.GenericTypeArguments.First(), listProp, depth);
+                    availableProperties.Add(listProp);
 
-                    //(Not used)currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ListLine });
                     continue;
                 }
-
                 //Class
                 if (prop.PropertyType.IsClass)
                 {
-                    var increasedDepth = depth + 40;
+                    int increasedDepth = depth + 1;
 
-                    //(Not used)currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
-                    currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.Class });
+                    var reccursiveProperty = new PropertyDescription() { PropertyName = prop.Name, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.Class };
+                    availableProperties.Add(reccursiveProperty);
 
-                    //Since prop is class object it can be resolved and be linearly added to same ObservableCollection<PropertyDescription> array
-                    TryResolvePropertyAndAddToCollection(prop.PropertyType, currentDescription, increasedDepth);
+                    int ats = depth + 1;
+                    var resolvedProps = GetTypePropertyDescriptions(prop.PropertyType, increasedDepth, maxDepth);
 
-                    //(Not used)currentDescription.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
+                    foreach (var item in resolvedProps)
+                    {
+                        availableProperties.Add(item);
+                    }
+                    //resolvedProps.ToList().ForEach(resolvedProp => availableProperties.Add(resolvedProp));
                 }
-
             }
 
+            return availableProperties;
         }
+
 
         /// <summary>
         /// Resolves List<T> Type t properties and adds their descriptions to ObservableCollection<PropertyDescription> List
@@ -108,8 +147,12 @@ namespace JSONConfFileEditor.Models
         /// <param name="listType">Type for which properties will be resolved</param>
         /// <paramref name="listPropDes">Property descriptions will be stored in List parents PropertyDescription.listPropertyDescriptions property</paramref>/> 
         /// <paramref name="depth"/ Propotional to how many times this and TryResolvePropertyAndAddToCollection functions were called recursively>
-        private void TryResolveListAndAddToCollection(Type listType, PropertyDescription listPropDes, int depth)
+        private void TryResolveListAndAddToCollection(Type listType, PropertyDescription listPropDes, int depth = 0, int maxDepth = 20)
         {
+            /*if (depth > maxDepth)
+            {
+                throw new Exception("Too many inner Object/Lists");
+            }*/
 
             //Enum
             if (listType.IsEnum)
@@ -147,7 +190,7 @@ namespace JSONConfFileEditor.Models
             //Class
             if (listType.IsClass)
             {
-                var increasedDepth = depth + 40;
+                var increasedDepth = depth + 1;
 
                 listPropDes.ListProperty = PossibleTypes.Class;
                 listPropDes.ListObjectType = listType;
@@ -156,7 +199,12 @@ namespace JSONConfFileEditor.Models
                 //(Not used)listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
 
                 //Since List<T> holds class properties they need to be resolved
-                TryResolvePropertyAndAddToCollection(listType, listPropDes.ListPropertyDescriptions, increasedDepth);
+                var resolvedProps = GetTypePropertyDescriptions(listType, depth);
+
+                foreach (var item in resolvedProps)
+                {
+                    listPropDes.ListPropertyDescriptions.Add(item);
+                }
 
                 //(Not used)listPropDes.ListPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
             }
@@ -165,7 +213,7 @@ namespace JSONConfFileEditor.Models
 
 
 
-        public class PropertyDescription
+        public class PropertyDescription : INotifyPropertyChanged
         {
             #region ListProperties
 
@@ -277,6 +325,22 @@ namespace JSONConfFileEditor.Models
             /// </summary>
             public RelayCommand RemoveFromListCommand { set; get; }
 
+
+            /// <summary>
+            /// Command for entering Edit List menu
+            /// </summary>
+            public RelayCommand EditListMenuCommand { set; get; }
+
+            /// <summary>
+            /// Command for canceling lists edit
+            /// </summary>
+            public RelayCommand EditListCancelCommand { set; get; }
+
+            /// <summary>
+            /// Command for editing to List<> values
+            /// </summary>
+            public RelayCommand EditListCommand { set; get; }
+
             private int selectedItem = -1;
 
             public int SelectedItem
@@ -287,6 +351,21 @@ namespace JSONConfFileEditor.Models
                     if (value != selectedItem)
                     {
                         selectedItem = value;
+                    }
+                }
+            }
+
+            private bool isEditing;
+
+            public bool IsEditing
+            {
+                get { return isEditing; }
+                set
+                {
+                    if (value != isEditing)
+                    {
+                        isEditing = value;
+                        NotifyPropertyChanged();
                     }
                 }
             }
@@ -351,24 +430,58 @@ namespace JSONConfFileEditor.Models
             }
 
 
-            /// <summary>
-            /// Removes value from array
-            /// </summary>
             private void ExecuteRemoveFromListCommand(object obj)
             {
                 ObjectList.RemoveAt(selectedItem);
                 DescriptionList.RemoveAt(selectedItem);
             }
 
+            private void ExecuteEditListMenuCommand(object obj)
+            {
+                int index = selectedItem;
+                IsEditing = true;
+
+            }
+
+            private void ExecuteEditListCancelCommand(object obj)
+            {
+                int index = selectedItem;
+                IsEditing = false;
+
+            }
+
+            private void ExecuteEditListCommand(object obj)
+            {
+                int index = selectedItem;
+
+            }
+
             public PropertyDescription()
             {
-                AddToListCommand = new RelayCommand(ExecuteAddToListCommand);
-                RemoveFromListCommand = new RelayCommand(ExecuteRemoveFromListCommand, canExecute => selectedItem >= 0);
+                AddToListCommand = new RelayCommand(ExecuteAddToListCommand, canExecute => !IsEditing);
+                RemoveFromListCommand = new RelayCommand(ExecuteRemoveFromListCommand, canExecute => selectedItem >= 0 && !IsEditing);
+                EditListMenuCommand = new RelayCommand(ExecuteEditListMenuCommand, canExecute => !IsEditing);
+                EditListCancelCommand = new RelayCommand(ExecuteEditListCancelCommand);
+                EditListCommand = new RelayCommand(ExecuteEditListCommand);
             }
-        }
 
-        
-        private bool CheckIfPropertyIsNumeric(Type propType)
+            #region INotifyPropertyChanged implementation
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            // This method is called by the Set accessor of each property.
+            // The CallerMemberName attribute that is applied to the optional propertyName
+            // parameter causes the property name of the caller to be substituted as an argument.
+            private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+            {
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
+
+            #endregion
+        }
+        public bool CheckIfPropertyIsNumeric(Type propType)
         {
 
             if (propType == null)
@@ -399,5 +512,7 @@ namespace JSONConfFileEditor.Models
             }
             return false;
         }
+
     }
+
 }

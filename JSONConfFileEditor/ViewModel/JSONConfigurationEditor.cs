@@ -19,10 +19,9 @@ namespace JSONConfFileEditor.ViewModel
 
         private ObservableCollection<PropertyDescription> allAvailableProperties;
 
-        public ObservableCollection<PropertyDescription> AllAvailablePropertiesGraph {
+        public ObservableCollection<PropertyDescription> AllAvailableProperties {
 
             get { return allAvailableProperties; }
-            //(Not used) get { return new ObservableCollection<PropertyDescription>(allAvailableProperties.Where(prop => prop.GeneralProperty != PossibleTypes.Class)); }
             private set { allAvailableProperties = value; } 
         }
 
@@ -34,6 +33,21 @@ namespace JSONConfFileEditor.ViewModel
 
         PropertyDescriptionBuilder propertyDescriptionBuilder;
 
+        public ValidationState GetValidationState()
+        {          
+            return propertyDescriptionBuilder.ValidationState;
+        }
+
+        public string GetNonValidMessage()
+        {
+            return propertyDescriptionBuilder.NonValidClassMessage;
+        }
+
+        public void ValidateConfiguratioClass()
+        {
+            propertyDescriptionBuilder.ValidateClass(MyCustomConfigurationClass.GetType());
+        }
+
 
         public JSONConfigurationEditor(Object myCustomConfigurationClass)
         {
@@ -41,8 +55,12 @@ namespace JSONConfFileEditor.ViewModel
             MyCustomConfigurationClass = myCustomConfigurationClass;
 
             propertyDescriptionBuilder = new PropertyDescriptionBuilder(MyCustomConfigurationClass);
-            AllAvailablePropertiesGraph = propertyDescriptionBuilder.AllAvailableProperties;
-            AllAvailablePropertiesLength = AllAvailablePropertiesGraph.Count;
+
+            if (propertyDescriptionBuilder.BuildProperties())
+            {
+                AllAvailableProperties = propertyDescriptionBuilder.AllAvailableProperties;
+                AllAvailablePropertiesLength = AllAvailableProperties.Count;
+            }
 
         }
 
@@ -51,7 +69,7 @@ namespace JSONConfFileEditor.ViewModel
         {
             int propDesIndex = 0;
 
-            if (allAvailableProperties.Count != 0)
+            if (allAvailableProperties != null && allAvailableProperties.Count != 0)
                 PropertyDescriptionBuilder.SetObjectValuesWithPropertyDescription(MyCustomConfigurationClass, allAvailableProperties, ref propDesIndex);
 
             return MyCustomConfigurationClass; 
