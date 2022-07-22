@@ -167,7 +167,6 @@ namespace JSONConfFileEditor.Models
             //Class
             if (listType.IsClass)
             {
-                //TryResolvePropertyAndAddToCollection(listType, listPropDes.ListPropertyDescriptions, increasedDepth);
                 return ValidateClass(listType, depth);
             }
             NonValidClassMessage = "Unresolved List property type";

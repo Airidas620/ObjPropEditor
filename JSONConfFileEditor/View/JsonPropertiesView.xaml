@@ -35,7 +35,7 @@
 
         <DataTemplate x:Key="enum">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
+                <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center"/>
                 <ComboBox  MinWidth="70" ItemsSource="{Binding AvailableEnumValues}" Margin="5,0,0,0" SelectedItem="{Binding ValueAsEnum}" />
             </StackPanel>
         </DataTemplate>
@@ -58,7 +58,9 @@
                 <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Foreground="#FFDE1717" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
             </StackPanel>
         </DataTemplate>
-        
+
+
+
         <DataTemplate x:Key="DataTemplateTriggers">
             <ContentControl Content="{Binding}" Margin="0,7,0,0" >
                 <ContentControl.Style>
@@ -105,18 +107,12 @@
                                                     Value="{StaticResource ObjectLine}" />
                             </DataTrigger>
 
-
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
         </DataTemplate>
 
-
-        <Style TargetType="Button" >
-            
-        </Style>
-        
         <DataTemplate x:Key="List">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
 

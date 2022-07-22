@@ -18,9 +18,9 @@ namespace JSONConfFileEditor.Models
 
         //public List<InnerClass1> listobj { get; set; } = new List<InnerClass1>();
 
-        public bool IsFeedbackEnabled2 { get; set; }
+        //public bool IsFeedbackEnabled2 { get; set; }
 
-        public List<InnerClass1> innerClass1 { get; set; }
+        //public List<InnerClass1> innerClass1 { get; set; }
         //public List<bool> listBool { get; set; } = new List<bool>();
 
         public bool IsFeedbackEnabled { get; set; }
