@@ -23,19 +23,24 @@ namespace JSONConfFileEditor.Models
         {
             var props = src.GetType().GetProperties().ToList();
 
+            int currentIndex = 0;
+
             PropertyDescription propertyDescription;
 
             foreach (var prop in props)
             {
                 //Skip ObjectLines and ListLines
-                while (propertyDescriptions.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ObjectLine ||
+                /*while (propertyDescriptions.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ObjectLine ||
                     propertyDescriptions.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ListLine)
                 {
                     propDesIndex++;
-                }
+                }*/
 
 
                 propertyDescription = propertyDescriptions.ElementAt(propDesIndex);
+
+                currentIndex++;
+                Console.WriteLine(currentIndex);
 
                 propDesIndex++;
 
@@ -111,7 +116,7 @@ namespace JSONConfFileEditor.Models
                     {
                         prop.SetValue(src, Activator.CreateInstance(prop.PropertyType));
                     }
-                    SetObjectValuesWithPropertyDescription(prop.GetValue(src), propertyDescriptions, ref propDesIndex);
+                    SetObjectValuesWithPropertyDescription(prop.GetValue(src), propertyDescriptions, ref propDesIndex); //propertyDescription.InnerPropertyDescriptions
                 }
 
             }

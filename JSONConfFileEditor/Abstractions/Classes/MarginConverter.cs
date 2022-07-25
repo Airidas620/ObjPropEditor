@@ -19,7 +19,6 @@ namespace JSONConfFileEditor.Abstractions.Classes
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            Console.WriteLine(value);
 
             return new System.Windows.Thickness(System.Convert.ToDouble(value)*40, 0, 0, 0);
         }

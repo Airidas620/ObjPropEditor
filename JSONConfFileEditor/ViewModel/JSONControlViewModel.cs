@@ -45,6 +45,24 @@ namespace JSONConfFileEditor.ViewModel
             }
         }
 
+        private bool isFocused = false;
+        public bool IsFocused
+        {
+            get { return isFocused; }
+            set
+            {
+                if (value != isFocused)
+                {
+                    isFocused = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public void ChangeFocus(bool focus)
+        {
+            IsFocused = focus;
+        }
 
 
         private JSONConfigurationEditor jSONConfigurationEditor;
@@ -62,8 +80,10 @@ namespace JSONConfFileEditor.ViewModel
         /// </summary>
         private void ExecuteSaveConfigurationCommand(object obj)
         {
+            IsFocused = false;
             var myConfiguration = jSONConfigurationEditor.GetConfiguredClass();
             File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "JSONConf.txt"), JsonConvert.SerializeObject(myConfiguration, Formatting.Indented));
+            IsFocused = true;
         }
 
         /// <summary>

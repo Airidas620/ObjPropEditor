@@ -14,7 +14,7 @@ namespace JSONConfFileEditor.ConfModels
 
         //public string field;
 
-        public k c { get; set; }
+        //public k c { get; set; }
 
     //public List<string> test2 { get; set; }
 }

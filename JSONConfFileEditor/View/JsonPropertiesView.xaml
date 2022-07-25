@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cl="clr-namespace:JSONConfFileEditor.Abstractions.Classes" 
              xmlns:enums ="clr-namespace:JSONConfFileEditor.Abstractions.Enums"
+             xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:models ="clr-namespace:JSONConfFileEditor.Models"
              xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
              xmlns:local="clr-namespace:JSONConfFileEditor.View"
@@ -15,28 +16,28 @@
         <DataTemplate x:Key="bool">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left"  >
                 <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
-                <CheckBox IsChecked="{Binding ValueAsBool}" Margin="5,0,0,0"/>
+                <CheckBox IsChecked="{Binding ValueAsBool}" Margin="5,0,0,0" Focusable="{Binding IsFocused}"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="numeric">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center"/>
-                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0" Text="{Binding ValueAsDouble}"/>
+                <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center" />
+                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0" Text="{Binding ValueAsDouble}" Focusable="{Binding IsFocused}"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="string">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" >
                 <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center"/>
-                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString}"/>
+                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString}" Focusable="False"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="enum">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center"/>
-                <ComboBox  MinWidth="70" ItemsSource="{Binding AvailableEnumValues}" Margin="5,0,0,0" SelectedItem="{Binding ValueAsEnum}" />
+                <ComboBox  MinWidth="70" ItemsSource="{Binding AvailableEnumValues}" Margin="5,0,0,0" SelectedItem="{Binding ValueAsEnum}" Focusable="{Binding IsFocused}"/>
             </StackPanel>
         </DataTemplate>
 
@@ -53,7 +54,7 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="Class">
+        <DataTemplate x:Key="class2">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left">
                 <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Foreground="#FFDE1717" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
             </StackPanel>
@@ -92,19 +93,9 @@
                                                     Value="{DynamicResource List}" />
                             </DataTrigger>
 
-                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.ObjectLine}">
-                                <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource ObjectLine}" />
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.ListLine}">
-                                <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource ListLine}" />
-                            </DataTrigger>
-
                             <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Class}">
                                 <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource ObjectLine}" />
+                                                    Value="{DynamicResource Class}" />
                             </DataTrigger>
 
                         </Style.Triggers>
@@ -113,12 +104,25 @@
             </ContentControl>
         </DataTemplate>
 
+        <!--<DataTemplate x:Key="Class">
+            <Expander>
+                <ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Expander>
+        </DataTemplate>-->
+
+
         <DataTemplate x:Key="List">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
 
             <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
 
-                <ItemsControl ItemsSource="{Binding ListPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
+                <ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
 
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -175,7 +179,25 @@
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
-        <StackPanel Orientation="Vertical"  Margin="0,10,0,0" HorizontalAlignment="Center">
+        <StackPanel Orientation="Vertical"  Margin="0,10,0,0" HorizontalAlignment="Center" >
+            <!--<Expander Width="300">
+                
+                --><!--<controls:JsonEditor Visibility="{Binding HasValue, Converter={StaticResource VisibilityConverter}}" 
+                                             Data="{Binding Value}" Margin="4" />--><!--
+            </Expander>-->
+
+            <!--<Expander Width="auto">
+
+                <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                --><!--<controls:JsonEditor Visibility="{Binding HasValue, Converter={StaticResource VisibilityConverter}}" 
+                                             Data="{Binding Value}" Margin="4" />--><!--
+            </Expander>-->
             <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
