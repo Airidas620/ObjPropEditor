@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace JSONConfFileEditor.ViewModel
 {
@@ -45,30 +46,18 @@ namespace JSONConfFileEditor.ViewModel
             }
         }
 
-        private bool isFocused = false;
-        public bool IsFocused
-        {
-            get { return isFocused; }
-            set
-            {
-                if (value != isFocused)
-                {
-                    isFocused = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
 
-        public void ChangeFocus(bool focus)
-        {
-            IsFocused = focus;
-        }
-
-
-        private JSONConfigurationEditor jSONConfigurationEditor;
-        public JSONConfigurationEditor JSONConfigurationEditor
+        private JSONEditorViewModel jSONConfigurationEditor;
+        public JSONEditorViewModel JSONConfigurationEditor
         {
             get { return jSONConfigurationEditor; }
+            set
+            {
+                if (value != jSONConfigurationEditor)
+                {
+                    jSONConfigurationEditor = value;
+                }
+            }
         }
 
         public RelayCommand SaveConfigurationCommand { private set; get; }
@@ -80,10 +69,9 @@ namespace JSONConfFileEditor.ViewModel
         /// </summary>
         private void ExecuteSaveConfigurationCommand(object obj)
         {
-            IsFocused = false;
+            JSONConfigurationEditor.FinalizeBinding();
             var myConfiguration = jSONConfigurationEditor.GetConfiguredClass();
             File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "JSONConf.txt"), JsonConvert.SerializeObject(myConfiguration, Formatting.Indented));
-            IsFocused = true;
         }
 
         /// <summary>
@@ -91,7 +79,6 @@ namespace JSONConfFileEditor.ViewModel
         /// </summary>
         private void ExecuteValidateJSONClassCommand(object obj)
         {
-            //var myConfiguration = jSONConfigurationEditor.GetConfiguredClass();
             jSONConfigurationEditor.ValidateConfiguratioClass();
 
             ValidationState = jSONConfigurationEditor.GetValidationState();
@@ -100,11 +87,11 @@ namespace JSONConfFileEditor.ViewModel
 
         public JSONControlViewModel()
         {
-            var configurationFile = new CarbideSIModel();
+            //var configurationFile = new CarbideSIModel();
             //var configurationFile = new MyCustomConfigurationClass2();
-            //var configurationFile = new ValidationTest();
+           var configurationFile = new ValidationTest();
 
-            jSONConfigurationEditor = new JSONConfigurationEditor(configurationFile);
+            jSONConfigurationEditor = new JSONEditorViewModel(configurationFile);
 
             SaveConfigurationCommand = new RelayCommand(ExecuteSaveConfigurationCommand);
             ValidateJSONClassCommand = new RelayCommand(ExecuteValidateJSONClassCommand);

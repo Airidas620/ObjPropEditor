@@ -37,7 +37,7 @@ namespace JSONConfFileEditor.Models
                 }*/
 
 
-                propertyDescription = propertyDescriptions.ElementAt(propDesIndex);
+                propertyDescription = propertyDescriptions.ElementAt(currentIndex);
 
                 currentIndex++;
                 Console.WriteLine(currentIndex);

@@ -87,7 +87,7 @@
     <Compile Include="ConfModels\MyCustomConfigurationClass.cs" />
     <Compile Include="ConfModels\MyCustomConfigurationClass2.cs" />
     <Compile Include="Models\PropertyDescriptionBuilder.cs" />
-    <Compile Include="ViewModel\JSONConfigurationEditor.cs" />
+    <Compile Include="ViewModel\JSONEditorViewModel.cs" />
     <Compile Include="ViewModel\JSONControlViewModel.cs" />
     <Compile Include="View\JsonPropertiesView.xaml.cs">
       <DependentUpon>JsonPropertiesView.xaml</DependentUpon>

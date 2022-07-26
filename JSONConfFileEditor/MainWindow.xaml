@@ -51,9 +51,9 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <view:JsonPropertiesView DataContext="{Binding JSONConfigurationEditor}"/>
+            <view:JsonPropertiesView/>
         </Grid>
-        <!--Background ="#FFC4E0C1"-->
+        
         <Grid Grid.Row="1">
             <Button Command="{Binding SaveConfigurationCommand}" MinWidth="80" MaxHeight="50" Margin="50,5,0,5" Content="Save JSON" Background ="#FFC4E0C1"  HorizontalAlignment="Left" Style="{StaticResource BStyle}" />
             <StackPanel Orientation="Horizontal">

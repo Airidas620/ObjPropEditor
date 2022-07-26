@@ -16,28 +16,28 @@
         <DataTemplate x:Key="bool">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left"  >
                 <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
-                <CheckBox IsChecked="{Binding ValueAsBool}" Margin="5,0,0,0" Focusable="{Binding IsFocused}"/>
+                <CheckBox IsChecked="{Binding ValueAsBool}" Margin="5,0,0,0"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="numeric">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
                 <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center" />
-                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0" Text="{Binding ValueAsDouble}" Focusable="{Binding IsFocused}"/>
+                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0" Text="{Binding ValueAsDouble}"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="string">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" >
                 <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center"/>
-                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString}" Focusable="False"/>
+                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString}"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="enum">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center"/>
-                <ComboBox  MinWidth="70" ItemsSource="{Binding AvailableEnumValues}" Margin="5,0,0,0" SelectedItem="{Binding ValueAsEnum}" Focusable="{Binding IsFocused}"/>
+                <ComboBox  MinWidth="70" ItemsSource="{Binding AvailableEnumValues}" Margin="5,0,0,0" SelectedItem="{Binding ValueAsEnum}"/>
             </StackPanel>
         </DataTemplate>
 
@@ -63,7 +63,7 @@
 
 
         <DataTemplate x:Key="DataTemplateTriggers">
-            <ContentControl Content="{Binding}" Margin="0,7,0,0" >
+            <ContentControl Content="{Binding}" Margin="0,7,0,7" >
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">
                         <Style.Triggers>
@@ -104,8 +104,8 @@
             </ContentControl>
         </DataTemplate>
 
-        <!--<DataTemplate x:Key="Class">
-            <Expander>
+        <DataTemplate x:Key="Class">
+            <Expander Header="{Binding PropertyName}" IsExpanded="True">
                 <ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -114,25 +114,58 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </Expander>
-        </DataTemplate>-->
+        </DataTemplate>
 
 
         <DataTemplate x:Key="List">
+            <!--remove-->
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
+                <!--NumberOfObjects-->
+                <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
+                <Button Content= "Add2" Command="{Binding Add2}" Margin="0,0,0,20" MaxWidth="50"/>
+                <Expander IsExpanded="True">
+                    <ItemsControl ItemsSource="{Binding NumberOfObjects}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                                    <TextBlock Text="hi"></TextBlock>
+                                    <!--<ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical"
+                                                        VerticalAlignment="Center"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>-->
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    
+                    
+                    <!--<ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
 
-            <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
+                                <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>-->
+                </Expander>
 
-                <ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
+                <!--<ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
 
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
+                                
                                 <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
-                </ItemsControl>
-                <StackPanel Orientation="Horizontal"  Margin="{Binding NestDepth, Converter={cl:MarginConverter}}">
+                </ItemsControl>-->
+                <!--<StackPanel Orientation="Horizontal"  Margin="{Binding NestDepth, Converter={cl:MarginConverter}}">
                         <Button Content= "Add" Command="{Binding AddToListCommand}"/>
                         <Button Content= "Remove" Command="{Binding RemoveFromListCommand}"  Margin="5,0,0,0"/>
                         <Button Content= "Edit" Command="{Binding EditListMenuCommand}"  Margin="5,0,0,0"/>
@@ -170,7 +203,7 @@
                     </StackPanel>
 
 
-                <ListBox Width="300" Height="132" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}"  ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" HorizontalAlignment="Left" />
+                <ListBox Width="300" Height="132" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}"  ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" HorizontalAlignment="Left" />-->
 
             </StackPanel>
         </DataTemplate>
@@ -178,26 +211,9 @@
 
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+    <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
         <StackPanel Orientation="Vertical"  Margin="0,10,0,0" HorizontalAlignment="Center" >
-            <!--<Expander Width="300">
-                
-                --><!--<controls:JsonEditor Visibility="{Binding HasValue, Converter={StaticResource VisibilityConverter}}" 
-                                             Data="{Binding Value}" Margin="4" />--><!--
-            </Expander>-->
 
-            <!--<Expander Width="auto">
-
-                <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-                --><!--<controls:JsonEditor Visibility="{Binding HasValue, Converter={StaticResource VisibilityConverter}}" 
-                                             Data="{Binding Value}" Margin="4" />--><!--
-            </Expander>-->
             <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

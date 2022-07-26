@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
-
+using JSONConfFileEditor.ViewModel;
 
 namespace JSONConfFileEditor.View
 {
@@ -22,9 +22,24 @@ namespace JSONConfFileEditor.View
     /// </summary>
     public partial class JsonPropertiesView : UserControl
     {
+
+
         public JsonPropertiesView()
         {
             InitializeComponent();
+
+            //Try Catch to avoid design time error
+            try
+            {
+                this.DataContext = MainWindow.JSONControlViewModel.JSONConfigurationEditor;
+
+                var viewModel  = (JSONEditorViewModel)this.DataContext;
+                viewModel.FocusEvent += () => ScrollViewer.Focus();
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)

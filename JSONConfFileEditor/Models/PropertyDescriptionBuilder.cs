@@ -32,8 +32,7 @@ namespace JSONConfFileEditor.Models
 
         public bool BuildProperties()
         {
-            /*AllAvailableProperties = GetTypePropertyDescriptions(MyCustonConfigurationClass.GetType());
-            return true;*/
+
 
             try
             {
@@ -131,8 +130,8 @@ namespace JSONConfFileEditor.Models
 
                     foreach (var item in resolvedProps)
                     {
-                        availableProperties.Add(item);
-                        //innerCollection.Add(item);
+                        //availableProperties.Add(item);
+                        innerCollection.Add(item);
 
                     }
                     //resolvedProps.ToList().ForEach(resolvedProp => availableProperties.Add(resolvedProp));
@@ -217,26 +216,6 @@ namespace JSONConfFileEditor.Models
 
         public class PropertyDescription : INotifyPropertyChanged
         {
-
-            /*private static bool isFocused = false;
-            public static bool IsFocused
-            {
-                get { return isFocused; }
-                set
-                {
-                    if (value != isFocused)
-                    {
-                        isFocused = value;
-                        NotifyPropertyChanged();
-                    }
-                }
-            }
-
-            public static void ChangeFocus(bool focus)
-            {
-                IsFocused = focus;
-            }*/
-
             #region ListProperties
 
             /// <summary>
@@ -343,6 +322,11 @@ namespace JSONConfFileEditor.Models
             public RelayCommand AddToListCommand { set; get; }
 
             /// <summary>
+            /// Command for adding values to List<>
+            /// </summary>
+            public RelayCommand AddToListCommand2 { set; get; }
+
+            /// <summary>
             /// Command for removing values from List<>
             /// </summary>
             public RelayCommand RemoveFromListCommand { set; get; }
@@ -390,6 +374,25 @@ namespace JSONConfFileEditor.Models
                         NotifyPropertyChanged();
                     }
                 }
+            }
+
+            private List<int> numberOfObjects = new List<int> { 1,1,1};
+
+            public List<int> NumberOfObjects
+            {
+                get { return numberOfObjects; }
+                set
+                {
+                    if (numberOfObjects != value)
+                    {
+                        numberOfObjects = value;
+                    }
+                }
+            }
+
+            private void ExecuteAddToListCommand2(object obj)
+            {
+
             }
 
 
@@ -481,6 +484,7 @@ namespace JSONConfFileEditor.Models
             public PropertyDescription()
             {
                 AddToListCommand = new RelayCommand(ExecuteAddToListCommand, canExecute => !IsEditing);
+                AddToListCommand2 = new RelayCommand(ExecuteAddToListCommand2);
                 RemoveFromListCommand = new RelayCommand(ExecuteRemoveFromListCommand, canExecute => selectedItem >= 0 && !IsEditing);
                 EditListMenuCommand = new RelayCommand(ExecuteEditListMenuCommand, canExecute => !IsEditing);
                 EditListCancelCommand = new RelayCommand(ExecuteEditListCancelCommand);

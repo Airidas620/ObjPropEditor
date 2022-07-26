@@ -67,6 +67,7 @@ namespace JSONConfFileEditor.Models
 	public class AttenuatorConf
 	{
 		public bool IsPresent { get; set; }
+
 		//todo maybe diode address
 		public double DiodeOffset { get; set; }
 		public double DiodeGain { get; set; }

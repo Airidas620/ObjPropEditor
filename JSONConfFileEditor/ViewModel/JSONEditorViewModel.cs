@@ -11,11 +11,23 @@ using JSONConfFileEditor.Models;
 using System.Collections.ObjectModel;
 using static JSONConfFileEditor.Models.PropertyDescriptionBuilder;
 using JSONConfFileEditor.Abstractions.Classes;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Controls;
 
 namespace JSONConfFileEditor.ViewModel
 {
-    public class JSONConfigurationEditor
+    public class JSONEditorViewModel
     {
+
+
+        public delegate void EventFocusAction();
+        public event EventFocusAction FocusEvent;
+
+        public void FinalizeBinding()
+        {
+            FocusEvent.Invoke();
+        }
 
         private ObservableCollection<PropertyDescription> allAvailableProperties;
 
@@ -49,7 +61,7 @@ namespace JSONConfFileEditor.ViewModel
         }
 
 
-        public JSONConfigurationEditor(Object myCustomConfigurationClass)
+        public JSONEditorViewModel(Object myCustomConfigurationClass)
         {
 
             MyCustomConfigurationClass = myCustomConfigurationClass;

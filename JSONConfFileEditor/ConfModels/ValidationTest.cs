@@ -16,11 +16,11 @@ namespace JSONConfFileEditor.ConfModels
 
         //public k c { get; set; }
 
-    //public List<string> test2 { get; set; }
+        public List<string> test2 { get; set; }
 }
 
     public class k
     {
-        public k a { get; set; }
+        public k a { get; set; } = new k();
     }
 }
