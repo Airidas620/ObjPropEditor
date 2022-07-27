@@ -123,10 +123,9 @@ namespace JSONConfFileEditor.Models
                     var reccursiveProperty = new PropertyDescription() { PropertyName = prop.Name, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.Class, InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>()};
                     availableProperties.Add(reccursiveProperty);
 
-                    int ats = depth + 1;
                     var resolvedProps = GetTypePropertyDescriptions(prop.PropertyType, increasedDepth, maxDepth);
 
-                    var innerCollection = availableProperties.Last().InnerPropertyDescriptions;
+                    var innerCollection = availableProperties.Last().InnerPropertyDescriptions; // pakeist i recursive
 
                     foreach (var item in resolvedProps)
                     {
@@ -191,20 +190,25 @@ namespace JSONConfFileEditor.Models
             //Class
             if (listType.IsClass)
             {
-                var increasedDepth = depth + 1;
-
                 listPropDes.ListProperty = PossibleTypes.Class;
                 listPropDes.ListObjectType = listType;
                 listPropDes.ListObjectType = listType;
 
-                //(Not used)listPropDes.InnerPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
+                var increasedDepth = depth + 1;
+
+                var reccursiveProperty = new PropertyDescription() { PropertyName = listPropDes.PropertyName, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.Class, InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>() };
+                listPropDes.InnerPropertyDescriptions.Add(reccursiveProperty);
 
                 //Since List<T> holds class properties they need to be resolved
                 var resolvedProps = GetTypePropertyDescriptions(listType, depth);
 
+                var innerCollection = reccursiveProperty.InnerPropertyDescriptions; // pakeist i recursive
+
                 foreach (var item in resolvedProps)
                 {
                     listPropDes.InnerPropertyDescriptions.Add(item);
+                    innerCollection.Add(item);
+
                 }
 
                 //(Not used)listPropDes.InnerPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
@@ -214,8 +218,42 @@ namespace JSONConfFileEditor.Models
 
 
 
-        public class PropertyDescription : INotifyPropertyChanged
+        public class PropertyDescription : INotifyPropertyChanged, ICloneable
         {
+            public object Clone()
+            {
+                var propDescriptionCopy = new PropertyDescription() {GeneralProperty = this.GeneralProperty, PropertyName = this.PropertyName, PropertyType = this.PropertyType, NestDepth = this.NestDepth };
+
+                propDescriptionCopy.GeneralProperty = this.GeneralProperty;
+                propDescriptionCopy.PropertyName = this.PropertyName;
+                propDescriptionCopy.PropertyType = this.PropertyType;
+                propDescriptionCopy.NestDepth = this.NestDepth;
+
+                if(this.GeneralProperty == PossibleTypes.Enum)
+                {
+                    propDescriptionCopy.AvailableEnumValues = this.AvailableEnumValues;
+                }
+
+                if (this.GeneralProperty == PossibleTypes.Class)
+                {
+                    propDescriptionCopy.innerPropertyDescriptions = new ObservableCollection<PropertyDescription>();
+                    //Console.WriteLine("fqw");
+                    foreach(var item in this.innerPropertyDescriptions)
+                    {
+                        propDescriptionCopy.innerPropertyDescriptions.Add((PropertyDescription)item.Clone());
+                    }
+                }
+
+                //PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType
+                //if(this.)
+
+
+                return propDescriptionCopy;
+
+                //return null;
+            }
+
+
             #region ListProperties
 
             /// <summary>
@@ -233,6 +271,24 @@ namespace JSONConfFileEditor.Models
                         }
                     }
             }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            private ObservableCollection<ObservableCollection<PropertyDescription>> innerPropertyDescriptionList = new ObservableCollection<ObservableCollection<PropertyDescription>>();
+
+            public ObservableCollection<ObservableCollection<PropertyDescription>> InnerPropertyDescriptionList
+            {
+                get { return innerPropertyDescriptionList; }
+                set
+                {
+                    if (innerPropertyDescriptionList != value)
+                    {
+                        innerPropertyDescriptionList = value;
+                    }
+                }
+            }
+
 
             /// <summary>
             /// (Not used)
@@ -280,7 +336,7 @@ namespace JSONConfFileEditor.Models
             public double ValueAsDouble { get; set; }
 
             /// <summary>
-            /// Holds string values if property is atring
+            /// Holds string values if property is string
             /// </summary>
             public string ValueAsString { get; set; } = "";
 
@@ -376,7 +432,7 @@ namespace JSONConfFileEditor.Models
                 }
             }
 
-            private List<int> numberOfObjects = new List<int> { 1,1,1};
+            private List<int> numberOfObjects = new List<int> { 1,3,2};
 
             public List<int> NumberOfObjects
             {
@@ -392,9 +448,39 @@ namespace JSONConfFileEditor.Models
 
             private void ExecuteAddToListCommand2(object obj)
             {
+                //innerPropertyDescriptions
+                var clonedList = innerPropertyDescriptions.Select(objEntity => (PropertyDescription)objEntity.Clone()).ToList();
 
+                InnerPropertyDescriptionList.Add(new ObservableCollection<PropertyDescription>(clonedList));
+                //innerPropertyDescriptionList.Add(new ObservableCollection<PropertyDescription>(innerPropertyDescriptions));
+                //innerPropertyDescriptions.
             }
 
+            public void addToOrigignal()
+            {
+
+                if (ListProperty == PossibleTypes.String)
+                {
+
+                    foreach (var property in innerPropertyDescriptionList)
+                    {
+                        ObjectList.Add(property.First().ValueAsString);
+                    }
+
+                    //Since single property list only have one property description
+                    //Last() can be replaced with First() or [0]
+                    //ObjectList.Add(innerPropertyDescriptions.Last().ValueAsString);
+
+                    //if (innerPropertyDescriptions.Last().ValueAsString != "")
+                    //    DescriptionList.Add(ObjectList.Last().ToString());
+
+                    //else
+                    //    DescriptionList.Add("\"\"");
+                }
+
+              
+
+            }
 
             private void ExecuteAddToListCommand(object obj)
             {
@@ -491,6 +577,7 @@ namespace JSONConfFileEditor.Models
                 EditListCommand = new RelayCommand(ExecuteEditListCommand);
             }
 
+           
             #region INotifyPropertyChanged implementation
             public event PropertyChangedEventHandler PropertyChanged;
 

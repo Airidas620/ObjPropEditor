@@ -30,7 +30,7 @@
         <DataTemplate x:Key="string">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" >
                 <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center"/>
-                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString}"/>
+                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString,Mode=TwoWay}"/>
             </StackPanel>
         </DataTemplate>
 
@@ -122,36 +122,62 @@
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
                 <!--NumberOfObjects-->
                 <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
-                <Button Content= "Add2" Command="{Binding Add2}" Margin="0,0,0,20" MaxWidth="50"/>
-                <Expander IsExpanded="True">
-                    <ItemsControl ItemsSource="{Binding NumberOfObjects}">
+                <Button Content= "Add2" Command="{Binding AddToListCommand2}" Margin="0,0,0,20" MaxWidth="50"/>
+                <Expander IsExpanded="True" Header="{Binding PropertyName}">
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding InnerPropertyDescriptionList}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+
+                                    <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                        
+                        <!--<ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+
+                                    <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>-->
+                        
+                    </StackPanel>
+                   
+                    <!--<ItemsControl ItemsSource="{Binding NumberOfObjects}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                                    <TextBlock Text="hi"></TextBlock>
-                                    <!--<ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
+                                    --><!--<TextBlock Text="{Binding }"></TextBlock>--><!--
+                                    <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Expander}},Path=IsExpanded}">
+                                        
+                                    </ItemsControl>
+                                    --><!--<ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Vertical"
                                                         VerticalAlignment="Center"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
-                                    </ItemsControl>-->
+                                    </ItemsControl>--><!--
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    
-                    
-                    <!--<ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-
-                                <StackPanel Orientation="Vertical"
-                                    VerticalAlignment="Center"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
                     </ItemsControl>-->
+                    
+                    
+                    <!--<itemscontrol itemssource="{binding innerpropertydescriptions}" itemtemplate="{staticresource datatemplatetriggers}" margin="0,0,0,8">
+                        <itemscontrol.itemspanel>
+                            <itemspaneltemplate>
+
+                                <stackpanel orientation="vertical"
+                                    verticalalignment="center"/>
+                            </itemspaneltemplate>
+                        </itemscontrol.itemspanel>
+                    </itemscontrol>-->
                 </Expander>
 
                 <!--<ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
@@ -165,7 +191,7 @@
                         </ItemsControl.ItemsPanel>
 
                 </ItemsControl>-->
-                <!--<StackPanel Orientation="Horizontal"  Margin="{Binding NestDepth, Converter={cl:MarginConverter}}">
+                <StackPanel Orientation="Horizontal"  Margin="{Binding NestDepth, Converter={cl:MarginConverter}}">
                         <Button Content= "Add" Command="{Binding AddToListCommand}"/>
                         <Button Content= "Remove" Command="{Binding RemoveFromListCommand}"  Margin="5,0,0,0"/>
                         <Button Content= "Edit" Command="{Binding EditListMenuCommand}"  Margin="5,0,0,0"/>
@@ -203,7 +229,7 @@
                     </StackPanel>
 
 
-                <ListBox Width="300" Height="132" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}"  ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" HorizontalAlignment="Left" />-->
+                <ListBox Width="300" Height="132" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}"  ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" HorizontalAlignment="Left" />
 
             </StackPanel>
         </DataTemplate>

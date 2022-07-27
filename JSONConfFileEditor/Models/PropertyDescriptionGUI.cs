@@ -76,6 +76,8 @@ namespace JSONConfFileEditor.Models
                 if (propertyDescription.GeneralProperty == PossibleTypes.List)
                 {
 
+                    propertyDescription.addToOrigignal();
+
                     if (propertyDescription.ListProperty == PossibleTypes.String || propertyDescription.ListProperty == PossibleTypes.Bool || propertyDescription.ListProperty == PossibleTypes.Numeric 
                         || propertyDescription.ListProperty == PossibleTypes.Enum || propertyDescription.ListProperty == PossibleTypes.Class )
                     {

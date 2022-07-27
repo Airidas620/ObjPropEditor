@@ -89,7 +89,7 @@ namespace JSONConfFileEditor.ViewModel
         {
             //var configurationFile = new CarbideSIModel();
             //var configurationFile = new MyCustomConfigurationClass2();
-           var configurationFile = new ValidationTest();
+            var configurationFile = new ValidationTest();
 
             jSONConfigurationEditor = new JSONEditorViewModel(configurationFile);
 
