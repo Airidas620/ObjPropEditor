@@ -27,7 +27,7 @@ namespace JSONConfFileEditor.ConfModels
 
         //public List<bool> f { get; set; }
 
-        public List<List<string>> Aa { get; set; }
+        //public List<List<string>> Aa { get; set; }
 
         //public List<k> g { get; set; }
 

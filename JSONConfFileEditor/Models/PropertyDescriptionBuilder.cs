@@ -263,7 +263,6 @@ namespace JSONConfFileEditor.Models
                     propDescriptionCopy.ListObjectType = this.ListObjectType;
 
                     propDescriptionCopy.innerPropertyDescriptions.Add((PropertyDescription)this.innerPropertyDescriptions.First().Clone());
-                    //Console.WriteLine("hi");
                 }
 
                 if (this.GeneralProperty == PossibleTypes.Class)
@@ -276,23 +275,17 @@ namespace JSONConfFileEditor.Models
                     }
                 }
                 return propDescriptionCopy;
-
-                //return null;
             }
 
             private void ExecuteAddToListCommand2(object obj)
             {
-                //innerPropertyDescriptions
 
-
-                //Console.WriteLine(innerPropertyDescriptions.Count());
                 innerPropertyDescriptions.Select(objEntity => objEntity.PropertyName);
 
                 var clonedList = innerPropertyDescriptions.Select(objEntity => (PropertyDescription)objEntity.Clone()).ToList();
 
                 InnerPropertyDescriptionList.Add(new ObservableCollection<PropertyDescription>(clonedList));
-                //innerPropertyDescriptionList.Add(new ObservableCollection<PropertyDescription>(innerPropertyDescriptions));
-                //innerPropertyDescriptions.
+
             }
 
 
@@ -431,65 +424,6 @@ namespace JSONConfFileEditor.Models
             public RelayCommand RemoveFromListCommand { set; get; }
 
 
-            /// <summary>
-            /// Command for entering Edit List menu
-            /// </summary>
-            public RelayCommand EditListMenuCommand { set; get; }
-
-            /// <summary>
-            /// Command for canceling lists edit
-            /// </summary>
-            public RelayCommand EditListCancelCommand { set; get; }
-
-            /// <summary>
-            /// Command for editing to List<> values
-            /// </summary>
-            public RelayCommand EditListCommand { set; get; }
-
-            private int selectedItem = -1;
-
-            public int SelectedItem
-            {
-                get { return selectedItem; }
-                set
-                {
-                    if (value != selectedItem)
-                    {
-                        selectedItem = value;
-                    }
-                }
-            }
-
-            private bool isEditing;
-
-            public bool IsEditing
-            {
-                get { return isEditing; }
-                set
-                {
-                    if (value != isEditing)
-                    {
-                        isEditing = value;
-                        NotifyPropertyChanged();
-                    }
-                }
-            }
-
-            private List<int> numberOfObjects = new List<int> { 1,3,2};
-
-            public List<int> NumberOfObjects
-            {
-                get { return numberOfObjects; }
-                set
-                {
-                    if (numberOfObjects != value)
-                    {
-                        numberOfObjects = value;
-                    }
-                }
-            }
-
-         
 
             public void SaveGUIListDataToList()
             {
@@ -615,38 +549,15 @@ namespace JSONConfFileEditor.Models
 
             private void ExecuteRemoveFromListCommand(object obj)
             {
-                ObjectList.RemoveAt(selectedItem);
-                DescriptionList.RemoveAt(selectedItem);
-            }
-
-            private void ExecuteEditListMenuCommand(object obj)
-            {
-                int index = selectedItem;
-                IsEditing = true;
-
-            }
-
-            private void ExecuteEditListCancelCommand(object obj)
-            {
-                int index = selectedItem;
-                IsEditing = false;
-
-            }
-
-            private void ExecuteEditListCommand(object obj)
-            {
-                int index = selectedItem;
-
+                //ObjectList.RemoveAt(selectedItem);
+                //DescriptionList.RemoveAt(selectedItem);
             }
 
             public PropertyDescription()
             {
-                AddToListCommand = new RelayCommand(ExecuteAddToListCommand, canExecute => !IsEditing);
+                AddToListCommand = new RelayCommand(ExecuteAddToListCommand);
                 AddToListCommand2 = new RelayCommand(ExecuteAddToListCommand2);
-                RemoveFromListCommand = new RelayCommand(ExecuteRemoveFromListCommand, canExecute => selectedItem >= 0 && !IsEditing);
-                EditListMenuCommand = new RelayCommand(ExecuteEditListMenuCommand, canExecute => !IsEditing);
-                EditListCancelCommand = new RelayCommand(ExecuteEditListCancelCommand);
-                EditListCommand = new RelayCommand(ExecuteEditListCommand);
+                RemoveFromListCommand = new RelayCommand(ExecuteRemoveFromListCommand );
             }
 
            
