@@ -14,10 +14,36 @@ namespace JSONConfFileEditor.Models
 
         //public ObservableCollection<string> AllAvailableProperties { get; set; } = new ObservableCollection<string> { "hi", "x" };
 
-        public List<List<List<string>>> test2 { get; set; } = new List<List<List<string>>>();
+        //public List<List<List<string>>> test2 { get; set; } = new List<List<List<string>>>();
+
+        //public List<InnerClass1> listobj { get; set; } = new List<InnerClass1>();
+
+        //public bool IsFeedbackEnabled2 { get; set; }
+
+        //public List<InnerClass1> innerClass1 { get; set; }
+        //public List<bool> listBool { get; set; } = new List<bool>();
+
+        public bool IsFeedbackEnabled { get; set; }
+
+        /* public List<bool> listBool { get; set; } = new List<bool>();
+
+         public List<double> listDouble { get; set; } = new List<double>();
+
+         public List<Int32> lisInt32 { get; set; } = new List<Int32>();
+
+         public List<FeedbackMechanismGroupOneEnum> listEnum { get; set; } = new List<FeedbackMechanismGroupOneEnum>();
+
+
+         public List<string> listString { get; set; } = new List<string>();
+         public List<string> listString2 { get; set; } = new List<string>();*/
 
         //public List<List<string>> test4 { get; set; } = new List<List<string>>();
 
+        //public List<FeedbackMechanismGroupOneEnum> listEnum { get; set; } = new List<FeedbackMechanismGroupOneEnum>();
+
+        //public List<List<string>> test4 { get; set; } = new List<List<string>>();
+
+        //public List<InnerClass1> listobj { get; set; } = new List<InnerClass1>();
 
         /*public List<string> listString { get; set; } = new List<string>();
 
@@ -73,10 +99,11 @@ namespace JSONConfFileEditor.Models
 
         public class InnerClass1
         {
-            public InnerClass2 innerClass2 { get; set; }// = new InnerClass2(); 
-
 
             public string FeedbackTitle1x { get; set; }
+
+            public InnerClass2 innerClass2 { get; set; }// = new InnerClass2(); 
+
 
 
             public bool IsFeedbackEnabled1x { get; set; }
@@ -87,10 +114,12 @@ namespace JSONConfFileEditor.Models
         public class InnerClass2
         {
 
-            public InnerClass3 InnerClass3 { get; set; }
+            public List<InnerClass3> InnerClass3 { get; set; }
+
 
             public string FeedbackTitle2 { get; set; }
 
+            public InnerClass3 innerClass3 { get; set; }
 
             public bool IsFeedbackEnabled2x { get; set; }
         }
@@ -100,7 +129,7 @@ namespace JSONConfFileEditor.Models
 
             public string FeedbackTitle3 { get; set; }
 
-            public List<string> stringArray { get; set; } = new List<string>();
+            //public List<bool> stringArray { get; set; } = new List<bool>();
 
             public bool IsFeedbackEnabled3x { get; set; }
         }

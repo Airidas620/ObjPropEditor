@@ -40,8 +40,10 @@ namespace JSONConfFileEditor.Models
 		public int HarpiaMainBoardSingleShutterStageIndex { get; set; } = 0;//todo this prop should be moved to object HardwareConfig, which is specific to hardware
 
 
-		public List<HardwareComponentConfiguration> HardwareComponents { get; set; } = new List<HardwareComponentConfiguration>();
+		public HarpiaMainBoardSingleShutterConfig test { get; set; }
 
+		public List<HardwareComponentConfiguration> HardwareComponents { get; set; } = new List<HardwareComponentConfiguration>();
+	
 		public string CarbideIPAddress { get; set; } = "";
 	
 		public CarbideElectronicsType CarbideElectronicsType { get; set; } = CarbideElectronicsType.GHI;
@@ -65,6 +67,7 @@ namespace JSONConfFileEditor.Models
 	public class AttenuatorConf
 	{
 		public bool IsPresent { get; set; }
+
 		//todo maybe diode address
 		public double DiodeOffset { get; set; }
 		public double DiodeGain { get; set; }

@@ -11,6 +11,8 @@ namespace JSONConfFileEditor.Models
 {
     public partial class PropertyDescriptionBuilder
     {
+
+
         /// <summary>
         /// Writes values to Object src from GUI values
         /// </summary>
@@ -21,19 +23,17 @@ namespace JSONConfFileEditor.Models
         {
             var props = src.GetType().GetProperties().ToList();
 
+            int currentIndex = 0;
+
             PropertyDescription propertyDescription;
 
             foreach (var prop in props)
             {
-                //Skip ObjectLines and ListLines
-                /*while (propertyDescriptions.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ObjectLine ||
-                    propertyDescriptions.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ListLine)
-                {
-                    propDesIndex++;
-                }*/
 
+                propertyDescription = propertyDescriptions.ElementAt(currentIndex);
 
-                propertyDescription = propertyDescriptions.ElementAt(propDesIndex);
+                currentIndex++;
+                //Console.WriteLine(currentIndex);
 
                 propDesIndex++;
 
@@ -54,7 +54,6 @@ namespace JSONConfFileEditor.Models
                 //Bool
                 if (propertyDescription.GeneralProperty == PossibleTypes.Bool)
                 {
-
                     prop.SetValue(src, propertyDescription.ValueAsBool);
                     continue;
                 }
@@ -62,10 +61,7 @@ namespace JSONConfFileEditor.Models
                 //Numeric
                 if (propertyDescription.GeneralProperty == PossibleTypes.Numeric)
                 {
-
-                    string ValueAsDoubleString = propertyDescription.ValueAsDouble.ToString();
-                    SetNumericProp(prop, prop.PropertyType, ValueAsDoubleString);
-
+                    prop.SetValue(src, SetNumericProp(prop.PropertyType, propertyDescription.ValueAsDouble.ToString()));
                     continue;
                 }
 
@@ -73,173 +69,39 @@ namespace JSONConfFileEditor.Models
                 if (propertyDescription.GeneralProperty == PossibleTypes.List)
                 {
 
-                    if (propertyDescription.ListProperty == PossibleTypes.String)
+                    propertyDescription.SaveGUIListDataToList();
+
+
+                    if (propertyDescription.ListProperty == PossibleTypes.String || propertyDescription.ListProperty == PossibleTypes.Bool || propertyDescription.ListProperty == PossibleTypes.Numeric 
+                        || propertyDescription.ListProperty == PossibleTypes.Enum || propertyDescription.ListProperty == PossibleTypes.Class )
                     {
 
-
-                        prop.SetValue(src, propertyDescription.StringList);
-                        continue;
-                    }
-
-                    if (propertyDescription.ListProperty == PossibleTypes.Bool)
-                    {
-                        prop.SetValue(src, propertyDescription.BoolList);
-                        continue;
-                    }
-
-                    if (propertyDescription.ListProperty == PossibleTypes.Numeric)
-                    {
-                        string ValueAsDoubleString = propertyDescription.ValueAsDouble.ToString();
-
-                        //For Numeric Enum and Class types you need to convert from generic List(Double, Enum, Object) to src Type T list at runtime
-                        //First array gets created of Type T. Then it's values are set with generic list
                         Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList.Count());
 
-                        for (int i = 0; i < values.Length; i++)
+                        if (propertyDescription.ListProperty == PossibleTypes.Numeric)//TODO check if not double
                         {
-                            ValueAsDoubleString = propertyDescription.ObjectList[i].ToString();
-                            //Change from double to required type
-                            values.SetValue(SetNumericProp(null, prop.PropertyType.GetGenericArguments().First(), ValueAsDoubleString, true), i);
-                        }
-
-
-                        //List<T> is created for src List with constructor List<T>(IEnumerable<T>)
-                        prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
-                        continue;
-                    }
-
-                    if (propertyDescription.ListProperty == PossibleTypes.Enum)
-                    {
-
-                        Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.EnumList.Count());
-
-                        for (int i = 0; i < values.Length; i++)
-                        {
-                            values.SetValue(propertyDescription.EnumList[i], i);
-                        }
-
-                        prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
-                        continue;
-                    }
-
-                    Array ArrayCreator(Type genericType, PropertyDescription propDescription)
-                    {
-                        Array array;
-                        Array innerArray;
-
-                            
-                        array = Array.CreateInstance(genericType,propDescription.ObjectList.Count());
-                        Console.WriteLine(propDescription.ObjectList.GetType().GetGenericArguments().First());
-
-                        //Console.WriteLine(array.GetType());
-                        //if (propDescription.ListProperty == PossibleTypes.List)
-                        //    Console.WriteLine(propDescription.ObjectList.Count());
-
-                        ////Console.WriteLine(array.Length);
-
-                        PropertyDescription listDescritpion = null;
-
-                        for (int j = 0; j < propDescription.ListPropertyDescriptions.Count(); j++)
-                        {
-                            if (propDescription.ListPropertyDescriptions[j].GeneralProperty == PossibleTypes.List)
+                            for (int i = 0; i < values.Length; i++)
                             {
-                                listDescritpion = propDescription.ListPropertyDescriptions[j];
+                                //Change from double to required type
+                                values.SetValue(SetNumericProp(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList[i].ToString()), i);
                             }
                         }
 
-                        for (int i = 0; i < array.Length; i++)
+                        else
                         {
-                            //rekucrion in here   
-
-                            if(listDescritpion.ListProperty == PossibleTypes.List)
+                            for (int i = 0; i < values.Length; i++)
                             {
-                                /*Console.WriteLine("tset");
-
-                                Console.WriteLine("inside " + array.GetType());*/
-
-                                Array test = ArrayCreator(genericType.GetGenericArguments().First(), listDescritpion);
-                                Console.WriteLine(test.GetType());
-                                Console.WriteLine(genericType.GetGenericArguments().First());
-                                Object ob = Activator.CreateInstance(typeof(List<>).MakeGenericType(typeof(List<string>)), new object[] { test });
-                                Object ob2 = Activator.CreateInstance(typeof(List<>).MakeGenericType(genericType.GetGenericArguments().First()), new object[] { test });
-
-
-                                array.SetValue(ob2,0);
-
-                                //array.SetValue(ArrayCreator(genericType.GetGenericArguments().First(), listDescritpion),i);
-
-                                /*Console.WriteLine("inside2 " + array.GetType());
-                                
-                                Console.WriteLine("tset3");*/
-
-                                //innerArray = ArrayCreator(genericType.GetGenericArguments().First(), listDescritpion);
-                                //array.SetValue(innerArray, i);
+                                values.SetValue(propertyDescription.ObjectList[i], i);
                             }
-                            if (listDescritpion.ListProperty == PossibleTypes.String)
-                            {
-                                //Console.WriteLine("tset2");
-                                //array = Array.CreateInstance(typeof(List<>).MakeGenericType(typeof(string)), 1);// List<string>[] is for List<List<string>>
-
-                                array.SetValue(propDescription.ObjectList[i], i);
-
-                            }
-
-                        }
-                       // Console.WriteLine("return: " + array.GetType());
-                        return array;
-
-                    }
-
-                    if (propertyDescription.ListProperty == PossibleTypes.List)
-                    {
-
-
-                        Array values = ArrayCreator(prop.PropertyType.GetGenericArguments().First(), propertyDescription);
-
-
-                        if(values.Length != 0)
-                        {
-
-                            //Console.WriteLine(values.GetType());
-                            //Console.WriteLine(values.Length);
-                            prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
-                        }
-
-
-
-                        //Console.WriteLine(values.GetType());
-
-                        //prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
-
-
-                        //Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ListOfList.Count());
-
-                        /*Console.WriteLine(prop.PropertyType.GetGenericArguments().First());
-                        Console.WriteLine(propertyDescription.ListOfList[0].GetType());
-                        Console.WriteLine(propertyDescription.ListOfList.Count());*/
-
-                        /*for (int i = 0; i < values.Length; i++)
-                        {
-                            values.SetValue(propertyDescription.ListOfList[0], i);
-                        }*/
-
-
-
-                        continue;
-                    }
-
-                    if (propertyDescription.ListProperty == PossibleTypes.Class)
-                    {
-                        Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList.Count());
-
-                        for (int i = 0; i < values.Length; i++)
-                        {
-                            values.SetValue(propertyDescription.ObjectList[i], i);
                         }
 
                         prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
 
+                        //Such prop value write is not good because it saves list by reference
+                        //prop.SetValue(src, propertyDescription.ObjectList);
+                        continue;
                     }
+
                     continue;
                 }
 
@@ -248,9 +110,10 @@ namespace JSONConfFileEditor.Models
 
                     if (prop.GetValue(src) == null)
                     {
+                        //Console.WriteLine(prop.PropertyType);
                         prop.SetValue(src, Activator.CreateInstance(prop.PropertyType));
                     }
-                    SetObjectValuesWithPropertyDescription(prop.GetValue(src), propertyDescriptions, ref propDesIndex);
+                    SetObjectValuesWithPropertyDescription(prop.GetValue(src), propertyDescription.InnerPropertyDescriptions, ref propDesIndex); //propertyDescription.InnerPropertyDescriptions
                 }
 
             }
@@ -258,38 +121,32 @@ namespace JSONConfFileEditor.Models
             /// <summary>
             /// Writes numeric values to src or returns them
             /// </summary>
-            Object SetNumericProp(PropertyInfo prop, Type type, string valueAsDoubleString, bool returnValue = false)
+            Object SetNumericProp(Type type, string valueAsDoubleString)
             {
 
                 switch (Type.GetTypeCode(type))
                 {
                     case TypeCode.Byte:
-                        byte byteNumber;
+                        Byte byteNumber;
                         if (Byte.TryParse(valueAsDoubleString, out byteNumber))
                         {
-                            if (returnValue)
-                                return byteNumber;
-                            prop.SetValue(src, byteNumber);
+                            return byteNumber;
                         }
                         break;
 
                     case TypeCode.Decimal:
-                        decimal decimalNumber;
+                        Decimal decimalNumber;
                         if (Decimal.TryParse(valueAsDoubleString, out decimalNumber))
                         {
-                            if (returnValue)
-                                return decimalNumber;
-                            prop.SetValue(src, decimalNumber);
+                            return decimalNumber;
                         }
                         break;
 
                     case TypeCode.Double:
-                        double doubleNumber;
+                        Double doubleNumber;
                         if (Double.TryParse(valueAsDoubleString, out doubleNumber))
                         {
-                            if (returnValue)
-                                return doubleNumber;
-                            prop.SetValue(src, doubleNumber);
+                            return doubleNumber;
                         }
                         break;
 
@@ -297,9 +154,7 @@ namespace JSONConfFileEditor.Models
                         Int16 int16Number;
                         if (Int16.TryParse(valueAsDoubleString, out int16Number))
                         {
-                            if (returnValue)
-                                return int16Number;
-                            prop.SetValue(src, int16Number);
+                            return int16Number;
                         }
                         break;
 
@@ -307,9 +162,7 @@ namespace JSONConfFileEditor.Models
                         Int32 int32Number;
                         if (Int32.TryParse(valueAsDoubleString, out int32Number))
                         {
-                            if (returnValue)
-                                return int32Number;
-                            prop.SetValue(src, int32Number);
+                            return int32Number;
                         }
                         break;
 
@@ -317,9 +170,7 @@ namespace JSONConfFileEditor.Models
                         Int64 int64Number;
                         if (Int64.TryParse(valueAsDoubleString, out int64Number))
                         {
-                            if (returnValue)
-                                return int64Number;
-                            prop.SetValue(src, int64Number);
+                            return int64Number;
                         }
                         break;
 
@@ -327,9 +178,7 @@ namespace JSONConfFileEditor.Models
                         sbyte sbyteNumber;
                         if (sbyte.TryParse(valueAsDoubleString, out sbyteNumber))
                         {
-                            if (returnValue)
-                                return sbyteNumber;
-                            prop.SetValue(src, sbyteNumber);
+                            return sbyteNumber;
                         }
                         break;
 
@@ -337,9 +186,7 @@ namespace JSONConfFileEditor.Models
                         Single SingleNumber;
                         if (Single.TryParse(valueAsDoubleString, out SingleNumber))
                         {
-                            if (returnValue)
-                                return SingleNumber;
-                            prop.SetValue(src, SingleNumber);
+                            return SingleNumber;
                         }
                         break;
 
@@ -347,9 +194,7 @@ namespace JSONConfFileEditor.Models
                         UInt16 uInt16Number;
                         if (UInt16.TryParse(valueAsDoubleString, out uInt16Number))
                         {
-                            if (returnValue)
-                                return uInt16Number;
-                            prop.SetValue(src, uInt16Number);
+                            return uInt16Number;
                         }
                         break;
 
@@ -357,9 +202,7 @@ namespace JSONConfFileEditor.Models
                         UInt32 uInt32Number;
                         if (UInt32.TryParse(valueAsDoubleString, out uInt32Number))
                         {
-                            if (returnValue)
-                                return uInt32Number;
-                            prop.SetValue(src, uInt32Number);
+                            return uInt32Number;
                         }
                         break;
 
@@ -367,9 +210,7 @@ namespace JSONConfFileEditor.Models
                         UInt64 uInt64Number;
                         if (UInt64.TryParse(valueAsDoubleString, out uInt64Number))
                         {
-                            if (returnValue)
-                                return uInt64Number;
-                            prop.SetValue(src, uInt64Number);
+                            return uInt64Number;
                         }
                         break;
                 }

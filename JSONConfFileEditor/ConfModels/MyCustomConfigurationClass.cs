@@ -1,4 +1,4 @@
-﻿using JSONConfFileEditor.Abstractions.Enums;
+﻿using JSONConfFileEditor.ConfModels.Enums;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
