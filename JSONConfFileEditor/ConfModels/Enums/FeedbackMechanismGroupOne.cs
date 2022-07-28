@@ -6,14 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JSONConfFileEditor.Abstractions.Enums
+namespace JSONConfFileEditor.ConfModels.Enums
 {
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum FeedbackMechanismGroupTwoEnum
+    public enum FeedbackMechanismGroupOneEnum
     {
-        GroupTwoTypeOne = 0,
-        GroupTwoTypeTwo = 1,
-        GroupTwoTypeThree = 2,
-        GroupTwoTypeFour = 3,
+        GroupOneTypeOne = 0,
+        GroupOneTypeTwo = 1,
+        GroupOneTypeThree = 2,
     }
 }

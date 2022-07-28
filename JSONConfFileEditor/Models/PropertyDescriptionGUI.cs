@@ -29,18 +29,11 @@ namespace JSONConfFileEditor.Models
 
             foreach (var prop in props)
             {
-                //Skip ObjectLines and ListLines
-                /*while (propertyDescriptions.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ObjectLine ||
-                    propertyDescriptions.ElementAt(propDesIndex).GeneralProperty == PossibleTypes.ListLine)
-                {
-                    propDesIndex++;
-                }*/
-
 
                 propertyDescription = propertyDescriptions.ElementAt(currentIndex);
 
                 currentIndex++;
-                Console.WriteLine(currentIndex);
+                //Console.WriteLine(currentIndex);
 
                 propDesIndex++;
 
@@ -76,7 +69,8 @@ namespace JSONConfFileEditor.Models
                 if (propertyDescription.GeneralProperty == PossibleTypes.List)
                 {
 
-                    propertyDescription.addToOrigignal();
+                    propertyDescription.SaveGUIListDataToList();
+
 
                     if (propertyDescription.ListProperty == PossibleTypes.String || propertyDescription.ListProperty == PossibleTypes.Bool || propertyDescription.ListProperty == PossibleTypes.Numeric 
                         || propertyDescription.ListProperty == PossibleTypes.Enum || propertyDescription.ListProperty == PossibleTypes.Class )
@@ -84,7 +78,7 @@ namespace JSONConfFileEditor.Models
 
                         Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList.Count());
 
-                        if (propertyDescription.ListProperty == PossibleTypes.Numeric)
+                        if (propertyDescription.ListProperty == PossibleTypes.Numeric)//TODO check if not double
                         {
                             for (int i = 0; i < values.Length; i++)
                             {
@@ -116,9 +110,10 @@ namespace JSONConfFileEditor.Models
 
                     if (prop.GetValue(src) == null)
                     {
+                        //Console.WriteLine(prop.PropertyType);
                         prop.SetValue(src, Activator.CreateInstance(prop.PropertyType));
                     }
-                    SetObjectValuesWithPropertyDescription(prop.GetValue(src), propertyDescriptions, ref propDesIndex); //propertyDescription.InnerPropertyDescriptions
+                    SetObjectValuesWithPropertyDescription(prop.GetValue(src), propertyDescription.InnerPropertyDescriptions, ref propDesIndex); //propertyDescription.InnerPropertyDescriptions
                 }
 
             }

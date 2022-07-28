@@ -8,6 +8,7 @@ namespace JSONConfFileEditor.Abstractions.Enums
 {
     public enum PossibleTypes
     {
+		Unknown,
 		Numeric,
 		String,
 		Bool,
@@ -16,7 +17,6 @@ namespace JSONConfFileEditor.Abstractions.Enums
 		List,
 		ObjectLine,
 		ListLine,
-		Null,
-		Unknown
+		Null
 	}
 }

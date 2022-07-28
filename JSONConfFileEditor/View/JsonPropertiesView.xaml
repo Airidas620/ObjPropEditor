@@ -105,7 +105,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="Class">
-            <Expander Header="{Binding PropertyName}" IsExpanded="True">
+            <Expander Header="{Binding PropertyName , Converter={cl:ObjectHeaderConverter}}" IsExpanded="True">
                 <ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -122,8 +122,8 @@
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
                 <!--NumberOfObjects-->
                 <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
-                <Button Content= "Add2" Command="{Binding AddToListCommand2}" Margin="0,0,0,20" MaxWidth="50"/>
-                <Expander IsExpanded="True" Header="{Binding PropertyName}">
+                <Button Content= "Add2" Command="{Binding AddToListCommand2}" HorizontalAlignment="Left" Margin="0,0,0,10" MaxWidth="50"/>
+                <Expander IsExpanded="True" Header="{Binding PropertyName, Converter={cl:ListHeaderConverter}}" >
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding InnerPropertyDescriptionList}" ItemTemplate="{StaticResource DataTemplateTriggers}" Margin="0,0,0,8">
                             <ItemsControl.ItemsPanel>
@@ -191,7 +191,7 @@
                         </ItemsControl.ItemsPanel>
 
                 </ItemsControl>-->
-                <StackPanel Orientation="Horizontal"  Margin="{Binding NestDepth, Converter={cl:MarginConverter}}">
+                <!--<StackPanel Orientation="Horizontal"  Margin="{Binding NestDepth, Converter={cl:MarginConverter}}">
                         <Button Content= "Add" Command="{Binding AddToListCommand}"/>
                         <Button Content= "Remove" Command="{Binding RemoveFromListCommand}"  Margin="5,0,0,0"/>
                         <Button Content= "Edit" Command="{Binding EditListMenuCommand}"  Margin="5,0,0,0"/>
@@ -226,10 +226,10 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                    </StackPanel>
+                    </StackPanel>-->
 
 
-                <ListBox Width="300" Height="132" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}"  ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" HorizontalAlignment="Left" />
+                <!--<ListBox Width="300" Height="132" ItemsSource="{Binding DescriptionList}" SelectedIndex="{Binding SelectedItem}"  ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" HorizontalAlignment="Left" />-->
 
             </StackPanel>
         </DataTemplate>

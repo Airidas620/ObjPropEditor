@@ -103,9 +103,9 @@ namespace JSONConfFileEditor.Models
                     {
                         PropertyName = prop.Name,
                         NestDepth = depth,
-                        ObjectList = new List<Object>(),
                         PropertyType = prop.PropertyType,
                         InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>(),
+                        InnerPropertyDescriptionList = new ObservableCollection<ObservableCollection<PropertyDescription>>(),
                         DescriptionList = new ObservableCollection<string>(),
                         GeneralProperty = PossibleTypes.List
                     };
@@ -115,17 +115,19 @@ namespace JSONConfFileEditor.Models
 
                     continue;
                 }
+
+
                 //Class
                 if (prop.PropertyType.IsClass)
                 {
                     int increasedDepth = depth + 1;
 
-                    var reccursiveProperty = new PropertyDescription() { PropertyName = prop.Name, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.Class, InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>()};
+                    var reccursiveProperty = new PropertyDescription() {PropertyType = prop.PropertyType, PropertyName = prop.Name, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.Class, InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>()};
                     availableProperties.Add(reccursiveProperty);
 
                     var resolvedProps = GetTypePropertyDescriptions(prop.PropertyType, increasedDepth, maxDepth);
 
-                    var innerCollection = availableProperties.Last().InnerPropertyDescriptions; // pakeist i recursive
+                    var innerCollection = reccursiveProperty.InnerPropertyDescriptions; // pakeist i recursive
 
                     foreach (var item in resolvedProps)
                     {
@@ -186,17 +188,37 @@ namespace JSONConfFileEditor.Models
                 return;
             }
 
+            //List
+            if (listPropDes.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(ICollection<>)) &&
+                listPropDes.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
+            {
+                Console.WriteLine("hi");
+
+                var listProp = new PropertyDescription()
+                {
+                    PropertyName = listPropDes.PropertyName,
+                    NestDepth = depth,
+                    PropertyType = listPropDes.PropertyType,
+                    InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>(),
+                    InnerPropertyDescriptionList = new ObservableCollection<ObservableCollection<PropertyDescription>>(),
+                    DescriptionList = new ObservableCollection<string>(),
+                    GeneralProperty = PossibleTypes.List
+                };
+                //Function to resolve List<T> Type T properties
+                TryResolveListAndAddToCollection(listProp.PropertyType.GenericTypeArguments.First(), listProp, depth);
+                listPropDes.InnerPropertyDescriptions.Add(listProp);
+                return;
+            }
 
             //Class
             if (listType.IsClass)
             {
                 listPropDes.ListProperty = PossibleTypes.Class;
                 listPropDes.ListObjectType = listType;
-                listPropDes.ListObjectType = listType;
 
                 var increasedDepth = depth + 1;
 
-                var reccursiveProperty = new PropertyDescription() { PropertyName = listPropDes.PropertyName, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.Class, InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>() };
+                var reccursiveProperty = new PropertyDescription() { PropertyType = listPropDes.PropertyType, PropertyName = listPropDes.PropertyName, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.Class, InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>() };
                 listPropDes.InnerPropertyDescriptions.Add(reccursiveProperty);
 
                 //Since List<T> holds class properties they need to be resolved
@@ -206,7 +228,7 @@ namespace JSONConfFileEditor.Models
 
                 foreach (var item in resolvedProps)
                 {
-                    listPropDes.InnerPropertyDescriptions.Add(item);
+                    //listPropDes.InnerPropertyDescriptions.Add(item);
                     innerCollection.Add(item);
 
                 }
@@ -222,42 +244,63 @@ namespace JSONConfFileEditor.Models
         {
             public object Clone()
             {
-                var propDescriptionCopy = new PropertyDescription() {GeneralProperty = this.GeneralProperty, PropertyName = this.PropertyName, PropertyType = this.PropertyType, NestDepth = this.NestDepth };
 
-                propDescriptionCopy.GeneralProperty = this.GeneralProperty;
-                propDescriptionCopy.PropertyName = this.PropertyName;
-                propDescriptionCopy.PropertyType = this.PropertyType;
-                propDescriptionCopy.NestDepth = this.NestDepth;
+                //Console.WriteLine(this.PropertyName);
+
+                var propDescriptionCopy = new PropertyDescription() {GeneralProperty = this.GeneralProperty, PropertyName = this.PropertyName, PropertyType = this.PropertyType, NestDepth = this.NestDepth
+                    };
 
                 if(this.GeneralProperty == PossibleTypes.Enum)
                 {
                     propDescriptionCopy.AvailableEnumValues = this.AvailableEnumValues;
                 }
 
+                if(this.GeneralProperty == PossibleTypes.List)
+                {
+                    propDescriptionCopy.innerPropertyDescriptions = new ObservableCollection<PropertyDescription>();
+                    propDescriptionCopy.InnerPropertyDescriptionList = new ObservableCollection<ObservableCollection<PropertyDescription>>();
+                    propDescriptionCopy.ListProperty = this.ListProperty;
+                    propDescriptionCopy.ListObjectType = this.ListObjectType;
+
+                    propDescriptionCopy.innerPropertyDescriptions.Add((PropertyDescription)this.innerPropertyDescriptions.First().Clone());
+                    //Console.WriteLine("hi");
+                }
+
                 if (this.GeneralProperty == PossibleTypes.Class)
                 {
                     propDescriptionCopy.innerPropertyDescriptions = new ObservableCollection<PropertyDescription>();
-                    //Console.WriteLine("fqw");
+
                     foreach(var item in this.innerPropertyDescriptions)
                     {
                         propDescriptionCopy.innerPropertyDescriptions.Add((PropertyDescription)item.Clone());
                     }
                 }
-
-                //PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType
-                //if(this.)
-
-
                 return propDescriptionCopy;
 
                 //return null;
+            }
+
+            private void ExecuteAddToListCommand2(object obj)
+            {
+                //innerPropertyDescriptions
+
+
+                //Console.WriteLine(innerPropertyDescriptions.Count());
+                innerPropertyDescriptions.Select(objEntity => objEntity.PropertyName);
+
+                var clonedList = innerPropertyDescriptions.Select(objEntity => (PropertyDescription)objEntity.Clone()).ToList();
+
+                InnerPropertyDescriptionList.Add(new ObservableCollection<PropertyDescription>(clonedList));
+                //innerPropertyDescriptionList.Add(new ObservableCollection<PropertyDescription>(innerPropertyDescriptions));
+                //innerPropertyDescriptions.
             }
 
 
             #region ListProperties
 
             /// <summary>
-            /// <ObservableCollection<PropertyDescription> list to hold List<T> property properties
+            /// ObservableCollection<PropertyDescription> list which for Object properties it holds that objects properties and for List properties
+            /// it holds reference for creating new list entries (cref)
             /// </summary>
             private ObservableCollection<PropertyDescription> innerPropertyDescriptions;
 
@@ -275,7 +318,7 @@ namespace JSONConfFileEditor.Models
             /// <summary>
             /// 
             /// </summary>
-            private ObservableCollection<ObservableCollection<PropertyDescription>> innerPropertyDescriptionList = new ObservableCollection<ObservableCollection<PropertyDescription>>();
+            private ObservableCollection<ObservableCollection<PropertyDescription>> innerPropertyDescriptionList;
 
             public ObservableCollection<ObservableCollection<PropertyDescription>> InnerPropertyDescriptionList
             {
@@ -348,7 +391,7 @@ namespace JSONConfFileEditor.Models
             /// <summary>
             /// Holds enum values if property is enum
             /// </summary>
-            public Enum ValueAsEnum { get; set; }
+            public Enum ValueAsEnum { get; set; } //TODO check for saving with reference error
 
             /// <summary>
             /// All available enum property enum values
@@ -446,40 +489,69 @@ namespace JSONConfFileEditor.Models
                 }
             }
 
-            private void ExecuteAddToListCommand2(object obj)
+         
+
+            public void SaveGUIListDataToList()
             {
-                //innerPropertyDescriptions
-                var clonedList = innerPropertyDescriptions.Select(objEntity => (PropertyDescription)objEntity.Clone()).ToList();
-
-                InnerPropertyDescriptionList.Add(new ObservableCollection<PropertyDescription>(clonedList));
-                //innerPropertyDescriptionList.Add(new ObservableCollection<PropertyDescription>(innerPropertyDescriptions));
-                //innerPropertyDescriptions.
-            }
-
-            public void addToOrigignal()
-            {
-
+                Console.WriteLine("hi");
+                ObjectList = new List<object>();
                 if (ListProperty == PossibleTypes.String)
                 {
-
-                    foreach (var property in innerPropertyDescriptionList)
+                    foreach (var propertyList in innerPropertyDescriptionList)
                     {
-                        ObjectList.Add(property.First().ValueAsString);
+                        ObjectList.Add(propertyList.First().ValueAsString);
                     }
-
-                    //Since single property list only have one property description
-                    //Last() can be replaced with First() or [0]
-                    //ObjectList.Add(innerPropertyDescriptions.Last().ValueAsString);
-
-                    //if (innerPropertyDescriptions.Last().ValueAsString != "")
-                    //    DescriptionList.Add(ObjectList.Last().ToString());
-
-                    //else
-                    //    DescriptionList.Add("\"\"");
+                    //return;
                 }
 
-              
+                if (ListProperty == PossibleTypes.Bool)
+                {
+                    Console.WriteLine("dd0");
+                    foreach (var propertyList in innerPropertyDescriptionList)
+                    {
+                        ObjectList.Add(propertyList.First().ValueAsBool);
+                        Console.WriteLine("dd");
+                    }
+                    //return;
+                }
 
+                if (ListProperty == PossibleTypes.Numeric)
+                {
+                    foreach (var propertyList in innerPropertyDescriptionList)
+                    {
+                        ObjectList.Add(propertyList.First().ValueAsDouble);
+                    }
+                    //return;
+                }
+
+                if (ListProperty == PossibleTypes.Enum)
+                {
+                    foreach (var propertyList in innerPropertyDescriptionList)
+                    {
+                        ObjectList.Add(propertyList.First().ValueAsEnum);
+                    }
+                    //return;
+                }
+
+                if (ListProperty == PossibleTypes.Class)
+                {
+                    foreach (var propertyList in innerPropertyDescriptionList)
+                    {
+                        //Console.WriteLine(ListObjectType);
+
+                        Object instance = Activator.CreateInstance(ListObjectType);
+
+                        int propDesIndex = 0;
+
+                        //Assing values to Object from GUI 
+                        SetObjectValuesWithPropertyDescription(instance, propertyList.First().innerPropertyDescriptions, ref propDesIndex);
+
+                        //Add to List
+                        ObjectList.Add(instance);
+
+                    }
+                }
+                Console.WriteLine(ObjectList.Count());
             }
 
             private void ExecuteAddToListCommand(object obj)

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace JSONConfFileEditor.Abstractions.Classes
 {
-    public class MarginConverter : BaseConverter, System.Windows.Data.IValueConverter
+    public class ListHeaderConverter : BaseConverter, System.Windows.Data.IValueConverter
     {
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
 
-            return new System.Windows.Thickness(System.Convert.ToDouble(value)*40, 0, 0, 0);
+            return value.ToString() + " (List)";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -20,4 +20,6 @@ namespace JSONConfFileEditor.Abstractions.Classes
             return null;
         }
     }
+
+   
 }

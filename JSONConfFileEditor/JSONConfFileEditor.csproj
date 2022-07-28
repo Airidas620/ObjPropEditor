@@ -74,10 +74,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Abstractions\Classes\BaseConverter.cs" />
+    <Compile Include="Abstractions\Classes\ListHeaderConverter.cs" />
     <Compile Include="Abstractions\Classes\MarginConverter.cs" />
+    <Compile Include="Abstractions\Classes\ObjectHeaderConverter.cs" />
     <Compile Include="Abstractions\Classes\RelayCommand.cs" />
-    <Compile Include="Abstractions\Enums\FeedbackMechanismGroupOne.cs" />
-    <Compile Include="Abstractions\Enums\FeedbackMechanismGroupTwo.cs" />
+    <Compile Include="ConfModels\Enums\FeedbackMechanismGroupOne.cs" />
+    <Compile Include="ConfModels\Enums\FeedbackMechanismGroupTwo.cs" />
     <Compile Include="Abstractions\Enums\PossibleTypes.cs" />
     <Compile Include="Abstractions\Enums\ValidationTypes.cs" />
     <Compile Include="ConfModels\CarbideSIConfig.cs" />

@@ -33,8 +33,6 @@ namespace JSONConfFileEditor
 
             InitializeComponent();
 
-            Console.WriteLine(0);
-
 
         }
     }
