@@ -35,6 +35,8 @@ namespace JSONConfFileEditor.View
 
                 var viewModel  = (JSONEditorViewModel)this.DataContext;
                 viewModel.FocusEvent += () => ScrollViewer.Focus();
+
+                //Console.WriteLine(ttt.BorderBrush);
             }
             catch (Exception)
             {
