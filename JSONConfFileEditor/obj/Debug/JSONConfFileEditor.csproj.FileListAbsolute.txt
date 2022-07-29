@@ -113,3 +113,14 @@ C:\Code\JSONConfFileEditor2\JSONConfFileEditor\bin\Debug\Microsoft.Xaml.Behavior
 C:\Code\JSONConfFileEditor2\JSONConfFileEditor\bin\Debug\Microsoft.Xaml.Behaviors.xml
 C:\Code\JSONConfFileEditor2\JSONConfFileEditor\bin\Debug\de\MahApps.Metro.resources.dll
 C:\Code\JSONConfFileEditor2\JSONConfFileEditor\obj\Debug\App.baml
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\bin\Debug\ControlzEx.dll
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\bin\Debug\MahApps.Metro.dll
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\bin\Debug\Microsoft.Xaml.Behaviors.dll
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\bin\Debug\ControlzEx.pdb
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\bin\Debug\ControlzEx.xml
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\bin\Debug\MahApps.Metro.pdb
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\bin\Debug\MahApps.Metro.xml
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\bin\Debug\Microsoft.Xaml.Behaviors.pdb
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\bin\Debug\Microsoft.Xaml.Behaviors.xml
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\bin\Debug\de\MahApps.Metro.resources.dll
+C:\Users\Airidas\Documents\JSONFileConfiguration\JSONConfFileEditor\obj\Debug\App.baml
