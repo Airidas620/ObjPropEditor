@@ -19,7 +19,7 @@ namespace JSONConfFileEditor.Models
         /// <param name="src">Object to write values to</param>
         /// <param name="propertyDescriptions">List that holds Object src property descriptions</param>
         /// <param name="propDesIndex">Index for tracking propertyDescriptions current member</param>
-        public static void SetObjectValuesWithPropertyDescription(Object src, ObservableCollection<PropertyDescription> propertyDescriptions, ref int propDesIndex)
+        public static void SetObjectValuesWithPropertyDescription(Object src, ObservableCollection<PropertyDescription> propertyDescriptions)
         {
             var props = src.GetType().GetProperties().ToList();
 
@@ -31,11 +31,7 @@ namespace JSONConfFileEditor.Models
             {
 
                 propertyDescription = propertyDescriptions.ElementAt(currentIndex);
-
                 currentIndex++;
-                //Console.WriteLine(currentIndex);
-
-                propDesIndex++;
 
                 //Enum
                 if (propertyDescription.GeneralProperty == PossibleTypes.Enum)
@@ -75,10 +71,11 @@ namespace JSONConfFileEditor.Models
                     if (propertyDescription.ListProperty == PossibleTypes.String || propertyDescription.ListProperty == PossibleTypes.Bool || propertyDescription.ListProperty == PossibleTypes.Numeric 
                         || propertyDescription.ListProperty == PossibleTypes.Enum || propertyDescription.ListProperty == PossibleTypes.Class )
                     {
+                        //Todo check why saving by reference is ok
 
                         Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList.Count());
 
-                        if (propertyDescription.ListProperty == PossibleTypes.Numeric)//TODO check if not double
+                        if (propertyDescription.ListProperty == PossibleTypes.Numeric && prop.PropertyType.GetGenericArguments().First() != typeof(double))//TODO check if not double
                         {
                             for (int i = 0; i < values.Length; i++)
                             {
@@ -97,8 +94,6 @@ namespace JSONConfFileEditor.Models
 
                         prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
 
-                        //Such prop value write is not good because it saves list by reference
-                        //prop.SetValue(src, propertyDescription.ObjectList);
                         continue;
                     }
 
@@ -113,7 +108,7 @@ namespace JSONConfFileEditor.Models
                         //Console.WriteLine(prop.PropertyType);
                         prop.SetValue(src, Activator.CreateInstance(prop.PropertyType));
                     }
-                    SetObjectValuesWithPropertyDescription(prop.GetValue(src), propertyDescription.InnerPropertyDescriptions, ref propDesIndex); //propertyDescription.InnerPropertyDescriptions
+                    SetObjectValuesWithPropertyDescription(prop.GetValue(src), propertyDescription.InnerPropertyDescriptions); //propertyDescription.InnerPropertyDescriptions
                 }
 
             }

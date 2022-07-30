@@ -25,14 +25,16 @@ namespace JSONConfFileEditor.ConfModels
 
         //public List<FeedbackMechanismGroupOneEnum> e { get; set; }
 
-        //public List<bool> f { get; set; }
+        //public List<Int16> f { get; set; }
 
         //public List<List<string>> Aa { get; set; }
 
-        //public List<k> g { get; set; }
+        public List<k> g { get; set; }
 
-        //public k f { get; set; }
-        //public List<string> f { get; set; }
+
+        //public List<k> f { get; set; }
+
+        //public List<k> f { get; set; }
 
         //public k obj { get; set; }
 
@@ -44,7 +46,7 @@ namespace JSONConfFileEditor.ConfModels
         //public string test3 { get; set; }
 
         //public h test4 { get; set; }
-        public List<h> f { get; set; }
+        public List<FeedbackMechanismGroupOneEnum> f { get; set; }
 
 
         //public h test4 { get; set; }

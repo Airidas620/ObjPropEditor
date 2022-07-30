@@ -25,15 +25,11 @@ namespace JSONConfFileEditor.Models
         public PropertyDescriptionBuilder(Object customConfigurationClass)
         {
             MyCustonConfigurationClass = customConfigurationClass;
-            //GetTypePropertyDescriptions(customConfigurationClass.GetType());
-
         }
 
 
         public bool BuildProperties()
         {
-
-
             try
             {
                 AllAvailableProperties = GetTypePropertyDescriptions(MyCustonConfigurationClass.GetType());
@@ -59,8 +55,8 @@ namespace JSONConfFileEditor.Models
                 throw new Exception("Too many inner Object/Lists");
             }
 
+            //Collection that will be returned
             var availableProperties = new ObservableCollection<PropertyDescription>();
-            //var currentPropertyCollection = availableProperties;
 
             var props = type.GetProperties().ToList();
 
@@ -109,8 +105,10 @@ namespace JSONConfFileEditor.Models
                         DescriptionList = new ObservableCollection<string>(),
                         GeneralProperty = PossibleTypes.List
                     };
+
                     //Function to resolve List<T> Type T properties
                     TryResolveListAndAddToCollection(prop.PropertyType.GenericTypeArguments.First(), listProp, depth);
+
                     availableProperties.Add(listProp);
 
                     continue;
@@ -127,11 +125,10 @@ namespace JSONConfFileEditor.Models
 
                     var resolvedProps = GetTypePropertyDescriptions(prop.PropertyType, increasedDepth, maxDepth);
 
-                    var innerCollection = reccursiveProperty.InnerPropertyDescriptions; // pakeist i recursive
+                    var innerCollection = reccursiveProperty.InnerPropertyDescriptions;
 
                     foreach (var item in resolvedProps)
                     {
-                        //availableProperties.Add(item);
                         innerCollection.Add(item);
 
                     }
@@ -189,7 +186,7 @@ namespace JSONConfFileEditor.Models
             }
 
             //List
-            if (listPropDes.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(ICollection<>)) &&
+            /*if (listPropDes.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(ICollection<>)) &&
                 listPropDes.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
             {
                 Console.WriteLine("hi");
@@ -208,7 +205,7 @@ namespace JSONConfFileEditor.Models
                 TryResolveListAndAddToCollection(listProp.PropertyType.GenericTypeArguments.First(), listProp, depth);
                 listPropDes.InnerPropertyDescriptions.Add(listProp);
                 return;
-            }
+            }*/
 
             //Class
             if (listType.IsClass)
@@ -245,10 +242,9 @@ namespace JSONConfFileEditor.Models
             public object Clone()
             {
 
-                //Console.WriteLine(this.PropertyName);
+                var propDescriptionCopy = new PropertyDescription() {GeneralProperty = this.GeneralProperty, PropertyName = this.PropertyName, PropertyType = this.PropertyType, NestDepth = this.NestDepth,
+                    parentInnerPropertyDescriptionList = this.InnerPropertyDescriptionList};
 
-                var propDescriptionCopy = new PropertyDescription() {GeneralProperty = this.GeneralProperty, PropertyName = this.PropertyName, PropertyType = this.PropertyType, NestDepth = this.NestDepth
-                    };
 
                 if(this.GeneralProperty == PossibleTypes.Enum)
                 {
@@ -286,6 +282,12 @@ namespace JSONConfFileEditor.Models
 
                 InnerPropertyDescriptionList.Add(new ObservableCollection<PropertyDescription>(clonedList));
 
+                //Last because it's the most recent member added and first because list take one property description
+                InnerPropertyDescriptionList.Last().First().parentInnerPropertyDescriptionList = InnerPropertyDescriptionList;
+                InnerPropertyDescriptionList.Last().First().ListIndex = InnerPropertyDescriptionList.Count - 1;
+
+                //clonedList.
+
             }
 
 
@@ -308,6 +310,7 @@ namespace JSONConfFileEditor.Models
                     }
             }
 
+
             /// <summary>
             /// 
             /// </summary>
@@ -325,16 +328,9 @@ namespace JSONConfFileEditor.Models
                 }
             }
 
+            public  ObservableCollection<ObservableCollection<PropertyDescription>> parentInnerPropertyDescriptionList;
 
-            /// <summary>
-            /// (Not used)
-            /// </summary>
-            public ObservableCollection<PropertyDescription> ListPropertyDescriptionsGraph
-            {
-                get { return new ObservableCollection<PropertyDescription>(innerPropertyDescriptions.Where(prop => prop.GeneralProperty != PossibleTypes.Class)); }
-                set { innerPropertyDescriptions = value; }
-            }
-
+            int ListIndex;
 
             /// <summary>
             /// Property to describe added list item for WPF ListBox
@@ -471,18 +467,13 @@ namespace JSONConfFileEditor.Models
                 {
                     foreach (var propertyList in innerPropertyDescriptionList)
                     {
-                        //Console.WriteLine(ListObjectType);
-
                         Object instance = Activator.CreateInstance(ListObjectType);
 
-                        int propDesIndex = 0;
-
                         //Assing values to Object from GUI 
-                        SetObjectValuesWithPropertyDescription(instance, propertyList.First().innerPropertyDescriptions, ref propDesIndex);
+                        SetObjectValuesWithPropertyDescription(instance, propertyList.First().innerPropertyDescriptions);
 
                         //Add to List
                         ObjectList.Add(instance);
-
                     }
                 }
                 Console.WriteLine(ObjectList.Count());
@@ -531,10 +522,8 @@ namespace JSONConfFileEditor.Models
                     //Create object of List<T> Type T 
                     Object instance = Activator.CreateInstance(ListObjectType);
 
-                    int propDesIndex = 0;
-
                     //Assing values to Object from GUI 
-                    SetObjectValuesWithPropertyDescription(instance, InnerPropertyDescriptions, ref propDesIndex);
+                    SetObjectValuesWithPropertyDescription(instance, InnerPropertyDescriptions);
 
                     //Add to List
                     ObjectList.Add(instance);
@@ -549,6 +538,19 @@ namespace JSONConfFileEditor.Models
 
             private void ExecuteRemoveFromListCommand(object obj)
             {
+                /*if (InnerPropertyDescriptionList[0] != null)
+                {
+                    InnerPropertyDescriptionList.RemoveAt(0);
+                }*/
+
+                parentInnerPropertyDescriptionList.RemoveAt(ListIndex);
+
+                for (int i = ListIndex; i < parentInnerPropertyDescriptionList.Count; i++)
+                {
+                    parentInnerPropertyDescriptionList[i].First().ListIndex = i;
+                }
+
+                //Console.WriteLine(PropertyName);
                 //ObjectList.RemoveAt(selectedItem);
                 //DescriptionList.RemoveAt(selectedItem);
             }
