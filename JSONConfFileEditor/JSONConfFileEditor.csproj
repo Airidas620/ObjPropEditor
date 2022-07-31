@@ -84,10 +84,10 @@
     <Compile Include="Abstractions\Enums\PossibleTypes.cs" />
     <Compile Include="Abstractions\Enums\ValidationTypes.cs" />
     <Compile Include="ConfModels\CarbideSIConfig.cs" />
+    <Compile Include="ConfModels\MyCustomConfigurationClass1.cs" />
     <Compile Include="ConfModels\ValidationTest.cs" />
     <Compile Include="Models\PropertyDescitptionValidate.cs" />
     <Compile Include="Models\PropertyDescriptionGUI.cs" />
-    <Compile Include="ConfModels\MyCustomConfigurationClass.cs" />
     <Compile Include="ConfModels\MyCustomConfigurationClass2.cs" />
     <Compile Include="Models\PropertyDescriptionBuilder.cs" />
     <Compile Include="ViewModel\JSONEditorViewModel.cs" />

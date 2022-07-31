@@ -101,8 +101,7 @@ namespace JSONConfFileEditor.Models
                         NestDepth = depth,
                         PropertyType = prop.PropertyType,
                         InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>(),
-                        InnerPropertyDescriptionList = new ObservableCollection<ObservableCollection<PropertyDescription>>(),
-                        DescriptionList = new ObservableCollection<string>(),
+                        InnerPropertyDescriptionList = new ObservableCollection<PropertyDescription>(),
                         GeneralProperty = PossibleTypes.List
                     };
 
@@ -185,7 +184,7 @@ namespace JSONConfFileEditor.Models
                 return;
             }
 
-            //List
+            //List TODO
             /*if (listPropDes.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(ICollection<>)) &&
                 listPropDes.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
             {
@@ -225,71 +224,18 @@ namespace JSONConfFileEditor.Models
 
                 foreach (var item in resolvedProps)
                 {
-                    //listPropDes.InnerPropertyDescriptions.Add(item);
                     innerCollection.Add(item);
-
                 }
-
-                //(Not used)listPropDes.InnerPropertyDescriptions.Add(new PropertyDescription() { PropertyName = listType.Name, NestDepth = depth, GeneralProperty = PossibleTypes.ObjectLine }); //Just for property separation in the view
             }
 
         }
 
 
 
-        public class PropertyDescription : INotifyPropertyChanged, ICloneable
+        public class PropertyDescription : INotifyPropertyChanged
         {
-            public object Clone()
-            {
-
-                var propDescriptionCopy = new PropertyDescription() {GeneralProperty = this.GeneralProperty, PropertyName = this.PropertyName, PropertyType = this.PropertyType, NestDepth = this.NestDepth,
-                    parentInnerPropertyDescriptionList = this.InnerPropertyDescriptionList};
-
-
-                if(this.GeneralProperty == PossibleTypes.Enum)
-                {
-                    propDescriptionCopy.AvailableEnumValues = this.AvailableEnumValues;
-                }
-
-                if(this.GeneralProperty == PossibleTypes.List)
-                {
-                    propDescriptionCopy.innerPropertyDescriptions = new ObservableCollection<PropertyDescription>();
-                    propDescriptionCopy.InnerPropertyDescriptionList = new ObservableCollection<ObservableCollection<PropertyDescription>>();
-                    propDescriptionCopy.ListProperty = this.ListProperty;
-                    propDescriptionCopy.ListObjectType = this.ListObjectType;
-
-                    propDescriptionCopy.innerPropertyDescriptions.Add((PropertyDescription)this.innerPropertyDescriptions.First().Clone());
-                }
-
-                if (this.GeneralProperty == PossibleTypes.Class)
-                {
-                    propDescriptionCopy.innerPropertyDescriptions = new ObservableCollection<PropertyDescription>();
-
-                    foreach(var item in this.innerPropertyDescriptions)
-                    {
-                        propDescriptionCopy.innerPropertyDescriptions.Add((PropertyDescription)item.Clone());
-                    }
-                }
-                return propDescriptionCopy;
-            }
-
-            private void ExecuteAddToListCommand2(object obj)
-            {
-
-                innerPropertyDescriptions.Select(objEntity => objEntity.PropertyName);
-
-                var clonedList = innerPropertyDescriptions.Select(objEntity => (PropertyDescription)objEntity.Clone()).ToList();
-
-                InnerPropertyDescriptionList.Add(new ObservableCollection<PropertyDescription>(clonedList));
-
-                //Last because it's the most recent member added and first because list take one property description
-                InnerPropertyDescriptionList.Last().First().parentInnerPropertyDescriptionList = InnerPropertyDescriptionList;
-                InnerPropertyDescriptionList.Last().First().ListIndex = InnerPropertyDescriptionList.Count - 1;
-
-                //clonedList.
-
-            }
-
+            
+            public PropertyDescription CurrentProperty { get { return this; } private set { } }
 
             #region ListProperties
 
@@ -314,9 +260,10 @@ namespace JSONConfFileEditor.Models
             /// <summary>
             /// 
             /// </summary>
-            private ObservableCollection<ObservableCollection<PropertyDescription>> innerPropertyDescriptionList;
+            /// // pakeisiti i ObservableCollection<PropertyDescription>
+            private ObservableCollection<PropertyDescription> innerPropertyDescriptionList;
 
-            public ObservableCollection<ObservableCollection<PropertyDescription>> InnerPropertyDescriptionList
+            public ObservableCollection<PropertyDescription> InnerPropertyDescriptionList
             {
                 get { return innerPropertyDescriptionList; }
                 set
@@ -328,17 +275,12 @@ namespace JSONConfFileEditor.Models
                 }
             }
 
-            public  ObservableCollection<ObservableCollection<PropertyDescription>> parentInnerPropertyDescriptionList;
+            public  ObservableCollection<PropertyDescription> parentInnerPropertyDescriptionList;
 
             int ListIndex;
 
             /// <summary>
-            /// Property to describe added list item for WPF ListBox
-            /// </summary>
-            public ObservableCollection<string> DescriptionList { get; set; }
-
-            /// <summary>
-            /// List to hold List<string,bool,double,enum,object> values 
+            /// List for holding List<{string,bool,double,enum,object}> values 
             /// </summary>
             public List<Object> ObjectList { get; set; }
 
@@ -346,19 +288,21 @@ namespace JSONConfFileEditor.Models
             /// Objects List<T> list Type T resolved at runtime
             /// </summary>
             public Type ListObjectType { get; set; }
+
             #endregion
+
 
             #region ObjectProperties
 
-            //Properties used for single Type T properties
+            //Properties used for single properties
 
             /// <summary>
-            /// Type of Property
+            /// Property Type
             /// </summary>
             public Type PropertyType { get; set; }
 
             /// <summary>
-            /// Name of property
+            /// Property name
             /// </summary>
             public string PropertyName { get; set; }
 
@@ -409,58 +353,101 @@ namespace JSONConfFileEditor.Models
             /// </summary>
             public RelayCommand AddToListCommand { set; get; }
 
-            /// <summary>
-            /// Command for adding values to List<>
-            /// </summary>
-            public RelayCommand AddToListCommand2 { set; get; }
 
             /// <summary>
             /// Command for removing values from List<>
             /// </summary>
             public RelayCommand RemoveFromListCommand { set; get; }
 
+            /// <summary>
+            /// Command for dublicating List<> item
+            /// </summary>
+            public RelayCommand DublicateListItemCommand { set; get; }
 
+
+            private void ExecuteDublicateListItemCommand(Object obj)
+            {
+                var listItem = parentInnerPropertyDescriptionList.ElementAt(ListIndex);
+
+                parentInnerPropertyDescriptionList.Add(
+                
+                    (PropertyDescription)listItem.Clone(true)
+                );
+
+                parentInnerPropertyDescriptionList.Last().parentInnerPropertyDescriptionList = parentInnerPropertyDescriptionList;
+                parentInnerPropertyDescriptionList.Last().ListIndex = parentInnerPropertyDescriptionList.Count - 1;
+            }
+
+            private void ExecuteAddToListCommand(object obj)
+            {
+
+                //visada bus vienas, jei string... vienas ir object vienas jo vertes issaugojamos inner.inner
+                //var clonedList = new List<PropertyDescription>() { (PropertyDescription)innerPropertyDescriptions.First().Clone() };
+
+                InnerPropertyDescriptionList.Add(
+                    (PropertyDescription)innerPropertyDescriptions.First().Clone()
+                );
+                Console.Write(InnerPropertyDescriptionList.Count);
+
+                InnerPropertyDescriptionList.Last().parentInnerPropertyDescriptionList = InnerPropertyDescriptionList;
+                InnerPropertyDescriptionList.Last().ListIndex = InnerPropertyDescriptionList.Count - 1;
+            }
+
+            private void ExecuteRemoveFromListCommand(object obj)
+            {
+                parentInnerPropertyDescriptionList.RemoveAt(ListIndex);
+
+                for (int i = ListIndex; i < parentInnerPropertyDescriptionList.Count; i++)
+                {
+                    parentInnerPropertyDescriptionList[i].ListIndex = i;
+                }
+            }
+
+            public PropertyDescription()
+            {
+                AddToListCommand = new RelayCommand(ExecuteAddToListCommand);
+                RemoveFromListCommand = new RelayCommand(ExecuteRemoveFromListCommand);
+                DublicateListItemCommand = new RelayCommand(ExecuteDublicateListItemCommand);
+            }
 
             public void SaveGUIListDataToList()
             {
-                Console.WriteLine("hi");
                 ObjectList = new List<object>();
+
                 if (ListProperty == PossibleTypes.String)
                 {
                     foreach (var propertyList in innerPropertyDescriptionList)
                     {
-                        ObjectList.Add(propertyList.First().ValueAsString);
+                        ObjectList.Add(propertyList.ValueAsString);
                     }
-                    //return;
+                    return;
                 }
 
                 if (ListProperty == PossibleTypes.Bool)
                 {
-                    Console.WriteLine("dd0");
                     foreach (var propertyList in innerPropertyDescriptionList)
                     {
-                        ObjectList.Add(propertyList.First().ValueAsBool);
-                        Console.WriteLine("dd");
+                        ObjectList.Add(propertyList.ValueAsBool);
                     }
-                    //return;
+                    return;
                 }
 
                 if (ListProperty == PossibleTypes.Numeric)
                 {
                     foreach (var propertyList in innerPropertyDescriptionList)
                     {
-                        ObjectList.Add(propertyList.First().ValueAsDouble);
+                        ObjectList.Add(propertyList.ValueAsDouble);
                     }
-                    //return;
+                    return;
                 }
 
                 if (ListProperty == PossibleTypes.Enum)
                 {
                     foreach (var propertyList in innerPropertyDescriptionList)
                     {
-                        ObjectList.Add(propertyList.First().ValueAsEnum);
+                        ObjectList.Add(propertyList.ValueAsEnum);
                     }
-                    //return;
+                    return;
                 }
 
                 if (ListProperty == PossibleTypes.Class)
@@ -470,99 +457,95 @@ namespace JSONConfFileEditor.Models
                         Object instance = Activator.CreateInstance(ListObjectType);
 
                         //Assing values to Object from GUI 
-                        SetObjectValuesWithPropertyDescription(instance, propertyList.First().innerPropertyDescriptions);
+                        SetObjectValuesWithPropertyDescription(instance, propertyList.innerPropertyDescriptions);
 
                         //Add to List
                         ObjectList.Add(instance);
                     }
                 }
-                Console.WriteLine(ObjectList.Count());
             }
 
-            private void ExecuteAddToListCommand(object obj)
+            public object Clone(bool CloneGuiValues = false)
             {
+                var propDescriptionCopy = new PropertyDescription() { GeneralProperty = this.GeneralProperty, PropertyName = this.PropertyName, PropertyType = this.PropertyType, NestDepth = this.NestDepth };
 
-                if (ListProperty == PossibleTypes.String)
+                if (CloneGuiValues)
                 {
+                    propDescriptionCopy.ListProperty = this.ListProperty;
+                    propDescriptionCopy.ListObjectType = this.ListObjectType;
+                    propDescriptionCopy.ValueAsBool = this.ValueAsBool;
+                    propDescriptionCopy.ValueAsString = this.ValueAsString;
+                    propDescriptionCopy.ValueAsEnum = this.ValueAsEnum;
+                    propDescriptionCopy.ValueAsDouble = this.ValueAsDouble;
 
-                    //Since single property list only have one property description
-                    //Last() can be replaced with First() or [0]
-                    ObjectList.Add(innerPropertyDescriptions.Last().ValueAsString);
+                    propDescriptionCopy.AvailableEnumValues = this.AvailableEnumValues;
 
-                    if (innerPropertyDescriptions.Last().ValueAsString != "")
-                        DescriptionList.Add(ObjectList.Last().ToString());
 
-                    else
-                        DescriptionList.Add("\"\"");
-                }
+                    //propDescriptionCopy.parentInnerPropertyDescriptionList = this.parentInnerPropertyDescriptionList;
 
-                if (ListProperty == PossibleTypes.Bool)
-                {
-                    ObjectList.Add(innerPropertyDescriptions.Last().ValueAsBool);
-                    DescriptionList.Add(ObjectList.Last().ToString());
-                }
 
-                if (ListProperty == PossibleTypes.Numeric)
-                {
-                    ObjectList.Add(innerPropertyDescriptions.Last().ValueAsDouble);
-                    DescriptionList.Add(ObjectList.Last().ToString());
-                }
-
-                if (ListProperty == PossibleTypes.Enum)
-                {
-                    if(innerPropertyDescriptions.Last().ValueAsEnum != null)
+                    if (this.innerPropertyDescriptionList != null)
                     {
-                        ObjectList.Add(innerPropertyDescriptions.Last().ValueAsEnum);
-                        DescriptionList.Add(ObjectList.Last().ToString());
+                        propDescriptionCopy.innerPropertyDescriptionList = new ObservableCollection<PropertyDescription>();
+                        //foreach (var item in this.innerPropertyDescriptionList)
+                        //{
+                        var copied = new ObservableCollection<PropertyDescription>();
+                            foreach (var item in this.innerPropertyDescriptionList)
+                            {
+                                propDescriptionCopy.innerPropertyDescriptionList.Add((PropertyDescription)item.Clone(true));
+
+                                propDescriptionCopy.InnerPropertyDescriptionList.Last().parentInnerPropertyDescriptionList = propDescriptionCopy.InnerPropertyDescriptionList;
+
+                                propDescriptionCopy.InnerPropertyDescriptionList.Last().ListIndex = propDescriptionCopy.InnerPropertyDescriptionList.Count - 1;
+                            }
+                            //propDescriptionCopy.innerPropertyDescriptionList.Add(copied);
+                            
+                        //}
+                    }
+
+                    if (this.innerPropertyDescriptions != null)
+                    {
+                        propDescriptionCopy.innerPropertyDescriptions = new ObservableCollection<PropertyDescription>();
+                        foreach (var item in this.innerPropertyDescriptions)
+                        {
+                            propDescriptionCopy.innerPropertyDescriptions.Add((PropertyDescription)item.Clone(true));
+                            //propDescriptionCopy.InnerPropertyDescriptionList.Last().parentInnerPropertyDescriptionList = InnerPropertyDescriptionList;
+                        }
+                    }
+                    return propDescriptionCopy;
+                }
+
+
+                if (this.GeneralProperty == PossibleTypes.Enum)
+                {
+                    propDescriptionCopy.AvailableEnumValues = this.AvailableEnumValues;
+                }
+
+                if (this.GeneralProperty == PossibleTypes.List)
+                {
+                    //jei list sukuri nauja ObservableCollection<PropertyDescription>(), nes ten bus reference type, naujas dvigubas masyvas, nes ten bus vertes
+                    propDescriptionCopy.innerPropertyDescriptions = new ObservableCollection<PropertyDescription>();
+                    propDescriptionCopy.innerPropertyDescriptionList = new ObservableCollection<PropertyDescription>();
+                    propDescriptionCopy.ListProperty = this.ListProperty;
+                    propDescriptionCopy.ListObjectType = this.ListObjectType;
+
+                    propDescriptionCopy.innerPropertyDescriptions.Add((PropertyDescription)this.innerPropertyDescriptions.First().Clone());
+                }
+
+                if (this.GeneralProperty == PossibleTypes.Class)
+                {
+                    //jei klase nukupijuojamos vidines prop nes ten viskas yra
+                    propDescriptionCopy.innerPropertyDescriptions = new ObservableCollection<PropertyDescription>();
+
+                    foreach (var item in this.innerPropertyDescriptions)
+                    {
+                        propDescriptionCopy.innerPropertyDescriptions.Add((PropertyDescription)item.Clone());
                     }
                 }
 
-                if (ListProperty == PossibleTypes.Class)
-                {
-                    //Create object of List<T> Type T 
-                    Object instance = Activator.CreateInstance(ListObjectType);
-
-                    //Assing values to Object from GUI 
-                    SetObjectValuesWithPropertyDescription(instance, InnerPropertyDescriptions);
-
-                    //Add to List
-                    ObjectList.Add(instance);
-
-                    DescriptionList.Add(JsonConvert.SerializeObject(instance, Formatting.Indented));
-
-
-                }
-
+                return propDescriptionCopy;
             }
 
-
-            private void ExecuteRemoveFromListCommand(object obj)
-            {
-                /*if (InnerPropertyDescriptionList[0] != null)
-                {
-                    InnerPropertyDescriptionList.RemoveAt(0);
-                }*/
-
-                parentInnerPropertyDescriptionList.RemoveAt(ListIndex);
-
-                for (int i = ListIndex; i < parentInnerPropertyDescriptionList.Count; i++)
-                {
-                    parentInnerPropertyDescriptionList[i].First().ListIndex = i;
-                }
-
-                //Console.WriteLine(PropertyName);
-                //ObjectList.RemoveAt(selectedItem);
-                //DescriptionList.RemoveAt(selectedItem);
-            }
-
-            public PropertyDescription()
-            {
-                AddToListCommand = new RelayCommand(ExecuteAddToListCommand);
-                AddToListCommand2 = new RelayCommand(ExecuteAddToListCommand2);
-                RemoveFromListCommand = new RelayCommand(ExecuteRemoveFromListCommand );
-            }
-
-           
             #region INotifyPropertyChanged implementation
             public event PropertyChangedEventHandler PropertyChanged;
 

@@ -21,17 +21,7 @@ namespace JSONConfFileEditor.ViewModel
     {
 
 
-        public List<int> Test { get; private set; } = new List<int>(){1,2,3,4};
-
-        public Dictionary<int,string> Test2 { get; private set; } = new Dictionary<int, string>() { {1,"a"}, { 2, "a" }, { 3, "a" }, {4, "a" }, };
-
-        public delegate void EventFocusAction();
-        public event EventFocusAction FocusEvent;
-
-        public void FinalizeBinding()
-        {
-            FocusEvent.Invoke();
-        }
+        public Object MyCustomConfigurationClass { get; private set; }
 
         private ObservableCollection<PropertyDescription> allAvailableProperties;
 
@@ -42,9 +32,13 @@ namespace JSONConfFileEditor.ViewModel
         }
 
 
-        public int AllAvailablePropertiesLength { get ; private set; }
+        public delegate void EventFocusAction();
+        public event EventFocusAction FocusEvent;
 
-        public Object MyCustomConfigurationClass { get; private set; }
+        public void FinalizeBinding()
+        {
+            FocusEvent.Invoke();
+        }
 
 
         PropertyDescriptionBuilder propertyDescriptionBuilder;
@@ -75,7 +69,6 @@ namespace JSONConfFileEditor.ViewModel
             if (propertyDescriptionBuilder.BuildProperties())
             {
                 AllAvailableProperties = propertyDescriptionBuilder.AllAvailableProperties;
-                AllAvailablePropertiesLength = AllAvailableProperties.Count;
             }
 
         }

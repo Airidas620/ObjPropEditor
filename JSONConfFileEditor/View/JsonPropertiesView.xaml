@@ -20,17 +20,17 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="numeric">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center" />
-                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0" Text="{Binding ValueAsDouble}"/>
-            </StackPanel>
-        </DataTemplate>
-
         <DataTemplate x:Key="string">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" >
                 <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center"/>
                 <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString,Mode=TwoWay}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="numeric">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center" />
+                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0" Text="{Binding ValueAsDouble}"/>
             </StackPanel>
         </DataTemplate>
 
@@ -41,26 +41,85 @@
             </StackPanel>
         </DataTemplate>
 
-
-        <DataTemplate x:Key="ObjectLine">
-            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Foreground="#FFDE1717" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="ListLine">
-            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="class2">
-            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Foreground="#FFDE1717" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
-            </StackPanel>
+        <DataTemplate x:Key="Class">
+            <Expander Header="{Binding PropertyName , Converter={cl:ObjectHeaderConverter}}" IsExpanded="True" mah:HeaderedControlHelper.HeaderBackground="#CC238cde" BorderBrush="#CC238cde">
+                <ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Expander>
         </DataTemplate>
 
 
+        <DataTemplate x:Key="List">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
+                <Button Content= "Add" Command="{Binding AddToListCommand}" HorizontalAlignment="Left" Margin="0,0,0,10" MaxWidth="50"/>
+                <Expander IsExpanded="True" Header="{Binding PropertyName, Converter={cl:ListHeaderConverter}}" mah:HeaderedControlHelper.HeaderBackground="#CC238cde" BorderBrush="#CC238cde" MinWidth="250">
+
+                    <ItemsControl ItemsSource="{Binding InnerPropertyDescriptionList}" >
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <ContentControl Content="{Binding}" ContentTemplate="{DynamicResource DataTemplateTriggers}">
+                                        
+                                    </ContentControl>
+                                    <Button Content="D" Command="{Binding DublicateListItemCommand}" Margin="5,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                                    <Button Content="R" Command="{Binding RemoveFromListCommand}" Margin="0,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#e0c1c1"></Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                        <!--<ItemsControl.ItemTemplate>
+                                
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                        <ItemsControl.Template>
+                            <ControlTemplate TargetType="ItemsControl">
+                                <StackPanel>
+                                    <ItemsPresenter />
+                                    <Button Content="Add Item"  Click="AddItem_Click"/>
+                                </StackPanel>
+                            </ControlTemplate>
+                        </ItemsControl.Template>-->
+
+
+                        <!--<ItemsControl.ItemTemplate>
+                            <DataTemplate >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="sdgsg"></TextBlock>
+                                    <Button Content="D" Command="{Binding DublicateListItemCommand}" Margin="5,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                                    <Button Content="R" Command="{Binding RemoveFromListCommand}" Margin="0,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#e0c1c1"></Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>-->
+                    </ItemsControl>
+
+                        <!--<ItemsControl ItemsSource="{Binding InnerPropertyDescriptionList}" ItemTemplate="{DynamicResource DataTemplateTriggers}">-->
+                        <!--<ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock></TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>-->
+                        <!--<ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" >
+
+                                    <ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource DataTemplateTriggers}"/>
+                                    <Button Content="D" Command="{Binding DublicateListItemCommand}" Margin="5,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                                    <Button Content="R" Command="{Binding RemoveFromListCommand}" Margin="0,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#e0c1c1"></Button>
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>-->
+                    <!--</ItemsControl>-->
+                </Expander>
+            </StackPanel>
+        </DataTemplate>
 
         <DataTemplate x:Key="DataTemplateTriggers">
             <ContentControl Content="{Binding}" Margin="0,7,0,7" >
@@ -90,12 +149,12 @@
 
                             <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.List}">
                                 <Setter Property="ContentTemplate"
-                                                    Value="{DynamicResource List}" />
+                                                    Value="{StaticResource List}" />
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Class}">
                                 <Setter Property="ContentTemplate"
-                                                    Value="{DynamicResource Class}" />
+                                                    Value="{StaticResource Class}" />
                             </DataTrigger>
 
                         </Style.Triggers>
@@ -104,45 +163,8 @@
             </ContentControl>
         </DataTemplate>
 
-        <DataTemplate x:Key="Class">
-            <Expander Header="{Binding PropertyName , Converter={cl:ObjectHeaderConverter}}" IsExpanded="True" mah:HeaderedControlHelper.HeaderBackground="#CC238cde" BorderBrush="#CC238cde">
-                <ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </Expander>
-        </DataTemplate>
 
 
-        <DataTemplate x:Key="List">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
-                
-                <TextBlock Text="{Binding PropertyName, StringFormat= '----------------------- \{0\} -----------------------'}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
-                <Button Content= "Add" Command="{Binding AddToListCommand2}" HorizontalAlignment="Left" Margin="0,0,0,10" MaxWidth="50"/>
-                <Expander IsExpanded="True" Header="{Binding PropertyName, Converter={cl:ListHeaderConverter}}" mah:HeaderedControlHelper.HeaderBackground="#CC238cde" BorderBrush="#CC238cde">
-                    <ItemsControl ItemsSource="{Binding InnerPropertyDescriptionList}" >
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" >
-                                  
-                                    <ItemsControl ItemsSource="{Binding}" ItemTemplate="{StaticResource DataTemplateTriggers}"/>
-                                    <Button Content="D" Margin="5,5,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
-                                    <Button Content="R" Command="{Binding RemoveFromListCommand}" Margin="0,5,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#e0c1c1"></Button>
-                                   
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-
-                   
-                </Expander>
-
-
-            </StackPanel>
-        </DataTemplate>
 
 
     </UserControl.Resources>
@@ -150,10 +172,8 @@
     <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
         <StackPanel Orientation="Vertical"  Margin="0,10,0,0" HorizontalAlignment="Center" >
 
-            <Expander  mah:HeaderedControlHelper.HeaderBackground="#CC238cde" BorderBrush="#CC238cde" >
-            </Expander>
-            
-            
+            <!--<Expander  mah:HeaderedControlHelper.HeaderBackground="#CC238cde" BorderBrush="#CC238cde" >
+            </Expander>-->
             
             <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
                 <ItemsControl.ItemsPanel>

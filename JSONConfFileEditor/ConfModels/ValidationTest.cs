@@ -29,6 +29,12 @@ namespace JSONConfFileEditor.ConfModels
 
         //public List<List<string>> Aa { get; set; }
 
+        //public List<string> a { get; set; }
+
+        //public List<string> b { get; set; }
+
+        //public k g2 { get; set; }
+
         public List<k> g { get; set; }
 
 
@@ -43,10 +49,10 @@ namespace JSONConfFileEditor.ConfModels
     public class k // TODO fix naming issues
     {
         //public string test1 { get; set; }
-        //public string test3 { get; set; }
+        public string test3 { get; set; }
 
-        //public h test4 { get; set; }
-        public List<FeedbackMechanismGroupOneEnum> f { get; set; }
+        public h test4 { get; set; }
+        //public List<string> f { get; set; }
 
 
         //public h test4 { get; set; }
