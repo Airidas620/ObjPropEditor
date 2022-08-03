@@ -13,7 +13,7 @@ namespace JSONConfFileEditor.ConfModels
 
         public double GetLastFeedbackValue { get; set; }
 
-        public string FeedbackTitle { get; set; }
+        public string FeedbackTitle0 { get; set; }
 
         public FeedbackMechanismGroupOneEnum TypeOfFeedbackMechanism { get; set; }
 

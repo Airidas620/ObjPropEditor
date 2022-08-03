@@ -44,6 +44,9 @@
     <Reference Include="MahApps.Metro, Version=2.0.0.0, Culture=neutral, PublicKeyToken=51482d6f650b2b3f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.2.4.9\lib\net47\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="MaterialIcons, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialIcons.1.0.3\lib\MaterialIcons.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
@@ -74,15 +77,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Abstractions\Classes\BaseConverter.cs" />
-    <Compile Include="Abstractions\Classes\ListHeaderConverter.cs" />
-    <Compile Include="Abstractions\Classes\MarginConverter.cs" />
-    <Compile Include="Abstractions\Classes\ObjectHeaderConverter.cs" />
+    <Compile Include="Abstractions\Classes\Converters\BaseConverter.cs" />
+    <Compile Include="Abstractions\Classes\Converters\ListHeaderConverter.cs" />
+    <Compile Include="Abstractions\Classes\Converters\MarginConverter.cs" />
+    <Compile Include="Abstractions\Classes\Converters\ObjectHeaderConverter.cs" />
+    <Compile Include="Abstractions\Classes\NumericParser.cs" />
     <Compile Include="Abstractions\Classes\RelayCommand.cs" />
     <Compile Include="ConfModels\Enums\FeedbackMechanismGroupOne.cs" />
     <Compile Include="ConfModels\Enums\FeedbackMechanismGroupTwo.cs" />
     <Compile Include="Abstractions\Enums\PossibleTypes.cs" />
-    <Compile Include="Abstractions\Enums\ValidationTypes.cs" />
     <Compile Include="ConfModels\CarbideSIConfig.cs" />
     <Compile Include="ConfModels\MyCustomConfigurationClass1.cs" />
     <Compile Include="ConfModels\ValidationTest.cs" />
@@ -90,7 +93,7 @@
     <Compile Include="Models\PropertyDescriptionGUI.cs" />
     <Compile Include="ConfModels\MyCustomConfigurationClass2.cs" />
     <Compile Include="Models\PropertyDescriptionBuilder.cs" />
-    <Compile Include="ViewModel\JSONEditorViewModel.cs" />
+    <Compile Include="ViewModel\PropertyEditor.cs" />
     <Compile Include="ViewModel\JSONControlViewModel.cs" />
     <Compile Include="View\JsonPropertiesView.xaml.cs">
       <DependentUpon>JsonPropertiesView.xaml</DependentUpon>

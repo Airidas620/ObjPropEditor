@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JSONConfFileEditor.Abstractions.Classes
+namespace JSONConfFileEditor.Abstractions.Classes.Converters
 {
     public class MarginConverter : BaseConverter, System.Windows.Data.IValueConverter
     {
@@ -12,7 +12,7 @@ namespace JSONConfFileEditor.Abstractions.Classes
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
 
-            return new System.Windows.Thickness(System.Convert.ToDouble(value)*40, 0, 0, 0);
+            return new System.Windows.Thickness(System.Convert.ToDouble(value) * 40, 0, 0, 0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

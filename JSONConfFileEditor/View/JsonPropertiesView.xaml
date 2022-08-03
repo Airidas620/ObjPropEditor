@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:cl="clr-namespace:JSONConfFileEditor.Abstractions.Classes" 
+             xmlns:conv="clr-namespace:JSONConfFileEditor.Abstractions.Classes.Converters" 
              xmlns:enums ="clr-namespace:JSONConfFileEditor.Abstractions.Enums"
              xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:min="clr-namespace:MaterialIcons;assembly=MaterialIcons"
              xmlns:models ="clr-namespace:JSONConfFileEditor.Models"
              xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
              xmlns:local="clr-namespace:JSONConfFileEditor.View"
@@ -13,110 +14,88 @@
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
     <UserControl.Resources>
 
+
         <DataTemplate x:Key="bool">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left"  >
-                <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}"/>
+                <TextBlock Text="{Binding PropertyName}" VerticalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding ValueAsBool}" Margin="5,0,0,0"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="string">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" >
-                <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center"/>
-                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString,Mode=TwoWay}"/>
+                <TextBlock Text="{Binding PropertyName}" VerticalAlignment="Center"/>
+                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString}"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="numeric">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center" />
-                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0" Text="{Binding ValueAsDouble}"/>
+                <TextBlock Text="{Binding PropertyName}" VerticalAlignment="Center" />
+                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0"  Text="{Binding NumericValueAsString}">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}" >
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsInputValueValid}" Value="true">
+                                    <Setter Property="BorderBrush" Value="#FFCCCCCC"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsInputValueValid}" Value="false">
+                                    <Setter Property="BorderBrush" Value="Red"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="enum">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding PropertyName}" Margin="{Binding NestDepth, Converter={cl:MarginConverter}}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding PropertyName}" VerticalAlignment="Center"/>
                 <ComboBox  MinWidth="70" ItemsSource="{Binding AvailableEnumValues}" Margin="5,0,0,0" SelectedItem="{Binding ValueAsEnum}"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="Class">
-            <Expander Header="{Binding PropertyName , Converter={cl:ObjectHeaderConverter}}" IsExpanded="True" mah:HeaderedControlHelper.HeaderBackground="#CC238cde" BorderBrush="#CC238cde">
-                <ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+            <Expander Header="{Binding PropertyName , Converter={conv:ObjectHeaderConverter}}" IsExpanded="True"  BorderBrush="#CC238cde">
+                <ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{DynamicResource DataTemplateTriggers}" Margin="3,0,3,0">
                 </ItemsControl>
             </Expander>
         </DataTemplate>
 
 
         <DataTemplate x:Key="List">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
-                <Button Content= "Add" Command="{Binding AddToListCommand}" HorizontalAlignment="Left" Margin="0,0,0,10" MaxWidth="50"/>
-                <Expander IsExpanded="True" Header="{Binding PropertyName, Converter={cl:ListHeaderConverter}}" mah:HeaderedControlHelper.HeaderBackground="#CC238cde" BorderBrush="#CC238cde" MinWidth="250">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" >
+                <Expander IsExpanded="True" Header="{Binding PropertyName, Converter={conv:ListHeaderConverter}}"  BorderBrush="#CC238cde" MinWidth="300">
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding ListItems}" >
 
-                    <ItemsControl ItemsSource="{Binding InnerPropertyDescriptionList}" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ContentControl Content="{Binding}" ContentTemplate="{DynamicResource DataTemplateTriggers}" Margin="3,0,3,0"/>
+                                        <Button Command="{Binding DuplicateListItemCommand}" Margin="5,3,5,0" Height="33" Width="33" VerticalAlignment="top">
+                                            <Button.Content >
+                                                <min:MaterialIcon Icon="ic_content_copy" ></min:MaterialIcon>
+                                            </Button.Content>
+                                        </Button>
+                                        <Button Command="{Binding RemoveFromListCommand}" Margin="0,3,5,0" Height="33" Width="33" VerticalAlignment="top"  >
+                                            <Button.Content >
+                                                <min:MaterialIcon Icon="ic_delete" Foreground="#bf3b3b" ></min:MaterialIcon>
+                                            </Button.Content>
+                                        </Button>
 
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <ContentControl Content="{Binding}" ContentTemplate="{DynamicResource DataTemplateTriggers}">
-                                        
-                                    </ContentControl>
-                                    <Button Content="D" Command="{Binding DublicateListItemCommand}" Margin="5,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
-                                    <Button Content="R" Command="{Binding RemoveFromListCommand}" Margin="0,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#e0c1c1"></Button>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
-                        <!--<ItemsControl.ItemTemplate>
-                                
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-
-                        <ItemsControl.Template>
-                            <ControlTemplate TargetType="ItemsControl">
-                                <StackPanel>
-                                    <ItemsPresenter />
-                                    <Button Content="Add Item"  Click="AddItem_Click"/>
-                                </StackPanel>
-                            </ControlTemplate>
-                        </ItemsControl.Template>-->
-
-
-                        <!--<ItemsControl.ItemTemplate>
-                            <DataTemplate >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="sdgsg"></TextBlock>
-                                    <Button Content="D" Command="{Binding DublicateListItemCommand}" Margin="5,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
-                                    <Button Content="R" Command="{Binding RemoveFromListCommand}" Margin="0,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#e0c1c1"></Button>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>-->
-                    </ItemsControl>
-
-                        <!--<ItemsControl ItemsSource="{Binding InnerPropertyDescriptionList}" ItemTemplate="{DynamicResource DataTemplateTriggers}">-->
-                        <!--<ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock></TextBlock>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>-->
-                        <!--<ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" >
-
-                                    <ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource DataTemplateTriggers}"/>
-                                    <Button Content="D" Command="{Binding DublicateListItemCommand}" Margin="5,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
-                                    <Button Content="R" Command="{Binding RemoveFromListCommand}" Margin="0,6,5,0" Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#e0c1c1"></Button>
-
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>-->
-                    <!--</ItemsControl>-->
+                        <Button Command="{Binding AddToListCommand}" HorizontalAlignment="Left" Margin="3,8,0,5" MaxWidth="27" Style="{StaticResource MahApps.Styles.Button.Circle}" Background="#CC238cde" BorderThickness="0">
+                            <Button.Content >
+                                <min:MaterialIcon Icon="ic_add" Foreground="White"></min:MaterialIcon>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
                 </Expander>
             </StackPanel>
         </DataTemplate>
@@ -163,18 +142,11 @@
             </ContentControl>
         </DataTemplate>
 
-
-
-
-
     </UserControl.Resources>
 
-    <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+    <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinWidth="500">
         <StackPanel Orientation="Vertical"  Margin="0,10,0,0" HorizontalAlignment="Center" >
 
-            <!--<Expander  mah:HeaderedControlHelper.HeaderBackground="#CC238cde" BorderBrush="#CC238cde" >
-            </Expander>-->
-            
             <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

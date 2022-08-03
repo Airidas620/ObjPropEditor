@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JSONConfFileEditor.Abstractions.Classes
+namespace JSONConfFileEditor.Abstractions.Classes.Converters
 {
-    public class ObjectHeaderConverter : BaseConverter, System.Windows.Data.IValueConverter
+    public class ListHeaderConverter : BaseConverter, System.Windows.Data.IValueConverter
     {
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
 
-            return value.ToString() + " (Object)";
+            return value.ToString() + " (List)";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -19,4 +20,6 @@ namespace JSONConfFileEditor.Abstractions.Classes
             return null;
         }
     }
+
+
 }

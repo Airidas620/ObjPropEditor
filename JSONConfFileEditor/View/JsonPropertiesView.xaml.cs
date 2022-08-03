@@ -28,15 +28,16 @@ namespace JSONConfFileEditor.View
         {
             InitializeComponent();
 
+            //this.DataContext = MainWindow.JSONControlViewModel.JSONConfigurationEditor;
+
             //Try Catch to avoid design time error
             try
             {
                 this.DataContext = MainWindow.JSONControlViewModel.JSONConfigurationEditor;
 
-                var viewModel  = (JSONEditorViewModel)this.DataContext;
-                viewModel.FocusEvent += () => ScrollViewer.Focus();
+                /*var viewModel  = (PropertyEditor)this.DataContext;
+                viewModel.FocusEvent += () => ScrollViewer.Focus();*/
 
-                //Console.WriteLine(ttt.BorderBrush);
             }
             catch (Exception)
             {
@@ -46,7 +47,7 @@ namespace JSONConfFileEditor.View
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9.-]+");
+            Regex regex = new Regex("[^0-9.eEmM-]+");
             e.Handled = regex.IsMatch(e.Text);
         }
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JSONConfFileEditor.Abstractions.Classes
+namespace JSONConfFileEditor.Abstractions.Classes.Converters
 {
     public class BaseConverter : System.Windows.Markup.MarkupExtension
     {

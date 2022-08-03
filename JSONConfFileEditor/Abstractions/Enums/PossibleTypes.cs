@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace JSONConfFileEditor.Abstractions.Enums
 {
-    public enum PossibleTypes
-    {
+	public enum PossibleTypes
+	{
 		Unknown,
 		Numeric,
 		String,
@@ -15,8 +15,5 @@ namespace JSONConfFileEditor.Abstractions.Enums
 		Enum,
 		Class,
 		List,
-		ObjectLine,
-		ListLine,
-		Null
 	}
 }

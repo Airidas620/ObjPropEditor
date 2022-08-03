@@ -11,26 +11,30 @@ namespace JSONConfFileEditor.Models
     public partial class PropertyDescriptionBuilder
     {
 
-        public ValidationState ValidationState { get; set; }
 
         public string NonValidClassMessage { get; set; }
 
         public bool ValidateClass(Type classType, int depth = 0)
         {
-            try
-            {
-                GetTypePropertyDescriptions(classType);
-            }
-            catch (Exception)
-            {
-                NonValidClassMessage = "Unknown builder error";
-                ValidationState = ValidationState.Nonvalid;
-                return false;
-
-            }
-
             return ValidateClassProperties(classType);
 
+        }
+
+        public bool ValidateValues(ObservableCollection<PropertyDescription> propertyDescriptions)
+        {
+            if (propertyDescriptions != null)
+            {
+                foreach (PropertyDescription propertyDescription in propertyDescriptions)
+                {
+                    ValidateValues(propertyDescription.InnerPropertyDescriptions);
+                    if (!propertyDescription.IsInputValueValid)
+                    {
+                        NonValidClassMessage = "Invalid values";
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         private bool ValidateClassProperties(Type classType, int depth = 0)
@@ -40,7 +44,6 @@ namespace JSONConfFileEditor.Models
             if (fields.Count != 0)
             {
                 NonValidClassMessage = "Fields are not supported";
-                ValidationState = ValidationState.Nonvalid;
                 return false;
             }
 
@@ -53,7 +56,6 @@ namespace JSONConfFileEditor.Models
                 if (prop.PropertyType == typeof(char))
                 {
                     NonValidClassMessage = "Char type is not supported";
-                    ValidationState = ValidationState.Nonvalid;
                     return false;
                 }
 
@@ -109,13 +111,9 @@ namespace JSONConfFileEditor.Models
                 }
 
                 NonValidClassMessage = "Unresolved property type (" + prop.Name + ")";
-                ValidationState = ValidationState.Nonvalid;
                 return false;
             }
 
-
-
-            ValidationState = ValidationState.Valid;
             return true;
         }
 
@@ -125,7 +123,6 @@ namespace JSONConfFileEditor.Models
             if (listType == typeof(char))
             {
                 NonValidClassMessage = "Char type is not supported";
-                ValidationState = ValidationState.Nonvalid;
                 return false;
             }
 
@@ -158,9 +155,8 @@ namespace JSONConfFileEditor.Models
                 if (listType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(ICollection<>)) &&
                     listType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
                 {
-                    
+
                     NonValidClassMessage = "Multidimensional Lists are not supported";
-                    ValidationState = ValidationState.Nonvalid;
                     return false;
                 }
 
@@ -170,7 +166,6 @@ namespace JSONConfFileEditor.Models
                 return ValidateClass(listType, depth);
             }
             NonValidClassMessage = "Unresolved List property type";
-            ValidationState = ValidationState.Nonvalid;
             return false;
         }
     }

@@ -18,20 +18,6 @@ namespace JSONConfFileEditor.ViewModel
 {
     public class JSONControlViewModel : INotifyPropertyChanged
     {
-        private ValidationState validationState;
-        public ValidationState ValidationState
-        {
-            get { return validationState; }
-            set
-            {
-                if (value != validationState)
-                {
-                    validationState = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
         private string nonValidClassMessage;
         public string NonValidClassMessage
         {
@@ -47,8 +33,8 @@ namespace JSONConfFileEditor.ViewModel
         }
 
 
-        private JSONEditorViewModel jSONConfigurationEditor;
-        public JSONEditorViewModel JSONConfigurationEditor
+        private PropertyEditor jSONConfigurationEditor;
+        public PropertyEditor JSONConfigurationEditor
         {
             get { return jSONConfigurationEditor; }
             set
@@ -62,39 +48,30 @@ namespace JSONConfFileEditor.ViewModel
 
         public RelayCommand SaveConfigurationCommand { private set; get; }
 
-        public RelayCommand ValidateJSONClassCommand { private set; get; }
 
         /// <summary>
         /// Saves serialized config object to a file
         /// </summary>
         private void ExecuteSaveConfigurationCommand(object obj)
         {
-            JSONConfigurationEditor.FinalizeBinding();
-            var myConfiguration = jSONConfigurationEditor.GetConfiguredClass();
+            var myConfiguration = jSONConfigurationEditor.GetWrittenConfiguredClass();
+
+            NonValidClassMessage = jSONConfigurationEditor.GetNonValidMessage();
+
             File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "JSONConf.txt"), JsonConvert.SerializeObject(myConfiguration, Formatting.Indented));
         }
 
-        /// <summary>
-        /// Saves serialized config object to a file
-        /// </summary>
-        private void ExecuteValidateJSONClassCommand(object obj)
-        {
-            jSONConfigurationEditor.ValidateConfiguratioClass();
-
-            ValidationState = jSONConfigurationEditor.GetValidationState();
-            NonValidClassMessage = jSONConfigurationEditor.GetNonValidMessage();
-        }
 
         public JSONControlViewModel()
         {
             //var configurationFile = new CarbideSIModel();
             var configurationFile = new MyCustomConfigurationClass1();
+            //var configurationFile = new MyCustomConfigurationClass2();
             //var configurationFile = new ValidationTest();
 
-            jSONConfigurationEditor = new JSONEditorViewModel(configurationFile);
+            jSONConfigurationEditor = new PropertyEditor(configurationFile);
 
             SaveConfigurationCommand = new RelayCommand(ExecuteSaveConfigurationCommand);
-            ValidateJSONClassCommand = new RelayCommand(ExecuteValidateJSONClassCommand);
         }
 
         #region INotifyPropertyChanged implementation
