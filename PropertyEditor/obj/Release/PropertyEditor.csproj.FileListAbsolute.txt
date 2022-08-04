@@ -1,0 +1,16 @@
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditor.csproj.AssemblyReference.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditorControl.g.cs
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditor_MarkupCompile.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditor_MarkupCompile.lref
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Release\PropertyEditor.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Release\PropertyEditor.pdb
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Release\Newtonsoft.Json.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Release\Newtonsoft.Json.xml
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditorControl.baml
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditor.g.resources
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditor.Properties.Resources.resources
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditor.csproj.GenerateResource.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditor.csproj.CoreCompileInputs.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditor.csproj.CopyComplete
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditor.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditor.pdb

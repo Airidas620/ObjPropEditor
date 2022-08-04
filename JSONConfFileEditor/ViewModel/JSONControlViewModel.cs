@@ -1,7 +1,4 @@
-﻿using JSONConfFileEditor.Abstractions.Classes;
-using JSONConfFileEditor.Abstractions.Enums;
-using JSONConfFileEditor.ConfModels;
-using JSONConfFileEditor.Models;
+﻿using JSONConfFileEditor.ConfModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using VisualPropertyEditor.ViewModel;
+using JSONConfFileEditor.Abstractions.Classes;
 
 namespace JSONConfFileEditor.ViewModel
 {
@@ -33,15 +32,16 @@ namespace JSONConfFileEditor.ViewModel
         }
 
 
-        private PropertyEditor jSONConfigurationEditor;
-        public PropertyEditor JSONConfigurationEditor
+        private PropertyEditor propertyEditorInstance;
+        public PropertyEditor PropertyEditorInstance
         {
-            get { return jSONConfigurationEditor; }
+            get { return propertyEditorInstance; }
             set
             {
-                if (value != jSONConfigurationEditor)
+                if (value != propertyEditorInstance)
                 {
-                    jSONConfigurationEditor = value;
+                    propertyEditorInstance = value;
+                    NotifyPropertyChanged();
                 }
             }
         }
@@ -54,9 +54,10 @@ namespace JSONConfFileEditor.ViewModel
         /// </summary>
         private void ExecuteSaveConfigurationCommand(object obj)
         {
-            var myConfiguration = jSONConfigurationEditor.GetWrittenConfiguredClass();
 
-            NonValidClassMessage = jSONConfigurationEditor.GetNonValidMessage();
+            var myConfiguration = propertyEditorInstance.GetWrittenConfiguredClass();
+
+            NonValidClassMessage = propertyEditorInstance.GetNonValidMessage();
 
             File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "JSONConf.txt"), JsonConvert.SerializeObject(myConfiguration, Formatting.Indented));
         }
@@ -69,7 +70,12 @@ namespace JSONConfFileEditor.ViewModel
             //var configurationFile = new MyCustomConfigurationClass2();
             //var configurationFile = new ValidationTest();
 
-            jSONConfigurationEditor = new PropertyEditor(configurationFile);
+
+            PropertyEditorInstance = new PropertyEditor(configurationFile);
+
+            //PropertyEditorInstance.(configurationFile);
+
+            //propertyEditorInstance = new PropertyEditor(configurationFile);
 
             SaveConfigurationCommand = new RelayCommand(ExecuteSaveConfigurationCommand);
         }

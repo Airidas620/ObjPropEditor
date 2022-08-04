@@ -27,13 +27,10 @@ namespace JSONConfFileEditor
 
         public MainWindow()
         {
-
             JSONControlViewModel = new JSONControlViewModel();
             this.DataContext = JSONControlViewModel;
 
             InitializeComponent();
-
-
         }
     }
 }

@@ -1,0 +1,17 @@
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\PropertyEditorGUI.csproj.AssemblyReference.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\PropertyEditorControl.g.cs
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\MaterialIcons.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\PropertyEditorControl.baml
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\PropertyEditorGUI.csproj.GenerateResource.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\PropertyEditorGUI.csproj.CoreCompileInputs.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\PropertyEditorGUI.csproj.CopyComplete
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\ClassPropertyEditor.dll.config
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\ClassPropertyEditor.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\ClassPropertyEditor.pdb
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\ClassPropertyEditor_MarkupCompile.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\ClassPropertyEditor_MarkupCompile.lref
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\ClassPropertyEditor.g.resources
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\ClassPropertyEditor.Properties.Resources.resources
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\ClassPropertyEditor.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\ClassPropertyEditor.pdb

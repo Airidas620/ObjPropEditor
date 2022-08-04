@@ -112,6 +112,7 @@ namespace JSONConfFileEditor.Models
                 //Bool
                 if (prop.PropertyType == typeof(bool))
                 {
+
                     availableProperties.Add(new PropertyDescription() { PropertyName = prop.Name, NestDepth = depth, PropertyType = prop.PropertyType, GeneralProperty = PossibleTypes.Bool });
 
                     if (writeValue && src != null)
@@ -122,38 +123,42 @@ namespace JSONConfFileEditor.Models
                 }
 
                 //List
-                if (prop.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(ICollection<>)) &&
-                    prop.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
+                if (prop.PropertyType.IsGenericType)
                 {
-                    var listProp = new PropertyDescription()
+                    if (prop.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(ICollection<>)) &&
+                        prop.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
                     {
-                        PropertyName = prop.Name,
-                        NestDepth = depth,
-                        PropertyType = prop.PropertyType,
-                        InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>(),
-                        ListItems = new ObservableCollection<PropertyDescription>(),
-                        GeneralProperty = PossibleTypes.List
-                    };
 
-                    IEnumerable iErnurable = null;
+                        var listProp = new PropertyDescription()
+                        {
+                            PropertyName = prop.Name,
+                            NestDepth = depth,
+                            PropertyType = prop.PropertyType,
+                            InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>(),
+                            ListItems = new ObservableCollection<PropertyDescription>(),
+                            GeneralProperty = PossibleTypes.List
+                        };
 
-                    if (src != null)
-                    {
-                        iErnurable = (IEnumerable)prop.GetValue(src);
+                        IEnumerable iErnurable = null;
+
+                        if (src != null)
+                        {
+                            iErnurable = (IEnumerable)prop.GetValue(src);
+                        }
+
+                        //Function to resolve List<T> Type T properties
+                        TryResolveListAndAddToCollection(prop.PropertyType.GenericTypeArguments.First(), listProp, iErnurable, depth);
+
+                        availableProperties.Add(listProp);
+
+                        continue;
                     }
-
-                    //Function to resolve List<T> Type T properties
-                    TryResolveListAndAddToCollection(prop.PropertyType.GenericTypeArguments.First(), listProp, iErnurable, depth);
-
-                    availableProperties.Add(listProp);
-
-                    continue;
                 }
-
 
                 //Class
                 if (prop.PropertyType.IsClass)
                 {
+
                     int increasedDepth = depth + 1;
 
                     var reccursiveProperty = new PropertyDescription() { PropertyType = prop.PropertyType, PropertyName = prop.Name, NestDepth = increasedDepth, GeneralProperty = PossibleTypes.Class, InnerPropertyDescriptions = new ObservableCollection<PropertyDescription>() };
@@ -175,6 +180,7 @@ namespace JSONConfFileEditor.Models
 
                     }
                 }
+
             }
 
             return availableProperties;
@@ -307,20 +313,6 @@ namespace JSONConfFileEditor.Models
         public class PropertyDescription : INotifyPropertyChanged
         {
 
-            private bool isInputValueValid = true;
-
-            public bool IsInputValueValid
-            {
-                get { return isInputValueValid; }
-                set
-                {
-                    if (isInputValueValid != value)
-                    {
-                        isInputValueValid = value;
-                        NotifyPropertyChanged();
-                    }
-                }
-            }
 
             #region ObjectProperties
 
@@ -360,7 +352,7 @@ namespace JSONConfFileEditor.Models
                     {
                         try
                         {
-                            if (value.Contains("e")| value.Contains("E")| value.Contains("m")| value.Contains("M"))
+                            if (value.Contains("e") | value.Contains("E") | value.Contains("m") | value.Contains("M"))
                             {
                                 NumericParser.StringToNumericTypeValue(PropertyType, value).ToString();
                                 numericValueAsString = value;
@@ -380,6 +372,24 @@ namespace JSONConfFileEditor.Models
                 }
             }
 
+
+            private bool isInputValueValid = true;
+
+            /// <summary>
+            /// Is the value written in GUI correctly
+            /// </summary>
+            public bool IsInputValueValid
+            {
+                get { return isInputValueValid; }
+                set
+                {
+                    if (isInputValueValid != value)
+                    {
+                        isInputValueValid = value;
+                        NotifyPropertyChanged();
+                    }
+                }
+            }
 
             /// <summary>
             /// Holds bool value if property is bool

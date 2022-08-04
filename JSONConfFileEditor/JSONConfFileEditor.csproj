@@ -68,6 +68,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="VisualPropertyEditor, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VisualPropertyEditor.0.1.0\lib\net472\VisualPropertyEditor.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -77,27 +80,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Abstractions\Classes\Converters\BaseConverter.cs" />
-    <Compile Include="Abstractions\Classes\Converters\ListHeaderConverter.cs" />
-    <Compile Include="Abstractions\Classes\Converters\MarginConverter.cs" />
-    <Compile Include="Abstractions\Classes\Converters\ObjectHeaderConverter.cs" />
-    <Compile Include="Abstractions\Classes\NumericParser.cs" />
     <Compile Include="Abstractions\Classes\RelayCommand.cs" />
+    <Compile Include="Abstractions\Enums\PossibleTypes.cs" />
     <Compile Include="ConfModels\Enums\FeedbackMechanismGroupOne.cs" />
     <Compile Include="ConfModels\Enums\FeedbackMechanismGroupTwo.cs" />
-    <Compile Include="Abstractions\Enums\PossibleTypes.cs" />
     <Compile Include="ConfModels\CarbideSIConfig.cs" />
     <Compile Include="ConfModels\MyCustomConfigurationClass1.cs" />
     <Compile Include="ConfModels\ValidationTest.cs" />
-    <Compile Include="Models\PropertyDescitptionValidate.cs" />
-    <Compile Include="Models\PropertyDescriptionGUI.cs" />
     <Compile Include="ConfModels\MyCustomConfigurationClass2.cs" />
-    <Compile Include="Models\PropertyDescriptionBuilder.cs" />
-    <Compile Include="ViewModel\PropertyEditor.cs" />
     <Compile Include="ViewModel\JSONControlViewModel.cs" />
-    <Compile Include="View\JsonPropertiesView.xaml.cs">
-      <DependentUpon>JsonPropertiesView.xaml</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -110,10 +101,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\JsonPropertiesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -142,6 +129,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Abstractions\Classes\Converters\" />
+    <Folder Include="View\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

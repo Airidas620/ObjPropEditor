@@ -1,0 +1,175 @@
+﻿<UserControl x:Class="VisualPropertyEditor.PropertyEditorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:conv="clr-namespace:VisualPropertyEditor.Abstractions.Classes.Converters" 
+             xmlns:enums ="clr-namespace:VisualPropertyEditor.Abstractions.Enums"
+             xmlns:models ="clr-namespace:VisualPropertyEditor.Models"
+             xmlns:min="clr-namespace:MaterialIcons;assembly=MaterialIcons"
+             xmlns:local="clr-namespace.VisualPropertyEditor"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <!--<Style TargetType="Button" x:Key="RoundButton" BasedOn="{StaticResource {x:Type Button}}">
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="60" />
+                </Style>
+            </Style.Resources>
+        </Style>-->
+
+        <Style TargetType="Button" x:Key="RoundButton">
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="60" />
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <DataTemplate x:Key="bool">
+            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left"  >
+                <TextBlock Text="{Binding PropertyName}" VerticalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding ValueAsBool}" Margin="5,0,0,0"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="string">
+            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" >
+                <TextBlock Text="{Binding PropertyName}" VerticalAlignment="Center"/>
+                <TextBox MaxWidth="150" MinWidth="70" Margin="5,0,0,0" Text="{Binding ValueAsString}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <!--BasedOn="{StaticResource MahApps.Styles.TextBox}"-->
+        <DataTemplate x:Key="numeric">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                <TextBlock Text="{Binding PropertyName}" VerticalAlignment="Center" />
+                <TextBox MaxWidth="150" MinWidth="70" PreviewTextInput="NumberValidationTextBox" Margin="5,0,0,0"  Text="{Binding NumericValueAsString}">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}" >
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsInputValueValid}" Value="true">
+                                    <Setter Property="BorderBrush" Value="#FFCCCCCC"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsInputValueValid}" Value="false">
+                                    <Setter Property="BorderBrush" Value="Red"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="enum">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock Text="{Binding PropertyName}" VerticalAlignment="Center"/>
+                <ComboBox  MinWidth="70" ItemsSource="{Binding AvailableEnumValues}" Margin="5,0,0,0" SelectedItem="{Binding ValueAsEnum}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="Class">
+            <Expander Header="{Binding PropertyName , Converter={conv:ObjectHeaderConverter}}" IsExpanded="True"  BorderBrush="#CC238cde">
+                <ItemsControl ItemsSource="{Binding InnerPropertyDescriptions}" ItemTemplate="{DynamicResource DataTemplateTriggers}" Margin="3,0,3,0">
+                </ItemsControl>
+            </Expander>
+        </DataTemplate>
+
+
+        <DataTemplate x:Key="List">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" >
+                <Expander IsExpanded="True" Header="{Binding PropertyName, Converter={conv:ListHeaderConverter}}"  BorderBrush="#CC238cde" MinWidth="300">
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding ListItems}" >
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ContentControl Content="{Binding}" ContentTemplate="{DynamicResource DataTemplateTriggers}" Margin="3,0,3,0"/>
+                                        <Button Command="{Binding DuplicateListItemCommand}" Margin="5,3,5,0" Height="33" Width="33" VerticalAlignment="top">
+                                            <Button.Content >
+                                                <min:MaterialIcon Icon="ic_content_copy" ></min:MaterialIcon>
+                                            </Button.Content>
+                                        </Button>
+                                        <Button Command="{Binding RemoveFromListCommand}" Margin="0,3,5,0" Height="33" Width="33" VerticalAlignment="top"  >
+                                            <Button.Content >
+                                                <min:MaterialIcon Icon="ic_delete" Foreground="#bf3b3b" ></min:MaterialIcon>
+                                            </Button.Content>
+                                        </Button>
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Button Command="{Binding AddToListCommand}" HorizontalAlignment="Left" Margin="3,8,0,5" MaxWidth="27" Background="#CC238cde" BorderThickness="0" Style="{DynamicResource RoundButton}">
+                            <Button.Content >
+                                <min:MaterialIcon Icon="ic_add" Foreground="White"></min:MaterialIcon>
+                            </Button.Content>
+
+                        </Button>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DataTemplateTriggers">
+            <ContentControl Content="{Binding}" Margin="0,7,0,7" >
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Style.Triggers>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Bool}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource bool}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Numeric}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource numeric}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.String}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource string}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Enum}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource enum}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.List}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource List}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding GeneralProperty}" Value="{x:Static enums:PossibleTypes.Class}">
+                                <Setter Property="ContentTemplate"
+                                                    Value="{StaticResource Class}" />
+                            </DataTrigger>
+
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </DataTemplate>
+
+    </UserControl.Resources>
+
+        <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinWidth="500">
+            <StackPanel Orientation="Vertical"  Margin="0,10,0,0" HorizontalAlignment="Center" >
+            <TextBlock Text="safdasdfa"></TextBlock>
+                <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+ 
+</UserControl>

@@ -4,8 +4,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:JSONConfFileEditor"
-    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"    
-    xmlns:view="clr-namespace:JSONConfFileEditor.View"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"  
+    xmlns:dll ="clr-namespace:VisualPropertyEditor;assembly=VisualPropertyEditor"
     x:Class="JSONConfFileEditor.MainWindow"
     mc:Ignorable="d"
     xmlns:enums ="clr-namespace:JSONConfFileEditor.Abstractions.Enums"
@@ -23,12 +23,14 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <view:JsonPropertiesView/>
+            <!--xmlns:view="clr-namespace:JSONConfFileEditor.View"-->
+            <!--<view:JsonPropertiesView/>-->
+            <dll:PropertyEditorControl DataContext="{Binding PropertyEditorInstance}"></dll:PropertyEditorControl>
         </Grid>
 
         <Grid Grid.Row="1">
             <StackPanel Orientation="Horizontal">
-                <Button Command="{Binding SaveConfigurationCommand}" MinWidth="80" MaxHeight="50" Margin="50,5,0,5" Content="Save JSON" Background ="#FFC4E0C1"  HorizontalAlignment="Left" Focusable="False"  />
+                <Button Command="{Binding SaveConfigurationCommand}" MinWidth="80" MaxHeight="50" Margin="50,5,0,5" Content="Save JSON" Background ="#FFC4E0C1"  HorizontalAlignment="Left"  />
                 <Label Content="{Binding NonValidClassMessage}" Margin="10,0,0,0" VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JSONConfFileEditor.Models
+namespace JSONConfFileEditor.ConfModels
 {
     public class MyCustomConfigurationClass2
     {
@@ -23,7 +23,7 @@ namespace JSONConfFileEditor.Models
         //public List<InnerClass1> innerClass1 { get; set; }
         //public List<bool> listBool { get; set; } = new List<bool>();
 
-        public bool IsFeedbackEnabled { get; set; }
+        //public bool[] IsFeedbackEnabled { get; set; }
 
         /* public List<bool> listBool { get; set; } = new List<bool>();
 

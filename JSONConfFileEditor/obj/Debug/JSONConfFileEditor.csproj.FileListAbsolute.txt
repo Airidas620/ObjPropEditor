@@ -142,14 +142,11 @@ C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\de\MahApps.Metro.resour
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.csproj.AssemblyReference.cache
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.csproj.SuggestedBindingRedirects.cache
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\MainWindow.g.cs
-C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\View\JsonPropertiesView.g.cs
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\App.g.cs
-C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor_MarkupCompile.cache
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor_MarkupCompile.lref
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\App.baml
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\MainWindow.baml
-C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\View\JsonPropertiesView.baml
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.g.resources
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.Properties.Resources.resources
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.csproj.GenerateResource.cache
@@ -158,3 +155,6 @@ C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.cspr
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.exe
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.pdb
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\MaterialIcons.dll
+C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\VisualPropertyEditor.dll
+C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\VisualPropertyEditor.pdb
+C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\VisualPropertyEditor.dll.config

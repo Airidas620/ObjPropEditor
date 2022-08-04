@@ -1,0 +1,17 @@
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Release\VisualPropertyEditor.dll.config
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Release\VisualPropertyEditor.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Release\VisualPropertyEditor.pdb
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Release\MaterialIcons.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\VisualPropertyEditor.csproj.AssemblyReference.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditorControl.g.cs
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\GeneratedInternalTypeHelper.g.cs
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\VisualPropertyEditor_MarkupCompile.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\VisualPropertyEditor_MarkupCompile.lref
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\PropertyEditorControl.baml
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\VisualPropertyEditor.g.resources
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\VisualPropertyEditor.Properties.Resources.resources
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\VisualPropertyEditor.csproj.GenerateResource.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\VisualPropertyEditor.csproj.CoreCompileInputs.cache
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\VisualPropertyEditor.csproj.CopyComplete
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\VisualPropertyEditor.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Release\VisualPropertyEditor.pdb

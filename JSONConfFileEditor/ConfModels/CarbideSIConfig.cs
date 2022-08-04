@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JSONConfFileEditor.Models
+namespace JSONConfFileEditor.ConfModels
 {
 	public enum HardwareType
 	{
