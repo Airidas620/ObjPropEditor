@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using VisualPropertyEditor.Abstractions;
 
 namespace VisualPropertyEditor.Models
 {
     public partial class PropertyDescriptionBuilder
     {
-
+        //This is trashy
 
         public string NonValidClassMessage { get; set; }
 
@@ -47,8 +48,7 @@ namespace VisualPropertyEditor.Models
             var props = classType.GetProperties().ToList();
 
             foreach (var prop in props)
-            {
-
+            {  
                 //Enum
                 if (prop.PropertyType == typeof(char))
                 {
@@ -105,6 +105,18 @@ namespace VisualPropertyEditor.Models
                     }
                     ValidateClassProperties(prop.PropertyType, depth);
                     continue;
+                }
+
+
+                try
+                {
+                    ResolveProperty(prop, null, false, 0, 20);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    NonValidClassMessage = $"Unresolved property ({prop.Name}). Exception thrown: {ex.Message}";
+                    return false;
                 }
 
                 NonValidClassMessage = "Unresolved property type (" + prop.Name + ")";

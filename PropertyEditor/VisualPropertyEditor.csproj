@@ -13,6 +13,8 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,8 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MaterialIcons, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialIcons.1.0.3\lib\MaterialIcons.dll</HintPath>
+    <Reference Include="Material.Icons, Version=1.1.13.0, Culture=neutral, PublicKeyToken=34ed5903a64b4509, processorArchitecture=MSIL">
+      <HintPath>..\packages\Material.Icons.1.1.13\lib\netstandard2.0\Material.Icons.dll</HintPath>
+    </Reference>
+    <Reference Include="Material.Icons.WPF, Version=1.1.0.0, Culture=neutral, PublicKeyToken=34ed5903a64b4509, processorArchitecture=MSIL">
+      <HintPath>..\packages\Material.Icons.WPF.1.1.0\lib\net461\Material.Icons.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -51,7 +59,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="PropertyEditorControl.xaml">
+    <Page Include="Views\PropertyEditorControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -61,12 +69,13 @@
     <Compile Include="Abstractions\Classes\Converters\ObjectHeaderConverter.cs" />
     <Compile Include="Abstractions\Classes\NumericParser.cs" />
     <Compile Include="Abstractions\Classes\PropEditCommand.cs" />
+    <Compile Include="Abstractions\Classes\PropertyDescriptionHelper.cs" />
     <Compile Include="Abstractions\Enums\PossibleTypes.cs" />
+    <Compile Include="Abstractions\Classes\PropertyDescription.cs" />
     <Compile Include="Models\PropertyDescitptionValidate.cs" />
     <Compile Include="Models\PropertyDescriptionBuilder.cs" />
-    <Compile Include="Models\PropertyDescriptionGUI.cs" />
     <Compile Include="ViewModel\PropertyEditor.cs" />
-    <Compile Include="PropertyEditorControl.xaml.cs">
+    <Compile Include="Views\PropertyEditorControl.xaml.cs">
       <DependentUpon>PropertyEditorControl.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -95,6 +104,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

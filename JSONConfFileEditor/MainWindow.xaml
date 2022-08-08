@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     xmlns:enums ="clr-namespace:JSONConfFileEditor.Abstractions.Enums"
     Title="JSONEditor" Height="450" Width="800"
-    MinHeight="350" MinWidth="600" Background="White">
+    MinHeight="350" Background="White">
 
     <Window.Resources>
     </Window.Resources>
@@ -22,7 +22,7 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0">          
             <!--xmlns:view="clr-namespace:JSONConfFileEditor.View"-->
             <!--<view:JsonPropertiesView/>-->
             <dll:PropertyEditorControl DataContext="{Binding PropertyEditorInstance}"></dll:PropertyEditorControl>

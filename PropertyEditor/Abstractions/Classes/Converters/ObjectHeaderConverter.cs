@@ -7,7 +7,7 @@ namespace VisualPropertyEditor.Abstractions.Classes.Converters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
 
-            return value.ToString() + " (Object)";
+            return value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -20,7 +20,6 @@ namespace JSONConfFileEditor.ViewModel
     public class PropertyEditor
     {
 
-
         private Object CustomConfigurationClass { get; set; }
 
         private ObservableCollection<PropertyDescription> allAvailableProperties;

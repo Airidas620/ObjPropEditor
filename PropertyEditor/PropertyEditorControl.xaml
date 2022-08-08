@@ -161,7 +161,6 @@
 
         <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinWidth="500">
             <StackPanel Orientation="Vertical"  Margin="0,10,0,0" HorizontalAlignment="Center" >
-            <TextBlock Text="safdasdfa"></TextBlock>
                 <ItemsControl ItemsSource="{Binding AllAvailableProperties}" ItemTemplate="{DynamicResource DataTemplateTriggers}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

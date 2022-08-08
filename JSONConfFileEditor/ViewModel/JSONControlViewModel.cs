@@ -10,8 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using VisualPropertyEditor.ViewModel;
 using JSONConfFileEditor.Abstractions.Classes;
+using System.Diagnostics;
+using VisualPropertyEditor.ViewModel;
 
 namespace JSONConfFileEditor.ViewModel
 {
@@ -66,12 +67,13 @@ namespace JSONConfFileEditor.ViewModel
         public JSONControlViewModel()
         {
             //var configurationFile = new CarbideSIModel();
-            var configurationFile = new MyCustomConfigurationClass1();
+            // var configurationFile = new MyCustomConfigurationClass1();
             //var configurationFile = new MyCustomConfigurationClass2();
-            //var configurationFile = new ValidationTest();
-
+           var configurationFile = new ValidationTest();
+         //  var configurationFile = new GeneralLogsConfig();
 
             PropertyEditorInstance = new PropertyEditor(configurationFile);
+            Console.WriteLine(PropertyEditorInstance.IsConfigurationClassValid);
 
             //PropertyEditorInstance.(configurationFile);
 

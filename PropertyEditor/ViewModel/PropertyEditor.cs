@@ -5,6 +5,8 @@ using static VisualPropertyEditor.Models.PropertyDescriptionBuilder;
 using VisualPropertyEditor.Abstractions.Enums;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using VisualPropertyEditor.Abstractions;
+using VisualPropertyEditor.Abstractions.Classes;
 
 namespace VisualPropertyEditor.ViewModel
 {
@@ -29,7 +31,6 @@ namespace VisualPropertyEditor.ViewModel
             }
         }
 
-
         PropertyDescriptionBuilder propertyDescriptionBuilder;
 
         public string GetNonValidMessage()
@@ -37,27 +38,34 @@ namespace VisualPropertyEditor.ViewModel
             return propertyDescriptionBuilder.NonValidClassMessage;
         }
 
-        public bool ValidateConfiguratioClass()
+        public bool CheckIsConfigurationValid()
         {
             return propertyDescriptionBuilder.ValidateClass(ConfigurationClass.GetType());
         }
 
-        public bool IsConfigurationFileValid { get; private set; }
+        public bool IsConfigurationClassValid { get; private set; }
 
-
+        public string ClassDescription { get; private set; } = "";
+        public bool HasDescription { get; }
 
         public  PropertyEditor(Object configurationClass)
         {
             ConfigurationClass = configurationClass;
 
+
+            var descriptionAttributes = ConfigurationClass.GetType().GetCustomAttributes(typeof(DescriptionAttribute), false);
+            
+            if (descriptionAttributes != null && descriptionAttributes.Length > 0)
+            {
+                ClassDescription = ((DescriptionAttribute)descriptionAttributes[0]).Description;
+                HasDescription = true;
+            }
+
             propertyDescriptionBuilder = new PropertyDescriptionBuilder(ConfigurationClass);
 
-            IsConfigurationFileValid = ValidateConfiguratioClass();
-
-            if (propertyDescriptionBuilder.BuildProperties())
-            {
-                AllAvailableProperties = propertyDescriptionBuilder.AllAvailableProperties;
-            }
+            IsConfigurationClassValid = CheckIsConfigurationValid();
+            
+            AllAvailableProperties = propertyDescriptionBuilder.BuildProperties();            
         }
 
 
@@ -67,7 +75,7 @@ namespace VisualPropertyEditor.ViewModel
             if (propertyDescriptionBuilder.ValidateValues(allAvailableProperties))
             {
                 if (allAvailableProperties != null && allAvailableProperties.Count != 0)
-                    PropertyDescriptionBuilder.SetObjectValuesWithPropertyDescription(ConfigurationClass, allAvailableProperties);
+                    PropertyDescriptionHelper.SetObjectValuesWithPropertyDescription(ConfigurationClass, allAvailableProperties);
             }
 
             return ConfigurationClass;
