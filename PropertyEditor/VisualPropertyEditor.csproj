@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7C65A582-0E0C-4AE4-BA3C-0BFAF9F4C23B}</ProjectGuid>
-    <OutputType>library</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>VisualPropertyEditor</RootNamespace>
     <AssemblyName>VisualPropertyEditor</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -32,6 +32,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Material.Icons, Version=1.1.13.0, Culture=neutral, PublicKeyToken=34ed5903a64b4509, processorArchitecture=MSIL">
@@ -65,7 +68,6 @@
     </Page>
     <Compile Include="Abstractions\Classes\Converters\BaseConverter.cs" />
     <Compile Include="Abstractions\Classes\Converters\ListHeaderConverter.cs" />
-    <Compile Include="Abstractions\Classes\Converters\MarginConverter.cs" />
     <Compile Include="Abstractions\Classes\Converters\ObjectHeaderConverter.cs" />
     <Compile Include="Abstractions\Classes\NumericParser.cs" />
     <Compile Include="Abstractions\Classes\PropEditCommand.cs" />

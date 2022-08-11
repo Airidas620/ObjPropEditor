@@ -9,6 +9,7 @@ namespace JSONConfFileEditor.ConfModels
 {
     public class MyCustomConfigurationClass1
     {
+
         public bool IsFeedbackEnabled { get; set; }
 
         public double GetLastFeedbackValue { get; set; }
@@ -32,6 +33,8 @@ namespace JSONConfFileEditor.ConfModels
         public List<InnerClass0> objectList1{ get; set; }
 
         public List<InnerClass1> objectList2 { get; set; }
+
+        public List<List<List<int>>> MultiDimensionalList { get; set; } = new List<List<List<int>>> { new List<List<int>> { new List<int> { 1, 2, 3, 5 }, new List<int> { 1, 2, 5 } }, new List<List<int>> { new List<int> { 1, 2, 3, 5 }, new List<int> { 1, 2, 5 } } };
 
 
         public class InnerClass0

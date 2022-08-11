@@ -4,7 +4,7 @@
 library
 C#
 .cs
-C:\Code\JSONFileConfiguration-main\PropertyEditor\obj\Debug\
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\
 VisualPropertyEditor
 none
 false
@@ -12,8 +12,8 @@ DEBUG;TRACE
 
 12087263349
 
-16823448724
-17607504506
+15-606928702
+17-1188384981
 Views\PropertyEditorControl.xaml;
 
 False

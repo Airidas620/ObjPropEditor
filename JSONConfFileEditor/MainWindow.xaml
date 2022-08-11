@@ -23,8 +23,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">          
-            <!--xmlns:view="clr-namespace:JSONConfFileEditor.View"-->
-            <!--<view:JsonPropertiesView/>-->
+
             <dll:PropertyEditorControl DataContext="{Binding PropertyEditorInstance}"></dll:PropertyEditorControl>
         </Grid>
 

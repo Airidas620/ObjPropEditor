@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -15,7 +16,7 @@ namespace VisualPropertyEditor.Abstractions
     {
         #region ObjectProperties
 
-        //Properties used for describing single properties
+        //Properties used for describing single class properties
 
         /// <summary>
         /// Property Type
@@ -27,53 +28,44 @@ namespace VisualPropertyEditor.Abstractions
         /// </summary>
         public string PropertyName { get; set; }
 
-        /// <summary>
-        /// Holds string value if property is string
-        /// </summary>
-        public string ValueAsString { get; set; } = "";
-
         public bool HasDescription => ! string.IsNullOrEmpty(Description);
         public string Description { get; set; } = "";
 
-
-        private string numericValueAsString = "";
         /// <summary>
-        /// Holds string value if property is string
+        /// Holds string value if property is a string
+        /// </summary>
+        public string ValueAsString { get; set; } = "";
+
+        private string numericValueAsString = "0";
+        /// <summary>
+        /// Holds string value if property is a number
         /// </summary>
         public string NumericValueAsString
         {
             get { return numericValueAsString; }
             set
             {
-                if (numericValueAsString != value)
+                //Try parsing to validate written value
+                try
                 {
-                    try
-                    {
-                        if (value.Contains("e") | value.Contains("E") | value.Contains("m") | value.Contains("M"))
-                        {
-                            NumericParser.StringToNumericTypeValue(PropertyType, value).ToString();
-                            numericValueAsString = value;
-                        }
-                        else
-                        {
-                            numericValueAsString = NumericParser.StringToNumericTypeValue(PropertyType, value).ToString();
-                        }
-                        IsInputValueValid = true;
-                    }
-                    catch (Exception)
-                    {
-                        numericValueAsString = "0";
-                        IsInputValueValid = false;
-                    }
+                    NumericParser.StringToNumericTypeValue(PropertyType, value).ToString();
+                    
+                    numericValueAsString = value;
+                    IsInputValueValid = true;
                 }
-            }
+                catch (Exception)
+                {
+                    numericValueAsString = "0";
+                    IsInputValueValid = false;
+                }
+        }
         }
 
 
         private bool isInputValueValid = true;
 
         /// <summary>
-        /// Is the value written in GUI correctly
+        /// Is the value in GUI is valid
         /// </summary>
         public bool IsInputValueValid
         {
@@ -89,14 +81,14 @@ namespace VisualPropertyEditor.Abstractions
         }
 
         /// <summary>
-        /// Holds bool value if property is bool
+        /// Holds bool value if property is a bool
         /// </summary>
         public bool ValueAsBool { get; set; }
 
         /// <summary>
-        /// Holds enum value if property is enum
+        /// Holds enum value if property is a enum
         /// </summary>
-        public object ValueAsEnum { get; set; } //TODO check for saving with reference error
+        public object ValueAsEnum { get; set; } 
 
         /// <summary>
         /// All available enum property enum values
@@ -195,27 +187,14 @@ namespace VisualPropertyEditor.Abstractions
         /// </summary>
         public PropEditCommand DuplicateListItemCommand { set; get; }
 
-
-        private void ExecuteDuplicateListItemCommand(Object obj)
-        {
-            var listItem = parentListItems.ElementAt(ListItemIndex);
-
-            parentListItems.Add(
-
-                (PropertyDescription)listItem.Clone(true)
-            );
-
-            parentListItems.Last().parentListItems = parentListItems;
-            parentListItems.Last().ListItemIndex = parentListItems.Count - 1;
-        }
-
         private void ExecuteAddToListCommand(object obj)
         {
 
-
+            //First() because lists hold one generic type parameter
             ListItems.Add(
                 (PropertyDescription)innerPropertyDescriptions.First().Clone()
             );
+
 
             ListItems.Last().parentListItems = ListItems;
             ListItems.Last().ListItemIndex = ListItems.Count - 1;
@@ -231,6 +210,19 @@ namespace VisualPropertyEditor.Abstractions
             }
         }
 
+        private void ExecuteDuplicateListItemCommand(Object obj)
+        {
+            var listItem = parentListItems.ElementAt(ListItemIndex);
+
+            parentListItems.Add(
+
+                (PropertyDescription)listItem.Clone(true)
+            );
+
+            parentListItems.Last().parentListItems = parentListItems;
+            parentListItems.Last().ListItemIndex = parentListItems.Count - 1;
+        }
+
         public PropertyDescription()
         {
             AddToListCommand = new PropEditCommand(ExecuteAddToListCommand);
@@ -240,10 +232,11 @@ namespace VisualPropertyEditor.Abstractions
 
 
         /// <summary>
-        /// Saves GUI items data to single list
+        /// Saves GUI List items data to ObjectList 
         /// </summary>
         public void SaveGUIListDataToList()
         {
+            
             ObjectList = new List<object>();
 
             if (ListProperty == PossibleTypes.String)
@@ -282,24 +275,74 @@ namespace VisualPropertyEditor.Abstractions
                 return;
             }
 
-            if (ListProperty == PossibleTypes.Class)
+            if (ListProperty == PossibleTypes.List)
             {
+                Array values;
+
+                //Used to avoid writing long lines. 
+                var referenceToAListType = innerPropertyDescriptions.First().innerPropertyDescriptions.First().PropertyType;
+
                 foreach (var propertyList in listItems)
                 {
-                    Object instance = Activator.CreateInstance(ListObjectType);
+
+                    values = Array.CreateInstance(referenceToAListType, propertyList.listItems.Count());
+
+                    propertyList.SaveGUIListDataToList();
+
+
+                    if (innerPropertyDescriptions.First().ListProperty == PossibleTypes.Numeric)
+                    {
+                        for (int i = 0; i < values.Length; i++)
+                        {
+                            try
+                            {
+                                values.SetValue(NumericParser.StringToNumericTypeValue(referenceToAListType, 
+                                    propertyList.ObjectList[i].ToString()), i);
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        for (int i = 0; i < values.Length; i++)
+                        {
+                            values.SetValue(propertyList.ObjectList[i], i);
+                        }
+                    }
+
+
+                    var multiDimenionalList = Activator.CreateInstance(typeof(List<>).MakeGenericType(referenceToAListType), new object[] { values });
+
+                    ObjectList.Add(multiDimenionalList);
+
+                }
+                return;
+            }
+
+            if (ListProperty == PossibleTypes.Class)
+            {
+
+                foreach (var propertyList in listItems)
+                {
+                    Object listInstance = Activator.CreateInstance(ListObjectType);
 
                     //Assing values to Object from GUI 
-                    PropertyDescriptionHelper.SetObjectValuesWithPropertyDescription(instance, propertyList.innerPropertyDescriptions);
+                    PropertyDescriptionHelper.SetObjectValuesWithPropertyDescription(listInstance, propertyList.innerPropertyDescriptions);
 
                     //Add to List
-                    ObjectList.Add(instance);
+                    ObjectList.Add(listInstance);
                 }
             }
+
         }
 
         /// <summary>
-        /// Clones current object
-        /// <paramref name="CloneGuiValues"/> Copies current object values
+        /// Clones PropertyDescription. Used for adding new items to list and cloning a list item
+        /// <param name="CloneGuiValues"/> If to clone PropertyDescription with values from GUI
         /// </summary>
         /// <returns></returns>
         public object Clone(bool CloneGuiValues = false)
@@ -312,7 +355,7 @@ namespace VisualPropertyEditor.Abstractions
                 propDescriptionCopy.ListObjectType = this.ListObjectType;
                 propDescriptionCopy.ValueAsBool = this.ValueAsBool;
                 propDescriptionCopy.ValueAsString = this.ValueAsString;
-                propDescriptionCopy.NumericValueAsString = this.NumericValueAsString;
+                propDescriptionCopy.numericValueAsString = this.NumericValueAsString;
                 propDescriptionCopy.ValueAsEnum = this.ValueAsEnum;
 
                 propDescriptionCopy.AvailableEnumValues = this.AvailableEnumValues;

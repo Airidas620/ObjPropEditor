@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using VisualPropertyEditor.Abstractions;
 using VisualPropertyEditor.Abstractions.Classes;
+using System.Diagnostics;
 
 namespace VisualPropertyEditor.ViewModel
 {
@@ -38,11 +39,6 @@ namespace VisualPropertyEditor.ViewModel
             return propertyDescriptionBuilder.NonValidClassMessage;
         }
 
-        public bool CheckIsConfigurationValid()
-        {
-            return propertyDescriptionBuilder.ValidateClass(ConfigurationClass.GetType());
-        }
-
         public bool IsConfigurationClassValid { get; private set; }
 
         public string ClassDescription { get; private set; } = "";
@@ -63,19 +59,17 @@ namespace VisualPropertyEditor.ViewModel
 
             propertyDescriptionBuilder = new PropertyDescriptionBuilder(ConfigurationClass);
 
-            IsConfigurationClassValid = CheckIsConfigurationValid();
-            
+            IsConfigurationClassValid = propertyDescriptionBuilder.ValidateClass(ConfigurationClass.GetType());
+
             AllAvailableProperties = propertyDescriptionBuilder.BuildProperties();            
         }
 
 
         public Object GetWrittenConfiguredClass()
         {
-
-            if (propertyDescriptionBuilder.ValidateValues(allAvailableProperties))
+            if (allAvailableProperties != null && allAvailableProperties.Count != 0)
             {
-                if (allAvailableProperties != null && allAvailableProperties.Count != 0)
-                    PropertyDescriptionHelper.SetObjectValuesWithPropertyDescription(ConfigurationClass, allAvailableProperties);
+                PropertyDescriptionHelper.SetObjectValuesWithPropertyDescription(ConfigurationClass, allAvailableProperties);
             }
 
             return ConfigurationClass;

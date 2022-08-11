@@ -1,13 +1,10 @@
 C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\VisualPropertyEditor.csproj.AssemblyReference.cache
-C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\PropertyEditorControl.g.cs
 C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\VisualPropertyEditor_MarkupCompile.cache
 C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\VisualPropertyEditor_MarkupCompile.lref
 C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\VisualPropertyEditor.dll.config
 C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\VisualPropertyEditor.dll
 C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\VisualPropertyEditor.pdb
-C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\MaterialIcons.dll
-C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\PropertyEditorControl.baml
 C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\VisualPropertyEditor.g.resources
 C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\VisualPropertyEditor.Properties.Resources.resources
 C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\VisualPropertyEditor.csproj.GenerateResource.cache
@@ -58,3 +55,9 @@ C:\Code\JSONFileConfiguration-main\PropertyEditor\obj\Debug\VisualPropertyEditor
 C:\Code\JSONFileConfiguration-main\PropertyEditor\obj\Debug\VisualPropertyEditor.pdb
 C:\Code\JSONFileConfiguration-main\PropertyEditor\bin\Debug\Material.Icons.dll
 C:\Code\JSONFileConfiguration-main\PropertyEditor\bin\Debug\Material.Icons.WPF.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\Material.Icons.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\Material.Icons.WPF.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\Newtonsoft.Json.dll
+C:\Code\JSONConfFileEditor4\PropertyEditor\bin\Debug\Newtonsoft.Json.xml
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\Views\PropertyEditorControl.g.cs
+C:\Code\JSONConfFileEditor4\PropertyEditor\obj\Debug\Views\PropertyEditorControl.baml

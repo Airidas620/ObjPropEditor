@@ -5,12 +5,14 @@ namespace VisualPropertyEditor.Abstractions.Classes
     internal class NumericParser
     {
         /// <summary>
-        /// Writes numeric values to src or returns them
+        /// Parses string value to given numeric type
+        /// <para numericType>Number type </para>
+        /// <para valueAsString>Number value as string</para>
         /// </summary>
-        public static Object StringToNumericTypeValue(Type type, string valueAsString)
+        public static Object StringToNumericTypeValue(Type numericType, string valueAsString)
         {
 
-            switch (Type.GetTypeCode(type))
+            switch (Type.GetTypeCode(numericType))
             {
                 case TypeCode.Byte:
                     Byte byteNumber;

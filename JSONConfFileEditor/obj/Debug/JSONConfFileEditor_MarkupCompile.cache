@@ -1,19 +1,19 @@
 ﻿JSONConfFileEditor
 
 
-exe
+winexe
 C#
 .cs
-C:\Code\JSONFileConfiguration-main\JSONConfFileEditor\obj\Debug\
+C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\
 JSONConfFileEditor
 none
 false
 DEBUG;TRACE
-C:\Code\JSONFileConfiguration-main\JSONConfFileEditor\App.xaml
+C:\Code\JSONConfFileEditor4\JSONConfFileEditor\App.xaml
 1219584333
 
 15555626713
-25138072905
+25-1461583473
 MainWindow.xaml;
 
 False

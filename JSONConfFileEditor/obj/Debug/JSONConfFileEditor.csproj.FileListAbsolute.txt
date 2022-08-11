@@ -154,7 +154,6 @@ C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.cspr
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.csproj.CopyComplete
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.exe
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\obj\Debug\JSONConfFileEditor.pdb
-C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\MaterialIcons.dll
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\VisualPropertyEditor.dll
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\VisualPropertyEditor.pdb
 C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\VisualPropertyEditor.dll.config
@@ -231,3 +230,5 @@ C:\Code\JSONFileConfiguration-main\JSONConfFileEditor\obj\Debug\JSONConfFileEdit
 C:\Code\JSONFileConfiguration-main\JSONConfFileEditor\bin\Debug\Material.Icons.dll
 C:\Code\JSONFileConfiguration-main\JSONConfFileEditor\bin\Debug\Newtonsoft.Json.dll
 C:\Code\JSONFileConfiguration-main\JSONConfFileEditor\bin\Debug\Material.Icons.WPF.dll
+C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\Material.Icons.dll
+C:\Code\JSONConfFileEditor4\JSONConfFileEditor\bin\Debug\Material.Icons.WPF.dll

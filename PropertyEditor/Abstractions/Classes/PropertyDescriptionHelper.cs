@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +12,10 @@ namespace VisualPropertyEditor.Abstractions.Classes
     public static class PropertyDescriptionHelper
     {
         /// <summary>
-        /// Writes values to Object src from GUI values
+        /// Writes values to ConfigurationClass object src from GUI values
         /// </summary>
         /// <param name="src">Object to write values to</param>
         /// <param name="propertyDescriptions">List that holds Object src property descriptions</param>
-        /// <param name="propDesIndex">Index for tracking propertyDescriptions current member</param>
         public static void SetObjectValuesWithPropertyDescription(Object src, ObservableCollection<PropertyDescription> propertyDescriptions)
         {
             var props = src.GetType().GetProperties().ToList();       
@@ -67,7 +67,7 @@ namespace VisualPropertyEditor.Abstractions.Classes
 
 
                     if (propertyDescription.ListProperty == PossibleTypes.String || propertyDescription.ListProperty == PossibleTypes.Bool || propertyDescription.ListProperty == PossibleTypes.Numeric
-                        || propertyDescription.ListProperty == PossibleTypes.Enum || propertyDescription.ListProperty == PossibleTypes.Class)
+                        || propertyDescription.ListProperty == PossibleTypes.Enum || propertyDescription.ListProperty == PossibleTypes.Class || propertyDescription.ListProperty == PossibleTypes.List)
                     {
 
                         Array values = Array.CreateInstance(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList.Count());
@@ -76,10 +76,17 @@ namespace VisualPropertyEditor.Abstractions.Classes
                         {
                             for (int i = 0; i < values.Length; i++)
                             {
-                                //Change from double to required type
-                                values.SetValue(NumericParser.StringToNumericTypeValue(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList[i].ToString()), i);
+                                try
+                                {
+                                    values.SetValue(NumericParser.StringToNumericTypeValue(prop.PropertyType.GetGenericArguments().First(), propertyDescription.ObjectList[i].ToString()), i);
+                                }
+                                catch(Exception)
+                                {
+
+                                }
                             }
                         }
+
 
                         else
                         {
@@ -90,7 +97,6 @@ namespace VisualPropertyEditor.Abstractions.Classes
                         }
 
                         prop.SetValue(src, Activator.CreateInstance(typeof(List<>).MakeGenericType(prop.PropertyType.GetGenericArguments().First()), new object[] { values }));
-
                         continue;
                     }
 

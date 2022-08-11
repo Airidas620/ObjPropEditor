@@ -11,7 +11,7 @@ namespace VisualPropertyEditor.Models
         //This is trashy
 
         public string NonValidClassMessage { get; set; }
-
+        
         public bool ValidateClass(Type classType)
         {
             return ValidateClassProperties(classType, 0);
@@ -22,16 +22,20 @@ namespace VisualPropertyEditor.Models
         {
             if (propertyDescriptions != null)
             {
-                foreach (PropertyDescription propertyDescription in propertyDescriptions)
+                foreach (var propertyDescription in propertyDescriptions)
                 {
-                    ValidateValues(propertyDescription.InnerPropertyDescriptions);
+                    if (!ValidateValues(propertyDescription.InnerPropertyDescriptions) || !ValidateValues(propertyDescription.ListItems))
+                    {
+                        return false;
+                    }
+
                     if (!propertyDescription.IsInputValueValid)
                     {
-                        NonValidClassMessage = "Invalid values";
                         return false;
                     }
                 }
             }
+
             return true;
         }
 
@@ -87,7 +91,6 @@ namespace VisualPropertyEditor.Models
                         prop.PropertyType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
 
                     {
-                        //TODO validate if list 
                         if (ValidateList(prop.PropertyType.GenericTypeArguments.First(), depth))
                             continue;
 
@@ -159,15 +162,6 @@ namespace VisualPropertyEditor.Models
                 return true;
             }
 
-
-            if (listType.IsGenericType)
-                if (listType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(ICollection<>)) &&
-                    listType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IList<>)))
-                {
-
-                    NonValidClassMessage = "Multidimensional Lists are not supported";
-                    return false;
-                }
 
             //Class
             if (listType.IsClass)

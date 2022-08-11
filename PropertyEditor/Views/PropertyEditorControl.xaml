@@ -29,8 +29,8 @@
         <DataTemplate x:Key="bool">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding PropertyName}"
                            VerticalAlignment="Center" />
@@ -51,7 +51,7 @@
                            VerticalAlignment="Center" />
                 <TextBox Grid.Column="1"
                          MinWidth="70"
-                         Margin="5,0,30,0"
+                         Margin="5,0,0,0"
                          Text="{Binding ValueAsString}" />
             </Grid>
         </DataTemplate>
@@ -68,7 +68,7 @@
                 <TextBox Grid.Column="1"
                          MinWidth="70"
                          PreviewTextInput="NumberValidationTextBox"
-                         Margin="5,0,30,0"
+                         Margin="5,0,0,0"
                          Text="{Binding NumericValueAsString}">
                     <TextBox.Style>
                         <Style TargetType="TextBox"
